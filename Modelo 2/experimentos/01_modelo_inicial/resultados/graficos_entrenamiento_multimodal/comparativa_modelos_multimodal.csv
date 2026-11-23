@@ -1,0 +1,6 @@
+Modelo,Tiempo (s),MAE CV Train (Años),MAE Test (Años),RMSE Test,R² (Varianza Explicada),Exactitud (±5 Años)
+ElasticNet,5.02,10.37,11.65,14.1,60.7%,19.3%
+SVR (RBF),1.9,2.3,12.18,15.51,52.5%,28.6%
+Random Forest,24.7,5.31,9.98,12.9,67.1%,31.1%
+LightGBM,84.34,3.57,8.94,11.49,73.9%,33.6%
+XGBoost,93.61,3.47,9.28,11.82,72.4%,31.1%

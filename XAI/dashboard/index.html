@@ -1,0 +1,2031 @@
+<meta name="dash-one-writer">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap">
+<style>
+  /* Estilo: portada oscura, títulos grandes en letra fina, un solo acento violeta, tarjetas redondeadas sobre fondo gris.
+     Los colores salen de las variables del dashboard (color-mix), así que el modo oscuro funciona solo. */
+  .ei {
+    --ei-display: 'Work Sans', var(--font-anthropic-sans);
+    --ei-ink: #141416;                 /* portada y menú: oscuros en los dos modos */
+    --ei-accent: #3a17e6;              /* rellenos con texto blanco */
+    --ei-accent-text: color-mix(in srgb, #3a17e6 62%, var(--color-fg));
+    --ei-wash: color-mix(in srgb, var(--color-fg) 5%, var(--color-bg));
+    --ei-card: var(--color-bg);
+    --ei-line: color-mix(in srgb, var(--color-fg) 9%, transparent);
+    --ei-shadow: 0 14px 40px -24px color-mix(in srgb, #141416 45%, transparent);
+    --ei-r-lg: 28px; --ei-r: 20px; --ei-pill: 999px;
+    font-family: var(--ei-display); display: grid; gap: var(--cds-gap-lg); }
+  .ei h1, .ei h2 { font-family: var(--ei-display); margin: 0; text-wrap: balance; }
+  .ei h2 { font-size: 1.3rem; font-weight: 400; letter-spacing: -0.03em; line-height: 1.2; }
+  .ei-page > h2, .ei-display { font-size: clamp(1.7rem, 3.4vw, 2.6rem) !important; font-weight: 300 !important; letter-spacing: -0.04em !important; line-height: 1.05 !important; }
+  .ei-acc { color: var(--ei-accent-text); }
+  .ei-hero .ei-acc { color: #a99bff; }
+  .ei p { margin: 0; max-width: 72ch; }
+  .ei .ei-lead { color: var(--color-fg-muted); font-size: 1.05rem; line-height: 1.55; font-weight: 400; }
+  .ei .ei-lead b, .ei .ei-note b { font-weight: var(--cds-font-weight-medium); color: var(--color-fg); font-variant-numeric: tabular-nums; }
+  .ei .ei-note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); line-height: 1.5; }
+  .ei-eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ei-accent-text); font-weight: 500; }
+
+  /* Portada */
+  .ei-hero { position: relative; overflow: hidden; display: grid; gap: var(--cds-gap-lg); color: #fff; border-radius: var(--ei-r-lg);
+    padding: clamp(28px, 6vw, 72px) clamp(18px, 5vw, 64px); border: 1px solid color-mix(in srgb, var(--color-fg) 8%, transparent);
+    background: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.2px) 0 0 / 22px 22px, var(--ei-ink);
+    animation: ei-deriva 7s linear infinite; }
+  /* Dos luces violetas que flotan detrás del texto */
+  .ei-hero::before, .ei-hero::after { content: ''; position: absolute; border-radius: 50%; pointer-events: none; filter: blur(50px); z-index: 0; }
+  .ei-hero::before { width: 62%; aspect-ratio: 1; right: -14%; top: -38%; background: rgba(58, 23, 230, 0.6); animation: ei-flota 16s ease-in-out infinite alternate; }
+  .ei-hero::after { width: 42%; aspect-ratio: 1; left: -12%; bottom: -40%; background: rgba(120, 80, 255, 0.32); animation: ei-flota 21s ease-in-out -6s infinite alternate-reverse; }
+  .ei-luz { position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(420px circle at var(--mx, 75%) var(--my, 30%), rgba(169, 155, 255, 0.16), transparent 60%); }
+  .ei-hero > :not(.ei-luz):not(.ei-reloj) { position: relative; z-index: 1; }
+  .ei-hero .ei-eyebrow { color: rgba(255, 255, 255, 0.6); display: inline-flex; align-items: center; gap: 10px; }
+  .ei-pulso { width: 7px; height: 7px; border-radius: 50%; background: #a99bff; box-shadow: 0 0 0 0 rgba(169, 155, 255, 0.7); animation: ei-latido 2s ease-out infinite; }
+
+  /* Reloj decorativo de la portada: anillos que giran a distinta velocidad */
+  .ei-reloj { position: absolute; z-index: 0; pointer-events: none; right: clamp(-140px, -7vw, -30px); top: 50%; width: clamp(280px, 40vw, 480px);
+    transform: translateY(-50%) perspective(900px) rotateY(calc(var(--px, 0) * 18deg)) rotateX(calc(var(--py, 0) * -18deg));
+    transition: transform .4s cubic-bezier(.2, .8, .2, 1); animation: ei-aparece 1.6s .3s cubic-bezier(.2, .8, .2, 1) backwards; }
+  .ei-reloj * { transform-box: view-box; transform-origin: 160px 160px; fill: none; }
+  .ei-reloj .r-tic { stroke: rgba(255, 255, 255, 0.28); stroke-width: 6; stroke-dasharray: 1.5 14.208; }
+  .ei-reloj .r-tic-may { stroke: rgba(255, 255, 255, 0.6); stroke-width: 12; stroke-dasharray: 3 75.54; }
+  .ei-reloj .r-guion { stroke: rgba(255, 255, 255, 0.22); stroke-width: 1.5; stroke-dasharray: 2 9; }
+  .ei-reloj .r-arco { stroke: #7c5cff; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 150 50 36 60 12 320; }
+  .ei-reloj .r-sat { fill: #a99bff; }
+  .ei-reloj line { stroke: #fff; stroke-linecap: round; }
+  .ei-reloj .r-aguja-h line { stroke-width: 5; }
+  .ei-reloj .r-aguja-m line { stroke-width: 2.5; stroke: #a99bff; }
+  .ei-reloj .r-centro { fill: #fff; }
+  .ei-reloj .r-onda { stroke: #a99bff; stroke-width: 1.5; animation: ei-onda 3s ease-out infinite; }
+  .ei-reloj .r-gira-lento { animation: ei-gira 60s linear infinite; }
+  .ei-reloj .r-gira-inverso { animation: ei-gira 24s linear infinite reverse; }
+  .ei-reloj .r-orbita { animation: ei-gira 9s cubic-bezier(.45, .05, .55, .95) infinite; }
+  .ei-reloj .r-aguja-h { animation: ei-gira 48s linear infinite; }
+  .ei-reloj .r-aguja-m { animation: ei-gira 6s steps(60) infinite; }
+  @media (max-width: 700px) { .ei-reloj { opacity: 0.3; top: -40px; right: -110px; width: 300px; transform: none; } }
+  .ei-hero h1 { font-size: clamp(2.3rem, 6.4vw, 4.6rem); font-weight: 300; letter-spacing: -0.045em; line-height: 1; max-width: 16ch; }
+  .ei-hero .ei-lead { color: rgba(255, 255, 255, 0.74); max-width: 58ch; }
+
+  /* Modelo: fondo gris con tarjetas blancas encima */
+  .ei-model { background: var(--ei-wash); border-radius: var(--ei-r-lg); padding: clamp(10px, 2.6vw, 32px); }
+  .ei-model-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--cds-gap-lg); row-gap: var(--cds-gap-sm);
+    align-items: center; padding-top: clamp(6px, 1.5vw, 12px); }
+  .ei-model-head > :not(.ei-deco) { grid-column: 1; }
+  /* Nombre del modelo como título grande (v2.2): «Modelo» en el color del texto y el nombre en violeta */
+  .ei .ei-titulo-modelo { font-size: clamp(2.6rem, 6.4vw, 5.2rem); line-height: 1; letter-spacing: -0.05em; text-transform: none;
+    font-weight: 300; color: var(--color-fg); text-wrap: balance; }
+  .ei-model-head > .ei-titulo-modelo + h2 { font-size: clamp(1.25rem, 2.2vw, 1.75rem) !important; color: var(--color-fg-muted); }
+  .ei-deco { grid-column: 2; grid-row: 1 / span 2; position: relative; }
+  @media (max-width: 520px) { .ei-deco { display: none; } }
+  /* Células que flotan (modelo inmunológico) */
+  .ei-celulas { width: 132px; height: 72px; }
+  .ei-celulas i { position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s); border-radius: 50%;
+    border: 2px solid var(--ei-accent-text); background: radial-gradient(circle at 50% 50%, var(--ei-accent-text) 0 22%, transparent 24%);
+    opacity: 0.85; animation: ei-celula var(--t) ease-in-out var(--r, 0s) infinite alternate; }
+  .ei-celulas i:nth-child(even) { border-color: var(--color-fg-muted); background: radial-gradient(circle, var(--color-fg-muted) 0 18%, transparent 20%); opacity: 0.55; }
+  /* Doble hélice de ADN (modelo epigenético) */
+  .ei-adn { display: flex; gap: 5px; height: 56px; align-items: stretch; }
+  .ei-adn i { position: relative; width: 7px; }
+  .ei-adn i::before, .ei-adn i::after { content: ''; position: absolute; left: 0; width: 7px; height: 7px; border-radius: 50%;
+    animation: ei-helice-a 2.6s ease-in-out infinite; animation-delay: calc(var(--i) * -0.18s); }
+  .ei-adn i::before { background: var(--ei-accent-text); }
+  .ei-adn i::after { background: var(--color-fg-muted); animation-name: ei-helice-b; }
+
+  /* Pestañas: cápsula oscura flotante */
+  .ei-tabs { position: sticky; top: 10px; z-index: 5; justify-self: start; max-width: 100%; display: flex; gap: 2px; padding: 5px;
+    background: var(--ei-ink); border-radius: var(--ei-pill); box-shadow: var(--ei-shadow); overflow-x: auto; scrollbar-width: none; }
+  .ei-tabs::-webkit-scrollbar { display: none; }
+  .ei-tabs button { font: inherit; font-size: 14px; white-space: nowrap; background: none; border: 0; color: rgba(255, 255, 255, 0.68);
+    padding: 9px 16px; border-radius: var(--ei-pill); cursor: pointer; transition: background .2s, color .2s; }
+  .ei-tabs button:hover { color: #fff; }
+  .ei-tabs button[aria-selected="true"] { color: #fff; background: var(--ei-accent); }
+  .ei-tabs button:focus-visible { outline: 2px solid #fff; outline-offset: -3px; }
+  .ei-seg button:focus-visible, .ei select:focus-visible { outline: 2px solid var(--ei-accent-text); outline-offset: 2px; }
+  .ei-page { display: grid; gap: var(--cds-gap-lg); }
+  .ei [hidden] { display: none !important; }
+  .ei-grid { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+  .ei-tiles { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); }
+  .ei-card { background: var(--ei-card); border: 1px solid var(--ei-line); border-radius: var(--ei-r); box-shadow: var(--ei-shadow);
+    padding: clamp(14px, 2.2vw, 24px); display: grid; gap: var(--cds-gap-sm); align-content: start; min-width: 0; }
+  .ei-tile { gap: var(--cds-gap-md); align-content: space-between; }
+  .ei-tile .ei-big { font-family: var(--ei-display); font-weight: 300; font-size: clamp(1.9rem, 3.2vw, 2.6rem); letter-spacing: -0.045em;
+    line-height: 1; font-variant-numeric: tabular-nums; }
+  .ei-tile .ei-label { color: var(--color-fg-muted); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.4; }
+  /* La primera cifra de cada resumen va destacada en violeta */
+  .ei-tiles > .ei-tile:first-child { background: var(--ei-accent); border-color: transparent; color: #fff; }
+  .ei-tiles > .ei-tile:first-child .ei-label { color: rgba(255, 255, 255, 0.75); }
+  .ei-card .ei-card { box-shadow: none; background: var(--ei-wash); }
+  .ei-chart { position: relative; min-height: 16rem; }
+  .ei-chart.ei-tall { min-height: 26rem; }
+  .ei-chart svg { display: block; overflow: visible; }
+  .ei-chart text { fill: var(--color-fg-muted); font-size: 12px; font-family: var(--font-anthropic-sans); }
+  .ei-chart text.ei-val { fill: var(--color-fg); font-variant-numeric: tabular-nums; }
+  .ei-chart text.ei-strong { fill: var(--color-fg); font-weight: 600; }
+  .ei-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs) var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .ei-legend span { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+  .ei-sw { width: 0.75rem; height: 0.75rem; border-radius: 3px; display: inline-block; background: var(--cds-chart-muted); }
+  .ei-controls { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); align-items: center; }
+  .ei select { font: inherit; font-size: 14px; padding: 8px 14px; border: 1px solid var(--ei-line);
+    border-radius: var(--ei-pill); background: var(--ei-card); color: var(--color-fg); max-width: 100%; }
+  .ei-sw.ei-sw-anillo { background: none !important; border: 2px solid var(--color-fg-muted); border-radius: 50%; }
+  .ei-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border: 1px solid var(--ei-line); border-radius: var(--ei-pill); background: var(--ei-card); }
+  .ei-seg button { font: inherit; font-size: var(--cds-font-size-caption); background: none; color: var(--color-fg-muted);
+    border: 0; border-radius: var(--ei-pill); padding: 6px 14px; cursor: pointer; }
+  .ei-seg button[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); }
+  .ei-facts { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); }
+  .ei-tablebox { overflow: auto; max-height: 26rem; }
+  .ei table { border-collapse: collapse; width: 100%; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+  .ei th { text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); position: sticky; top: 0;
+    background: var(--ei-card); padding: var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line);
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .ei td { padding: var(--cds-pad-sm); border-bottom: 1px solid var(--ei-line); }
+  .ei-card .ei-card th { background: var(--ei-wash); }
+  .ei td.ei-num, .ei th.ei-num { text-align: right; }
+  .ei-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border);
+    border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm);
+    font-size: var(--cds-font-size-caption); white-space: nowrap; z-index: 2; }
+  .ei-tip .ei-tip-head { color: var(--cds-text-secondary); }
+  .ei-fail { display: flex; align-items: center; justify-content: center; gap: var(--cds-gap-xs); min-height: inherit;
+    color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .ei-dot { width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--color-bad); }
+  .ei-sim { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--cds-gap-sm); min-height: 16rem; min-width: 0; }
+  .ei-sim-fila { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs) var(--cds-gap-md); align-items: center; min-width: 0; }
+  .ei-sim-fila input[type=range] { flex: 1 1 8rem; min-width: 0; accent-color: var(--ei-accent); }
+  .ei-sim-nombre { flex: 0 0 6.5rem; font-variant-numeric: tabular-nums; }
+  .ei-sim-nombre-largo { flex-basis: 16rem; } /* nombres de biomarcadores, más largos que los de sondas */
+  .ei-sim-valor { flex: 1 0 14rem; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+  .ei-sim-valor b { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+  .ei-reset { font: inherit; font-size: var(--cds-font-size-caption); background: var(--ei-card); color: var(--color-fg); cursor: pointer;
+    border: 1px solid var(--ei-line); border-radius: var(--ei-pill); padding: 8px 16px; }
+  .ei-reset::after { content: ' ↺'; color: var(--ei-accent-text); }
+  .ei-reset:hover { border-color: var(--ei-accent-text); }
+  .ei-reset:focus-visible, .ei-sim input:focus-visible { outline: 2px solid var(--ei-accent-text); outline-offset: 2px; }
+  .ei-linea { display: inline-block; width: 0; height: 0.9rem; border-left: 2px dashed var(--color-fg-muted); }
+  .ei-grad { display: inline-block; width: 5rem; height: 0.6rem; border-radius: 3px; vertical-align: middle; margin: 0 var(--cds-gap-xs); }
+  .ei-chart circle.ei-click { cursor: pointer; }
+  /* Elección de modelo: píldoras con flecha dentro de la portada */
+  .ei-models { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); }
+  .ei-models button { font: inherit; text-align: left; cursor: pointer; display: grid; grid-template-columns: 1fr auto; column-gap: 18px; row-gap: 2px;
+    align-items: center; padding: 14px 22px 14px 26px; flex: 1 1 18rem; max-width: 27rem; color: #fff;
+    background: transparent; border: 1px solid rgba(255, 255, 255, 0.32); border-radius: var(--ei-pill); transition: background .2s, border-color .2s; }
+  .ei-models button:hover { border-color: rgba(255, 255, 255, 0.7); }
+  .ei-models button[aria-pressed="true"] { background: var(--ei-accent); border-color: var(--ei-accent); }
+  .ei-models button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .ei-models .ei-mname { font-size: 1.05rem; }
+  .ei-models .ei-msub { grid-column: 1; font-size: 12px; color: rgba(255, 255, 255, 0.66); }
+  .ei-models .ei-arrow { grid-column: 2; grid-row: 1 / span 2; font-size: 1.2rem; transition: transform .2s; }
+  .ei-models button:hover .ei-arrow, .ei-models button[aria-pressed="true"] .ei-arrow { transform: translateX(3px); }
+  .ei-models button { position: relative; overflow: hidden; isolation: isolate; }
+  .ei-models button > span { position: relative; z-index: 1; }
+  /* Destello que cruza la píldora al pasar el mouse */
+  .ei-models button::before { content: ''; position: absolute; inset: 0; z-index: 0; transform: translateX(-120%) skewX(-20deg);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent); }
+  .ei-models button:hover::before { transition: transform .8s cubic-bezier(.2, .8, .2, 1); transform: translateX(120%) skewX(-20deg); }
+  .ei-models button[aria-pressed="true"] { animation: ei-respira 2.8s ease-out infinite; }
+  .ei-models button:hover .ei-arrow { animation: ei-flecha .9s ease-in-out infinite; }
+
+  /* Indicador de la pestaña activa: se desliza entre pestañas */
+  .ei-tab-ind { position: absolute; left: 0; top: 5px; bottom: 5px; width: 0; border-radius: var(--ei-pill); background: var(--ei-accent);
+    box-shadow: 0 6px 20px -6px rgba(58, 23, 230, 0.9); pointer-events: none; }
+  .ei-ind-on .ei-tab-ind { transition: transform .5s cubic-bezier(.5, 1.5, .45, 1), width .5s cubic-bezier(.5, 1.5, .45, 1); }
+  .ei-tabs button { position: relative; z-index: 1; }
+  .ei-ind-on button[aria-selected="true"] { background: transparent; }
+
+  /* ===================== Animaciones de entrada (v1.3) ===================== */
+  /* Portada: las palabras del título suben una por una; "dos relojes" brilla */
+  .ei-hero .ei-w { display: inline-block; animation: ei-palabra .9s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(var(--i) * 75ms + 150ms); }
+  .ei-hero .ei-acc .ei-w { color: transparent; -webkit-background-clip: text; background-clip: text;
+    background-image: linear-gradient(100deg, #8f7bff 0%, #d9d2ff 30%, #8f7bff 55%, #6d4dff 80%, #8f7bff 100%); background-size: 220% 100%;
+    animation: ei-palabra .9s cubic-bezier(.2, .8, .2, 1) backwards, ei-brillo 5s linear infinite;
+    animation-delay: calc(var(--i) * 75ms + 150ms), 0s; }
+  .ei-hero > .ei-eyebrow { animation: ei-sube .8s cubic-bezier(.2, .8, .2, 1) backwards; }
+  .ei-hero > .ei-lead { animation: ei-sube .9s .85s cubic-bezier(.2, .8, .2, 1) backwards; }
+  .ei-hero .ei-models button { animation: ei-sube .9s 1.05s cubic-bezier(.2, .8, .2, 1) backwards; }
+  .ei-hero .ei-models button + button { animation-delay: 1.2s; }
+  .ei-hero .ei-models button[aria-pressed="true"] { animation: ei-sube .9s 1.05s cubic-bezier(.2, .8, .2, 1) backwards, ei-respira 2.8s 2s ease-out infinite; }
+
+  /* Tarjetas: aparecen al llegar a la pantalla (la clase ei-anim solo la pone el script, así sin script todo se ve) */
+  .ei-anim .ei-card:not(.ei-visto), .ei-anim .ei-model-head:not(.ei-visto), .ei-anim .ei-page > .ei-lead:not(.ei-visto),
+  .ei-anim .ei-page > h2:not(.ei-visto) { opacity: 0; }
+  .ei-anim .ei-visto { animation: ei-carta .85s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: var(--d, 0ms); }
+  /* Las cifras grandes suben desde abajo, un poco después de su tarjeta */
+  .ei-anim .ei-visto .ei-big { display: block; animation: ei-numero 1s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(var(--d, 0ms) + 220ms); }
+  /* Gráficos: se revelan de izquierda a derecha; los puntos aparecen en orden con un pequeño rebote */
+  .ei-anim .ei-visto .ei-chart > svg { animation: ei-barrido 1.2s cubic-bezier(.65, 0, .35, 1) backwards; animation-delay: calc(var(--d, 0ms) + 150ms); }
+  .ei-anim .ei-visto .ei-chart svg:not(.ei-muchos) circle { transform-box: fill-box; transform-origin: center;
+    animation: ei-pop .6s cubic-bezier(.3, 1.7, .5, 1) backwards; animation-delay: calc(var(--dp, 0ms) + 200ms); }
+  .ei-anim .ei-visto tbody tr { animation: ei-fila .6s ease-out backwards; animation-delay: calc(var(--d, 0ms) + 250ms); }
+  .ei-sim svg circle { transition: cx .35s cubic-bezier(.3, 1.4, .5, 1); }
+  .ei-bump { display: inline-block; animation: ei-bump .4s ease-out; }
+  /* Al pasar el mouse, la tarjeta se levanta */
+  .ei-card { transition: transform .35s cubic-bezier(.2, .8, .2, 1), box-shadow .35s, border-color .35s; }
+  .ei-page > .ei-card:not(.ei-cargando):hover, .ei-grid > .ei-card:hover, .ei-tiles > .ei-card:hover, .ei-page > .ei-facts > .ei-card:hover,
+  .ei-resultados > .ei-card:hover, .ei-resultados > .ei-facts > .ei-card:hover {
+    transform: translateY(-4px); border-color: color-mix(in srgb, var(--ei-accent-text) 28%, transparent);
+    box-shadow: 0 26px 50px -30px color-mix(in srgb, #3a17e6 60%, transparent); }
+  /* La cifra destacada tiene un fondo violeta que se mueve lento */
+  .ei-tiles > .ei-tile:first-child { position: relative; overflow: hidden; isolation: isolate; }
+  .ei-tiles > .ei-tile:first-child > * { position: relative; z-index: 1; }
+  .ei-tiles > .ei-tile:first-child::before { content: ''; position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(115deg, #2a0fb8, #3a17e6 25%, #6b4dff 50%, #3a17e6 75%, #2a0fb8) 0 0 / 300% 100%;
+    animation: ei-fondo 9s ease-in-out infinite alternate; }
+
+  @keyframes ei-sube { from { opacity: 0; transform: translateY(26px); filter: blur(6px); } }
+  @keyframes ei-carta { from { opacity: 0; transform: translateY(32px) scale(0.985); } }
+  @keyframes ei-palabra { from { opacity: 0; transform: translateY(0.55em) rotate(3deg); filter: blur(10px); } }
+  @keyframes ei-numero { from { opacity: 0; transform: translateY(0.5em); letter-spacing: 0.04em; filter: blur(4px); } }
+  @keyframes ei-barrido { from { clip-path: inset(-60px 100% -60px -260px); } to { clip-path: inset(-60px -60px -60px -260px); } }
+  @keyframes ei-pop { from { transform: scale(0); opacity: 0; } }
+  @keyframes ei-fila { from { opacity: 0; transform: translateX(-10px); } }
+  @keyframes ei-bump { 40% { transform: scale(1.1); color: var(--ei-accent-text); } }
+  @keyframes ei-brillo { to { background-position: -220% 0; } }
+  @keyframes ei-fondo { to { background-position: 100% 0; } }
+  @keyframes ei-deriva { to { background-position: 22px 22px; } }
+  @keyframes ei-flota { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-10%, 12%) scale(1.15); } 100% { transform: translate(6%, -4%) scale(0.92); } }
+  @keyframes ei-latido { 70% { box-shadow: 0 0 0 9px rgba(169, 155, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(169, 155, 255, 0); } }
+  @keyframes ei-gira { to { transform: rotate(360deg); } }
+  @keyframes ei-onda { from { r: 6; opacity: 0.9; } to { r: 70; opacity: 0; } }
+  @keyframes ei-aparece { from { opacity: 0; scale: 0.82; rotate: -40deg; } }
+  @keyframes ei-respira { 0% { box-shadow: 0 0 0 0 rgba(58, 23, 230, 0.55); } 70%, 100% { box-shadow: 0 0 0 12px rgba(58, 23, 230, 0); } }
+  @keyframes ei-flecha { 50% { transform: translateX(7px); } }
+  @keyframes ei-celula { from { transform: translate(0, 0) scale(1); } to { transform: translate(var(--mx2, 6px), var(--my2, -8px)) scale(1.12); } }
+  @keyframes ei-helice-a { 0%, 100% { top: 0; transform: scale(1); } 50% { top: calc(100% - 7px); transform: scale(0.45); } }
+  @keyframes ei-helice-b { 0%, 100% { top: calc(100% - 7px); transform: scale(0.45); } 50% { top: 0; transform: scale(1); } }
+  /* Quien pide menos movimiento en su sistema ve todo quieto */
+  @media (prefers-reduced-motion: reduce) {
+    .ei *, .ei *::before, .ei *::after, .ei-hero { animation: none !important; transition: none !important; }
+    .ei-anim .ei-card, .ei-anim .ei-model-head, .ei-anim .ei-page > .ei-lead, .ei-anim .ei-page > h2 { opacity: 1 !important; }
+  }
+  /* ============ Agregar un paciente (v1.4; solo aparece con el servidor Python) ============ */
+  .ei-resultados { display: grid; gap: var(--cds-gap-lg); }
+  /* Página de un solo reloj (v1.5, página web): sin la portada de aquí, que ahora es su propia página */
+  .ei-pagina-sola > .ei-hero { display: none; }
+  .ei-pagina-sola > .ei-model > .ei-model-head { padding-top: var(--cds-gap-md); }
+  .ei-subir-acciones { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-gap-sm) var(--cds-gap-md); }
+  .ei-subir-btn { font: inherit; font-size: 14px; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+    padding: 8px 18px 8px 8px; border: 0; border-radius: var(--ei-pill); background: var(--ei-accent); color: #fff;
+    box-shadow: 0 10px 24px -14px rgba(58, 23, 230, 0.9); transition: transform .2s, box-shadow .2s, opacity .2s; }
+  .ei-subir-btn:hover { transform: translateY(-1px); box-shadow: 0 16px 30px -14px rgba(58, 23, 230, 1); }
+  .ei-subir-btn:disabled { opacity: 0.5; cursor: progress; transform: none; }
+  .ei-subir-btn:focus-visible { outline: 2px solid var(--ei-accent-text); outline-offset: 3px; }
+  .ei-subir-mas { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, 0.2);
+    font-size: 17px; line-height: 1; transition: transform .3s cubic-bezier(.3, 1.5, .5, 1); }
+  .ei-subir-btn[aria-expanded="true"] .ei-subir-mas { transform: rotate(45deg); }
+  .ei .ei-subir-estado { font-size: var(--cds-font-size-caption); line-height: 1.5; color: var(--color-fg-muted); display: grid; gap: 2px; }
+  .ei .ei-subir-estado:empty { display: none; }
+  .ei .ei-subir-estado.ei-subir-error { color: var(--color-bad); display: flex; align-items: center; gap: 6px; }
+  .ei .ei-subir-estado b { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+  .ei-subir { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+  .ei-subir-zona { min-height: 19rem; place-content: center; justify-items: center; text-align: center; cursor: pointer; box-shadow: none;
+    border: 2px dashed color-mix(in srgb, var(--color-fg) 20%, transparent);
+    background: color-mix(in srgb, var(--ei-accent) 3%, var(--ei-card)); transition: border-color .2s, background .2s, transform .25s; }
+  .ei-subir-zona:hover, .ei-subir-zona:focus-visible, .ei-subir-zona.ei-arrastrando { outline: none; border-color: var(--ei-accent-text);
+    background: color-mix(in srgb, var(--ei-accent) 9%, var(--ei-card)); }
+  .ei-subir-zona.ei-arrastrando { transform: scale(1.012); }
+  .ei-subir-zona h2 { font-size: 1.25rem; }
+  .ei-subir-zona u { color: var(--ei-accent-text); text-decoration-color: currentColor; text-underline-offset: 3px; }
+  .ei-subir-icono { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 8px; color: #fff;
+    background: var(--ei-accent); box-shadow: 0 14px 30px -12px rgba(58, 23, 230, 0.9); }
+  .ei-subir-icono svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ei-subir-zona:hover .ei-subir-icono svg, .ei-arrastrando .ei-subir-icono svg { animation: ei-flecha-sube .9s ease-in-out infinite; }
+  .ei-subir-ayuda { align-content: stretch; }
+  .ei-subir-ayuda ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 6px; max-width: 60ch; }
+  .ei-subir-botones { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); align-self: end; margin-top: var(--cds-gap-sm); }
+  .ei-subir-ejemplo { font-size: var(--cds-font-size-caption); color: var(--ei-accent-text); text-decoration: none; padding: 8px 16px;
+    border: 1px solid color-mix(in srgb, var(--ei-accent-text) 45%, transparent); border-radius: var(--ei-pill); }
+  .ei-subir-ejemplo:hover { background: color-mix(in srgb, var(--ei-accent) 8%, transparent); }
+  .ei-subir-ejemplo::before { content: '↓ '; }
+  .ei-subir-ejemplo:focus-visible { outline: 2px solid var(--ei-accent-text); outline-offset: 2px; }
+  .ei-sin-icono::after { content: none !important; }
+  .ei-sin-icono::before { content: '← '; color: var(--ei-accent-text); }
+  /* Animación de carga: el video de la silueta. El gris del fondo se vuelve invisible con una mezcla:
+     en tema claro el gris pasa a blanco y "multiply" lo borra; en oscuro pasa a negro y "screen" lo borra. */
+  .ei-cargando { min-height: 26rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--cds-gap-md);
+    text-align: center; overflow: hidden; }
+  .ei-cargando-escena { position: relative; width: min(520px, 100%); aspect-ratio: 16 / 9; }
+  .ei-cargando video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+    filter: grayscale(1) brightness(1.6) contrast(3); mix-blend-mode: multiply; }
+  .ei-cargando.ei-oscuro video { filter: grayscale(1) brightness(1.6) contrast(3) invert(1); mix-blend-mode: screen; }
+  .ei .ei-cargando-texto { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-fg-muted); }
+  .ei-cargando-barra { width: min(260px, 70%); height: 3px; border-radius: 3px; overflow: hidden; background: color-mix(in srgb, var(--color-fg) 12%, transparent); }
+  .ei-cargando-barra i { display: block; height: 100%; width: 100%; background: var(--ei-accent-text); transform-origin: left; transform: scaleX(0); transition: transform .25s linear; }
+  .ei .ei-cargando-texto { font-variant-numeric: tabular-nums; }
+  /* Sin video (no cargó o no hay): solo el texto y la barra de progreso */
+  .ei-sin-video .ei-cargando-escena { display: none; }
+  @keyframes ei-flecha-sube { 50% { transform: translateY(-4px); } }
+
+  [data-dash-source-state=empty] { color: transparent; }
+  [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+</style>
+
+<div class="ei">
+  <header class="ei-hero" id="inicio">
+    <div class="ei-luz" aria-hidden="true"></div>
+    <svg class="ei-reloj" viewBox="0 0 320 320" aria-hidden="true" focusable="false">
+      <circle class="r-tic" cx="160" cy="160" r="150"/>
+      <circle class="r-tic-may" cx="160" cy="160" r="150"/>
+      <g class="r-gira-lento"><circle class="r-guion" cx="160" cy="160" r="122"/></g>
+      <g class="r-gira-inverso"><circle class="r-arco" cx="160" cy="160" r="100"/></g>
+      <g class="r-orbita"><circle class="r-sat" cx="160" cy="38" r="5"/></g>
+      <g class="r-aguja-h"><line x1="160" y1="168" x2="160" y2="104"/></g>
+      <g class="r-aguja-m"><line x1="160" y1="172" x2="160" y2="68"/></g>
+      <circle class="r-onda" cx="160" cy="160" r="6"/>
+      <circle class="r-centro" cx="160" cy="160" r="6"/>
+    </svg>
+    <span class="ei-eyebrow"><span class="ei-pulso" aria-hidden="true"></span>Immuno-XAI · Edad biológica explicable</span>
+    <h1><span class="ei-w" style="--i:0">La</span> <span class="ei-w" style="--i:1">edad</span> <span class="ei-w" style="--i:2">del</span> <span class="ei-w" style="--i:3">cuerpo,</span> <span class="ei-w" style="--i:4">contada</span> <span class="ei-w" style="--i:5">por</span> <span class="ei-acc"><span class="ei-w" style="--i:6">dos</span> <span class="ei-w" style="--i:7">relojes</span></span><span class="ei-w" style="--i:8">.</span></h1>
+    <p class="ei-lead">Dos modelos estiman la edad de una persona con datos distintos. Se entrenaron con personas distintas y funcionan por separado, así que cada uno tiene sus propias secciones.</p>
+    <div class="ei-models" role="group" aria-label="Modelo">
+      <button type="button" data-modelo-btn="inmuno" aria-pressed="true" id="btn-modelo-inmuno">
+        <span class="ei-mname">Inmunológico</span>
+        <span class="ei-msub">Células inmunes y citoquinas · TabPFN · Stanford 10K</span>
+        <span class="ei-arrow" aria-hidden="true">→</span>
+      </button>
+      <button type="button" data-modelo-btn="epi" aria-pressed="false" id="btn-modelo-epi">
+        <span class="ei-mname">Epigenético</span>
+        <span class="ei-msub">Metilación del ADN · ElasticNet · Hannum + GSE87571</span>
+        <span class="ei-arrow" aria-hidden="true">→</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================== MODELO INMUNOLÓGICO (TabPFN) ===================== -->
+  <div class="ei-page ei-model" data-modelo="inmuno" id="modelo-inmuno">
+  <div class="ei-model-head">
+    <span class="ei-eyebrow ei-titulo-modelo">Modelo <span class="ei-acc">inmunológico</span></span>
+    <h2 class="ei-display">El sistema inmune como <span class="ei-acc">reloj</span>.</h2>
+    <span class="ei-deco ei-celulas" aria-hidden="true">
+      <i style="--s:30px;--x:4px;--y:20px;--t:5.5s;--mx2:8px;--my2:-10px"></i>
+      <i style="--s:16px;--x:44px;--y:4px;--t:4.2s;--r:-1s;--mx2:-6px;--my2:8px"></i>
+      <i style="--s:24px;--x:56px;--y:38px;--t:6.4s;--r:-2s;--mx2:10px;--my2:-6px"></i>
+      <i style="--s:12px;--x:92px;--y:12px;--t:3.8s;--r:-.5s;--mx2:-8px;--my2:10px"></i>
+      <i style="--s:20px;--x:104px;--y:44px;--t:5s;--r:-3s;--mx2:-10px;--my2:-8px"></i>
+      <i style="--s:10px;--x:30px;--y:58px;--t:4.6s;--r:-1.6s;--mx2:12px;--my2:-4px"></i>
+    </span>
+  </div>
+  <p class="ei-lead">El modelo estima la edad de una persona a partir de sus células inmunes y citoquinas (Stanford 10K Immunomes). En pacientes nuevos del 10K se equivoca en promedio <b data-draw="num" data-source="metricas" data-field="MAE" data-where="prueba=test" data-fmt="f2">—</b> años; en estudios que nunca vio, <b data-draw="num" data-source="metricas" data-field="MAE" data-where="prueba=no_vistos" data-fmt="f1">—</b> años.</p>
+
+  <nav class="ei-tabs" role="tablist" aria-label="Secciones del modelo inmunológico">
+    <span class="ei-tab-ind" aria-hidden="true"></span>
+    <button role="tab" data-tab="resumen" aria-selected="true">Resumen</button>
+    <button role="tab" data-tab="explicabilidad" aria-selected="false">Qué mira el modelo</button>
+    <button role="tab" data-tab="paciente" aria-selected="false">Explorar un paciente</button>
+  </nav>
+
+  <!-- ============================== RESUMEN ============================== -->
+  <section class="ei-page" id="resumen" data-page="resumen">
+    <div class="ei-tiles">
+      <div class="ei-card ei-tile" id="tile-mae">
+        <span class="ei-label">Error medio en el test (MAE)</span>
+        <span class="ei-big"><span data-draw="num" data-source="metricas" data-field="MAE" data-where="prueba=test" data-fmt="f2">—</span> años</span>
+      </div>
+      <div class="ei-card ei-tile" id="tile-r2">
+        <span class="ei-label">Varianza explicada en el test (R²)</span>
+        <span class="ei-big" data-draw="num" data-source="metricas" data-field="R2" data-where="prueba=test" data-fmt="f3">—</span>
+      </div>
+      <div class="ei-card ei-tile" id="tile-acierto">
+        <span class="ei-label">Pacientes de test con error de ±<span data-draw="umbral">—</span> años o menos</span>
+        <span class="ei-big"><span data-draw="num" data-source="metricas" data-field="acierto5" data-where="prueba=test" data-fmt="f1">—</span> %</span>
+      </div>
+      <div class="ei-card ei-tile" id="tile-cv">
+        <span class="ei-label">Error medio en validación cruzada 5×5</span>
+        <span class="ei-big"><span data-draw="num" data-source="metricas" data-field="MAE" data-where="prueba=cv" data-fmt="f2">—</span> años</span>
+      </div>
+    </div>
+
+    <div class="ei-card" id="card-metricas">
+      <h2>Las tres pruebas del modelo final</h2>
+      <p class="ei-note">MAE y RMSE en años. La validación cruzada agrupa por paciente; el test se usó una sola vez; en "estudios no vistos" se entrena sin un estudio completo y se evalúa en él.</p>
+      <div class="ei-tablebox">
+        <table data-source="metricas" data-row-key="prueba">
+          <thead><tr>
+            <th data-field="evaluacion">Prueba</th>
+            <th data-field="MAE" class="ei-num">MAE</th>
+            <th data-field="RMSE" class="ei-num">RMSE</th>
+            <th data-field="R2" class="ei-num">R²</th>
+            <th data-field="r" class="ei-num">r</th>
+            <th data-field="acierto5" class="ei-num">Acierto (%)</th>
+          </tr></thead>
+          <tbody data-draw="tabla-metricas" data-source="metricas"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="ei-grid">
+      <div class="ei-card" id="card-evolucion">
+        <h2>Cómo bajó el error a lo largo del proyecto</h2>
+        <p class="ei-note">MAE en años; menor es mejor. Las primeras etapas no se evaluaron con estudios no vistos.</p>
+        <div class="ei-legend"><span><i class="ei-sw" data-sw="0"></i>Test (pacientes nuevos del 10K)</span><span><i class="ei-sw" data-sw="1"></i>Estudios no vistos</span></div>
+        <div class="ei-chart ei-tall dash-skeleton" data-draw="evolucion" data-source="evolucion" id="chart-evolucion"></div>
+      </div>
+      <div class="ei-card" id="card-no-vistos">
+        <h2>Error en cada estudio no visto</h2>
+        <p class="ei-note">Se entrena sin ese estudio y se evalúa en él. Bajo cada estudio, su rango de edades en años.</p>
+        <div class="ei-legend"><span><i class="ei-sw" data-sw="muted"></i>Modelo anterior (dos ramas)</span><span><i class="ei-sw" data-sw="2"></i>TabPFN dos ramas</span><span><i class="ei-sw" data-sw="0"></i>TabPFN un modelo (final)</span></div>
+        <div class="ei-chart ei-tall dash-skeleton" data-draw="no-vistos" data-source="no_vistos" id="chart-no-vistos"></div>
+      </div>
+    </div>
+
+    <div class="ei-controls">
+      <span class="ei-note">Prueba</span>
+      <div class="ei-seg" role="group" aria-label="Prueba con la que se comparan los modelos">
+        <button type="button" data-evalinm="cv" aria-pressed="false">Validación cruzada 5×5</button>
+        <button type="button" data-evalinm="test" aria-pressed="true">Test</button>
+        <button type="button" data-evalinm="no_vistos" aria-pressed="false">Estudios no vistos</button>
+      </div>
+    </div>
+    <div class="ei-card" id="card-inm-modelos">
+      <h2>Los siete modelos con la misma evaluación</h2>
+      <p class="ei-note">MAE en años en la prueba elegida; menor es mejor. Las etapas del gráfico de arriba se hicieron en momentos distintos; aquí los siete modelos se vuelven a entrenar con los mismos pacientes, las mismas particiones y las mismas tres pruebas. Los cinco clásicos usan las mismas 46 variables que TabPFN, con hiperparámetros elegidos solo con el train. TabPFN v2 es el mejor en las tres pruebas y es el modelo final.</p>
+      <div class="ei-legend"><span><i class="ei-sw" data-sw="0"></i>TabPFN v2 (final)</span><span><i class="ei-sw" data-sw="muted"></i>Otros modelos</span></div>
+      <div class="ei-chart dash-skeleton" data-draw="inm-modelos" data-source="comparacion_modelos" id="chart-inm-modelos"></div>
+    </div>
+
+    <div class="ei-card" id="card-inm-variables">
+      <h2>¿Hacen falta más o menos biomarcadores?</h2>
+      <p class="ei-note">MAE en validación cruzada 5×3 (años), calculado solo con los 354 pacientes de train, según cuántos biomarcadores recibe cada modelo (más el sexo): los k con más correlación con la edad entre las 71 candidatas. El anillo en 45 es cada modelo con los 45 biomarcadores que usa el modelo final. Con las 71, TabPFN, ElasticNet y LightGBM bajan un poco en el train, pero al confirmarlo en el test la diferencia no fue significativa (TabPFN: −0,23 años, IC95 −0,67 a +0,19) y en estudios no vistos el error subía. Por eso los seis modelos usan los mismos 45.</p>
+      <div class="ei-legend" data-draw="inm-leyenda-modelos" data-source="curva_variables"></div>
+      <div class="ei-chart dash-skeleton" data-draw="inm-curva-variables" data-source="curva_variables" id="chart-inm-variables"></div>
+    </div>
+  </section>
+
+  <!-- ========================== EXPLICABILIDAD =========================== -->
+  <section class="ei-page" id="explicabilidad" data-page="explicabilidad" hidden>
+    <p class="ei-lead">Para saber qué usa el modelo, se desordena una variable entre los pacientes de test y se mide cuánto empeora el error. Si sube mucho, el modelo depende de esa variable.</p>
+    <div class="ei-grid">
+      <div class="ei-card" id="card-bloques">
+        <h2>Células, citoquinas o sexo</h2>
+        <p class="ei-note">Aumento del MAE (años) al desordenar todo un bloque a la vez. Error base del test: <b data-draw="num" data-source="metricas" data-field="MAE" data-where="prueba=test" data-fmt="f2">—</b> años.</p>
+        <div class="ei-chart dash-skeleton" data-draw="bloques" data-source="bloques" id="chart-bloques"></div>
+      </div>
+      <div class="ei-card" id="card-perfil">
+        <h2>Cómo responde la edad predicha a un biomarcador</h2>
+        <p class="ei-note">Edad predicha media del test cuando el biomarcador elegido toma valores bajos a altos (percentiles 5 a 95 del train), con el resto de cada paciente igual.</p>
+        <div class="ei-controls">
+          <label for="sel-variable" class="ei-note">Biomarcador</label>
+          <select id="sel-variable" data-draw="sel-variable" data-source="perfiles"></select>
+        </div>
+        <div class="ei-chart dash-skeleton" data-draw="perfil" data-source="perfiles" id="chart-perfil"></div>
+      </div>
+    </div>
+    <div class="ei-card" id="card-importancia">
+      <h2>Biomarcadores que más usa el modelo</h2>
+      <p class="ei-note">Aumento del MAE (años) al desordenar cada variable; la línea fina es ± una desviación estándar en 5 repeticiones. Se muestran las 15 primeras del tipo elegido.</p>
+      <div class="ei-controls">
+        <div class="ei-seg" role="group" aria-label="Tipo de variable">
+          <button type="button" data-tipo="todas" aria-pressed="true">Todas</button>
+          <button type="button" data-tipo="Célula" aria-pressed="false">Células</button>
+          <button type="button" data-tipo="Citoquina" aria-pressed="false">Citoquinas</button>
+        </div>
+        <div class="ei-legend"><span><i class="ei-sw" data-sw="0"></i>Célula</span><span><i class="ei-sw" data-sw="1"></i>Citoquina</span><span><i class="ei-sw" data-sw="muted"></i>Sexo</span></div>
+      </div>
+      <div class="ei-chart ei-tall dash-skeleton" data-draw="importancia" data-source="importancia" id="chart-importancia"></div>
+    </div>
+    <h2 id="inm-shap">Aporte de cada biomarcador en cada paciente (SHAP)</h2>
+    <p class="ei-lead">La permutación dice de qué variables depende el modelo; SHAP dice cuántos años movió cada biomarcador la edad predicha de cada paciente. Se parte de un paciente de referencia, con todos los biomarcadores en la mediana del train (edad predicha: <b data-draw="num" data-source="pacientes_test" data-field="base" data-fmt="f1">—</b> años), y la diferencia con la edad predicha del paciente se reparte entre sus biomarcadores, contando también lo que hacen en conjunto. TabPFN no es lineal, así que los valores se estiman con la librería shap (KernelExplainer, <span data-draw="constante" data-nombre="SHAP_COMBINACIONES">—</span> combinaciones de biomarcadores por paciente): cada valor tiene un error cercano a 0,1 años.</p>
+    <div class="ei-card" id="card-inm-shap-imp">
+      <h2>Biomarcadores con más aporte medio</h2>
+      <p class="ei-note">Media del aporte en valor absoluto (años) en los <b data-draw="conteo" data-source="pacientes_test">—</b> pacientes de test: cuánto mueve cada biomarcador la edad predicha de un paciente típico. Se muestran los <span data-draw="constante" data-nombre="TOP_SHAP_INM">—</span> primeros.</p>
+      <div class="ei-legend"><span><i class="ei-sw" data-sw="0"></i>Célula</span><span><i class="ei-sw" data-sw="1"></i>Citoquina</span><span><i class="ei-sw" data-sw="muted"></i>Sexo</span></div>
+      <div class="ei-chart ei-tall dash-skeleton" data-draw="inm-shap-imp" data-source="shap_inmune_importancia" id="chart-inm-shap-imp"></div>
+    </div>
+    <div class="ei-card" id="card-inm-enjambre">
+      <h2>Un punto por paciente: enjambre SHAP</h2>
+      <p class="ei-note">Cada punto es un paciente de test. A la derecha del cero, el biomarcador lo hace parecer mayor; a la izquierda, menor. El color es su valor en ese biomarcador frente al train, de −2 a +2 desviaciones estándar: así se ve si un valor alto suma o resta años. En gris, los pacientes sin ese dato. Haz clic en un punto para explicar a ese paciente.</p>
+      <div class="ei-legend"><span>Valor bajo <i class="ei-grad" data-grad></i> alto</span><span><i class="ei-sw" data-sw="muted"></i>Sin dato</span></div>
+      <div class="ei-chart ei-tall dash-skeleton" data-draw="inm-enjambre" data-source="shap_inmune shap_inmune_importancia pacientes_test" id="chart-inm-enjambre"></div>
+    </div>
+  </section>
+
+  <!-- ============================= PACIENTE ============================== -->
+  <section class="ei-page" id="paciente" data-page="paciente" hidden>
+    <p class="ei-lead">Elige un paciente del test para ver qué biomarcadores lo hacen parecer mayor o menor. Su edad predicha es la base (<b data-draw="pac-num" data-source="pacientes_test" data-field="base" data-fmt="f1">—</b> años, la de un paciente de referencia con todos los biomarcadores en la mediana del train) más el aporte SHAP de cada biomarcador.</p>
+    <div class="ei-controls">
+      <label for="sel-paciente" class="ei-note">Paciente de test</label>
+      <select id="sel-paciente" data-draw="sel-paciente" data-source="pacientes_test"></select>
+    </div>
+    <!-- Agregar un paciente: solo aparece fuera de Claude, cuando hay un servidor que calcula la edad -->
+    <div class="ei-subir-acciones" data-subir-acciones hidden>
+      <button type="button" class="ei-subir-btn" data-subir-abrir="inmuno" aria-expanded="false" aria-controls="subir-inmuno"><span class="ei-subir-mas" aria-hidden="true">+</span>Agregar un paciente</button>
+      <p class="ei-subir-estado" data-draw="subir-estado" data-modelo="inmuno" role="status" aria-live="polite"></p>
+    </div>
+    <div class="ei-subir" id="subir-inmuno" data-subir="inmuno" hidden>
+      <div class="ei-card ei-subir-zona" data-subir-zona="inmuno" role="button" tabindex="0" aria-label="Subir el archivo CSV de un paciente">
+        <span class="ei-subir-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 15V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"/></svg></span>
+        <h2>Arrastra aquí el archivo del paciente</h2>
+        <p class="ei-note">o <u>haz clic para elegirlo</u> · CSV, hasta 20 pacientes</p>
+      </div>
+      <input type="file" accept=".csv,text/csv" data-subir-input="inmuno" hidden>
+      <div class="ei-card ei-subir-ayuda">
+        <h2>Qué debe traer el archivo</h2>
+        <ul class="ei-note">
+          <li>Una fila por paciente y una columna por biomarcador: las 16 células y las 29 citoquinas del modelo, con sus mismos nombres (por ejemplo <b>Naive_CD8_T_cells</b> o <b>IL6</b>) y en la escala normalizada del Stanford 10K.</li>
+          <li>Una columna <b>gender</b> con Male o Female.</li>
+          <li>Opcional: <b>age</b>, la edad real, para calcular la brecha, e <b>id</b>, el nombre del paciente.</li>
+          <li>Se aceptan biomarcadores vacíos porque el modelo los maneja; si falta más de la mitad, no se calcula.</li>
+          <li>El cálculo tarda alrededor de 40 segundos, más unos 20 por cada paciente adicional: el modelo predice la edad, estima los valores SHAP (<span data-draw="constante" data-nombre="SHAP_COMBINACIONES_SUBIDA">—</span> combinaciones de biomarcadores por paciente) y calcula las curvas del simulador «qué pasaría si».</li>
+        </ul>
+        <div class="ei-subir-botones">
+          <a class="ei-subir-ejemplo" href="ejemplos/ejemplo_inmunologico.csv" download>Archivo de ejemplo</a>
+          <button type="button" class="ei-reset ei-sin-icono" data-subir-cerrar="inmuno">Volver a los pacientes de test</button>
+        </div>
+      </div>
+    </div>
+    <div class="ei-card ei-cargando" data-cargando="inmuno" hidden>
+      <div class="ei-cargando-escena" aria-hidden="true"><video muted playsinline preload="none"></video></div>
+      <p class="ei-cargando-texto" role="status" data-draw="carga-etapa" data-modelo="inmuno">Calculando la edad del paciente…</p>
+      <div class="ei-cargando-barra" aria-hidden="true"><i></i></div>
+    </div>
+    <div class="ei-resultados" data-resultados="inmuno">
+    <div class="ei-facts">
+      <div class="ei-card ei-tile"><span class="ei-label">Edad real</span><span class="ei-big"><span data-draw="pac-num" data-source="pacientes_test" data-field="edad_real" data-fmt="f1">—</span> años</span></div>
+      <div class="ei-card ei-tile"><span class="ei-label">Edad predicha</span><span class="ei-big"><span data-draw="pac-num" data-source="pacientes_test" data-field="edad_predicha" data-fmt="f1">—</span> años</span></div>
+      <div class="ei-card ei-tile"><span class="ei-label">Brecha (predicha − real)</span><span class="ei-big"><span data-draw="pac-num" data-source="pacientes_test" data-field="brecha_edad" data-fmt="s1">—</span> años</span></div>
+      <div class="ei-card ei-tile"><span class="ei-label">Estudio · sexo</span><span class="ei-big"><span data-draw="pac-txt" data-source="pacientes_test" data-field="estudio">—</span> · <span data-draw="pac-txt" data-source="pacientes_test" data-field="sexo">—</span></span></div>
+    </div>
+    <div class="ei-card" id="card-aportes">
+      <h2>De la base a la edad predicha, biomarcador por biomarcador</h2>
+      <p class="ei-note">Cascada de valores SHAP: parte de la base (la edad predicha del paciente de referencia) y suma el aporte de los <span data-draw="constante" data-nombre="CASCADA_BIO">—</span> biomarcadores con más efecto en este paciente; la última barra junta a todas las demás variables. Donde termina la cascada está la edad predicha. La línea punteada es la edad real. Pasa el cursor por una barra para ver el valor del paciente en ese biomarcador.</p>
+      <div class="ei-legend"><span><i class="ei-sw" data-sw="1"></i>Lo hace parecer mayor</span><span><i class="ei-sw" data-sw="0"></i>Lo hace parecer menor</span><span><i class="ei-sw" data-sw="muted"></i>Resto de variables</span></div>
+      <div class="ei-chart ei-tall dash-skeleton" data-draw="inm-cascada" data-source="shap_inmune pacientes_test" id="chart-aportes"></div>
+    </div>
+    <div class="ei-card" id="card-inm-simulador">
+      <h2>¿Qué pasaría si cambiaran sus biomarcadores?</h2>
+      <p class="ei-note">Mueve los <span data-draw="constante" data-nombre="SIM_BIOMARCADORES">—</span> biomarcadores que, llevados solos a su valor típico (la mediana del train), más cambian la edad predicha de este paciente, y mira qué pasa con ella. Pueden no ser los mismos de la cascada, porque SHAP reparte además los efectos conjuntos. Cada deslizador va del percentil 1 al 99 del train, en la escala normalizada del Stanford 10K. Se mueve <b>un biomarcador a la vez</b>: al mover uno, los demás vuelven al valor del paciente. Así el resultado sale del modelo real, calculado de antemano en 9 puntos de cada curva. No se pueden combinar porque TabPFN mezcla las variables: sumar los cambios de los seis se alejaba en promedio 8,2 años del cálculo exacto. Es una exploración del modelo, no una predicción biológica.</p>
+      <div class="ei-facts">
+        <div class="ei-card ei-tile"><span class="ei-label">Edad predicha simulada</span><span class="ei-big"><span data-draw="inm-sim-edad" data-source="simulador_inmune pacientes_test">—</span> años</span></div>
+        <div class="ei-card ei-tile"><span class="ei-label">Cambio frente a la edad predicha</span><span class="ei-big"><span data-draw="inm-sim-cambio" data-source="simulador_inmune pacientes_test">—</span> años</span></div>
+      </div>
+      <div class="ei-controls">
+        <button type="button" class="ei-reset" data-inm-sim-reset>Volver a los valores del paciente</button>
+      </div>
+      <div class="ei-legend"><span><i class="ei-sw" data-sw="muted"></i>Edad predicha</span><span><i class="ei-sw" data-sw="0"></i>Edad simulada</span><span><i class="ei-linea"></i>Edad real</span></div>
+      <div class="ei-sim dash-skeleton" data-draw="inm-simulador" data-source="simulador_inmune pacientes_test" id="sim-inm"></div>
+    </div>
+    </div>
+  </section>
+  </div>
+
+  <!-- ====================== MODELO EPIGENÉTICO (ElasticNet) ====================== -->
+  <div class="ei-page ei-model" data-modelo="epi" id="modelo-epi" hidden>
+    <div class="ei-model-head">
+      <span class="ei-eyebrow ei-titulo-modelo">Modelo <span class="ei-acc">epigenético</span></span>
+      <h2 class="ei-display">La metilación del ADN como <span class="ei-acc">reloj</span>.</h2>
+      <span class="ei-deco ei-adn" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i><i style="--i:12"></i><i style="--i:13"></i></span>
+    </div>
+    <p class="ei-lead">El modelo estima la edad a partir de la metilación del ADN en sangre: <span data-draw="constante" data-nombre="K_ELEGIDO">—</span> sondas CpG del array Illumina 450K, más el sexo. En los pacientes de test se equivoca en promedio <b data-draw="num" data-source="epi_metricas" data-field="MAE" data-where="prueba=test" data-fmt="f2">—</b> años; en la cohorte Hannum, la que se usa para comparar con otros relojes, <b data-draw="num" data-source="epi_metricas" data-field="MAE" data-where="prueba=hannum" data-fmt="f2">—</b> años.</p>
+
+    <nav class="ei-tabs" role="tablist" aria-label="Secciones del modelo epigenético">
+      <span class="ei-tab-ind" aria-hidden="true"></span>
+      <button role="tab" data-tab="epi-resumen" aria-selected="false">Resumen</button>
+      <button role="tab" data-tab="epi-explicabilidad" aria-selected="false">Qué mira el modelo</button>
+      <button role="tab" data-tab="epi-paciente" aria-selected="false">Explorar un paciente</button>
+    </nav>
+
+    <!-- ---------------------------- RESUMEN ---------------------------- -->
+    <section class="ei-page" id="epi-resumen" data-page="epi-resumen" hidden>
+      <div class="ei-tiles">
+        <div class="ei-card ei-tile" id="tile-epi-mae">
+          <span class="ei-label">Error medio en el test (MAE)</span>
+          <span class="ei-big"><span data-draw="num" data-source="epi_metricas" data-field="MAE" data-where="prueba=test" data-fmt="f2">—</span> años</span>
+        </div>
+        <div class="ei-card ei-tile" id="tile-epi-r2">
+          <span class="ei-label">Varianza explicada en el test de Hannum (R²)</span>
+          <span class="ei-big" data-draw="num" data-source="epi_metricas" data-field="R2" data-where="prueba=hannum" data-fmt="f3">—</span>
+        </div>
+        <div class="ei-card ei-tile" id="tile-epi-acierto">
+          <span class="ei-label">Pacientes de test con error de ±<span data-draw="umbral">—</span> años o menos</span>
+          <span class="ei-big"><span data-draw="num" data-source="epi_metricas" data-field="acierto5" data-where="prueba=test" data-fmt="f1">—</span> %</span>
+        </div>
+        <div class="ei-card ei-tile" id="tile-epi-cv">
+          <span class="ei-label">Error medio en validación cruzada (5 folds)</span>
+          <span class="ei-big"><span data-draw="num" data-source="epi_metricas" data-field="MAE" data-where="prueba=cv" data-fmt="f2">—</span> años</span>
+        </div>
+      </div>
+
+      <div class="ei-card" id="card-epi-metricas">
+        <h2>Validación cruzada y test, por cohorte</h2>
+        <p class="ei-note">MAE y RMSE en años. El test se separó antes de todo (25 % de cada cohorte) y se usó una sola vez. El R² combinado es más alto que el de cada cohorte porque juntar dos cohortes con distinto rango de edad aumenta la varianza; para comparar con otros relojes conviene el de Hannum.</p>
+        <div class="ei-tablebox">
+          <table data-source="epi_metricas" data-row-key="prueba">
+            <thead><tr>
+              <th data-field="evaluacion">Prueba</th>
+              <th data-field="MAE" class="ei-num">MAE</th>
+              <th data-field="RMSE" class="ei-num">RMSE</th>
+              <th data-field="R2" class="ei-num">R²</th>
+              <th data-field="r" class="ei-num">r</th>
+              <th data-field="acierto5" class="ei-num">Acierto (%)</th>
+            </tr></thead>
+            <tbody data-draw="tabla-metricas" data-source="epi_metricas"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="ei-controls">
+        <span class="ei-note">Cohorte del test</span>
+        <div class="ei-seg" role="group" aria-label="Cohorte del test">
+          <button type="button" data-epicohorte="Combinado" aria-pressed="true">Ambas</button>
+          <button type="button" data-epicohorte="Hannum" aria-pressed="false">Hannum (EE. UU.)</button>
+          <button type="button" data-epicohorte="GSE87571" aria-pressed="false">GSE87571 (Suecia)</button>
+        </div>
+      </div>
+      <div class="ei-card" id="card-epi-modelos">
+        <h2>Cinco algoritmos en el mismo test</h2>
+        <p class="ei-note">MAE en años en los pacientes de test de la cohorte elegida; menor es mejor. ElasticNet tuvo el menor error y es el modelo final.</p>
+        <div class="ei-legend"><span><i class="ei-sw" data-sw="0"></i>ElasticNet (final)</span><span><i class="ei-sw" data-sw="muted"></i>Otros algoritmos</span></div>
+        <div class="ei-chart dash-skeleton" data-draw="epi-modelos" data-source="epi_modelos" id="chart-epi-modelos"></div>
+      </div>
+      <div class="ei-grid">
+        <div class="ei-card" id="card-epi-aprendizaje">
+          <h2>¿Hacen falta más pacientes?</h2>
+          <p class="ei-note">MAE de validación (años) al entrenar con una parte creciente del train. Si la curva se aplana, sumar pacientes ayuda poco. La línea punteada es el error de ElasticNet en los mismos pacientes con que se entrenó.</p>
+          <div class="ei-legend" data-draw="epi-leyenda-modelos" data-source="epi_curva_aprendizaje"></div>
+          <div class="ei-chart dash-skeleton" data-draw="epi-aprendizaje" data-source="epi_curva_aprendizaje" id="chart-epi-aprendizaje"></div>
+        </div>
+        <div class="ei-card" id="card-epi-sondas-k">
+          <h2>¿Hacen falta más sondas?</h2>
+          <p class="ei-note">MAE en validación cruzada (años) según el número de sondas, elegidas entre las 470.043 del array por su correlación con la edad. Se eligieron <span data-draw="constante" data-nombre="K_ELEGIDO">—</span>: con 1.000 el error baja menos que la variación entre folds.</p>
+          <div class="ei-legend" data-draw="epi-leyenda-modelos" data-source="epi_curva_sondas"></div>
+          <div class="ei-chart dash-skeleton" data-draw="epi-curva-sondas" data-source="epi_curva_sondas" id="chart-epi-sondas-k"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------- QUÉ MIRA EL MODELO ------------------------- -->
+    <section class="ei-page" id="epi-explicabilidad" data-page="epi-explicabilidad" hidden>
+      <p class="ei-lead">ElasticNet es un modelo lineal: cada sonda tiene un coeficiente fijo, que dice cuántos años suma o resta cuando su metilación sube una desviación estándar. La explicación es exacta, sin aproximaciones. De las <b data-draw="num" data-source="epi_coef_resumen" data-field="total" data-fmt="d">—</b> variables, <b data-draw="num" data-source="epi_coef_resumen" data-field="activas" data-fmt="d">—</b> quedaron con coeficiente distinto de cero.</p>
+      <div class="ei-card" id="card-epi-coef">
+        <h2>Sondas con más peso en el modelo</h2>
+        <p class="ei-note">Las <span data-draw="constante" data-nombre="TOP_COEF">—</span> variables con el coeficiente más grande, en años por desviación estándar. cg16867657 está en el gen ELOVL2, el marcador de edad más replicado en la literatura.</p>
+        <div class="ei-legend"><span><i class="ei-sw" data-sw="1"></i>Más metilación, más edad</span><span><i class="ei-sw" data-sw="0"></i>Más metilación, menos edad</span></div>
+        <div class="ei-chart ei-tall dash-skeleton" data-draw="epi-coeficientes" data-source="epi_coeficientes" id="chart-epi-coef"></div>
+      </div>
+
+      <h2 id="epi-shap">Aporte de cada sonda en cada paciente (SHAP)</h2>
+      <p class="ei-lead">El coeficiente dice cuánto pesa una sonda; el aporte dice cuántos años movió la edad predicha de cada paciente. En un modelo lineal el aporte es exactamente su valor SHAP: coeficiente × metilación estandarizada del paciente. Todo se calcula con los <b data-draw="conteo" data-source="epi_pacientes_test">—</b> pacientes de test.</p>
+      <div class="ei-grid">
+        <div class="ei-card" id="card-epi-acumulado">
+          <h2>¿Cuántas sondas hacen el trabajo?</h2>
+          <p class="ei-note">Parte del aporte total (suma de los aportes medios en valor absoluto) que explican las variables, ordenadas de mayor a menor aporte. Las <b data-draw="num" data-source="epi_shap_resumen" data-field="top" data-fmt="d">—</b> primeras explican solo el <b data-draw="num" data-source="epi_shap_resumen" data-field="parte_top" data-fmt="f1">—</b> %; hacen falta <b data-draw="num" data-source="epi_shap_resumen" data-field="n50" data-fmt="d">—</b> para la mitad y <b data-draw="num" data-source="epi_shap_resumen" data-field="n80" data-fmt="d">—</b> para el 80 %. El reloj reparte la edad entre muchas sondas.</p>
+          <div class="ei-chart dash-skeleton" data-draw="epi-acumulado" data-source="epi_importancia" id="chart-epi-acumulado"></div>
+        </div>
+        <div class="ei-card" id="card-epi-imp-cohorte">
+          <h2>¿Pesan igual en las dos cohortes?</h2>
+          <p class="ei-note">Aporte medio en valor absoluto (años) de las <span data-draw="constante" data-nombre="TOP_SHAP">—</span> sondas principales, en los pacientes de test de cada cohorte. Cuando los puntos se separan, la sonda mueve más la edad en una cohorte que en la otra.</p>
+          <div class="ei-legend"><span><i class="ei-sw" data-sw="2"></i>Hannum</span><span><i class="ei-sw" data-sw="3"></i>GSE87571</span></div>
+          <div class="ei-chart ei-tall dash-skeleton" data-draw="epi-imp-cohorte" data-source="epi_importancia" id="chart-epi-imp-cohorte"></div>
+        </div>
+      </div>
+      <div class="ei-card" id="card-epi-enjambre">
+        <h2>Un punto por paciente: enjambre SHAP</h2>
+        <p class="ei-note">Cada punto es un paciente de test. A la derecha del cero, la sonda lo hace parecer mayor; a la izquierda, menor. El color es su metilación en esa sonda: así se ve si mucha metilación suma o resta años. Haz clic en un punto para explicar a ese paciente.</p>
+        <div class="ei-legend"><span>Metilación baja <i class="ei-grad" data-grad></i> alta</span></div>
+        <div class="ei-chart ei-tall dash-skeleton" data-draw="epi-enjambre" data-source="epi_shap" id="chart-epi-enjambre"></div>
+      </div>
+      <div class="ei-card" id="card-epi-calor">
+        <h2>Qué sondas empujan la edad en cada grupo de edad</h2>
+        <p class="ei-note">Aporte medio (años) de cada sonda según la edad real del paciente de test. Un buen reloj usa la misma sonda para restar años a los jóvenes y sumarlos a los mayores; una sonda que solo cambia en un extremo aporta sobre todo ahí.</p>
+        <div class="ei-legend"><span><i class="ei-sw" data-sw="1"></i>Suma años</span><span><i class="ei-sw" data-sw="0"></i>Resta años</span></div>
+        <div class="ei-chart ei-tall dash-skeleton" data-draw="epi-calor" data-source="epi_por_edad" id="chart-epi-calor"></div>
+      </div>
+      <div class="ei-card" id="card-epi-sonda">
+        <h2>Metilación de una sonda según la edad</h2>
+        <p class="ei-note">Valor beta (0 = nada metilada, 1 = totalmente metilada) de cada paciente de test. Las sondas son las 15 de más peso.</p>
+        <div class="ei-controls">
+          <label for="sel-epi-sonda" class="ei-note">Sonda</label>
+          <select id="sel-epi-sonda" data-draw="sel-sonda" data-source="epi_sondas_edad"></select>
+          <div class="ei-legend"><span><i class="ei-sw" data-sw="2"></i>Hannum</span><span><i class="ei-sw" data-sw="3"></i>GSE87571</span></div>
+        </div>
+        <div class="ei-chart dash-skeleton" data-draw="epi-sonda-edad" data-source="epi_sondas_edad" id="chart-epi-sonda"></div>
+      </div>
+    </section>
+
+    <!-- --------------------------- PACIENTE --------------------------- -->
+    <section class="ei-page" id="epi-paciente" data-page="epi-paciente" hidden>
+      <p class="ei-lead">Elige un paciente del test. Como el modelo es lineal, su edad predicha es exactamente la base (<b data-draw="pac-num" data-source="epi_pacientes_test" data-field="base" data-fmt="f2">—</b> años, la edad media del train) más la suma de lo que aporta cada variable.</p>
+      <div class="ei-controls">
+        <label for="sel-epi-paciente" class="ei-note">Paciente de test</label>
+        <select id="sel-epi-paciente" data-draw="sel-paciente" data-source="epi_pacientes_test"></select>
+      </div>
+      <!-- Agregar un paciente: solo aparece fuera de Claude, cuando hay un servidor que calcula la edad -->
+      <div class="ei-subir-acciones" data-subir-acciones hidden>
+        <button type="button" class="ei-subir-btn" data-subir-abrir="epi" aria-expanded="false" aria-controls="subir-epi"><span class="ei-subir-mas" aria-hidden="true">+</span>Agregar un paciente</button>
+        <p class="ei-subir-estado" data-draw="subir-estado" data-modelo="epi" role="status" aria-live="polite"></p>
+      </div>
+      <div class="ei-subir" id="subir-epi" data-subir="epi" hidden>
+        <div class="ei-card ei-subir-zona" data-subir-zona="epi" role="button" tabindex="0" aria-label="Subir el archivo CSV de un paciente">
+          <span class="ei-subir-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 15V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"/></svg></span>
+          <h2>Arrastra aquí el archivo del paciente</h2>
+          <p class="ei-note">o <u>haz clic para elegirlo</u> · CSV, hasta 20 pacientes</p>
+        </div>
+        <input type="file" accept=".csv,text/csv" data-subir-input="epi" hidden>
+        <div class="ei-card ei-subir-ayuda">
+          <h2>Qué debe traer el archivo</h2>
+          <ul class="ei-note">
+            <li>Una fila por paciente y una columna por sonda CpG, con su nombre (por ejemplo <b>cg16867657</b>) y el valor beta de metilación, entre 0 y 1, del array 450K o EPIC.</li>
+            <li>Una columna <b>gender</b> con Male o Female.</li>
+            <li>Opcional: <b>age</b>, la edad real, para calcular la brecha, e <b>id</b>, el nombre del paciente.</li>
+            <li>Basta con las 500 sondas del modelo; las demás columnas se ignoran. Las que falten se rellenan con la mediana del train y, si falta más del 10 %, se avisa.</li>
+            <li>El cálculo es exacto, igual que la cascada de los pacientes de test.</li>
+          </ul>
+          <div class="ei-subir-botones">
+            <a class="ei-subir-ejemplo" href="ejemplos/ejemplo_epigenetico.csv" download>Archivo de ejemplo</a>
+            <button type="button" class="ei-reset ei-sin-icono" data-subir-cerrar="epi">Volver a los pacientes de test</button>
+          </div>
+        </div>
+      </div>
+      <div class="ei-card ei-cargando" data-cargando="epi" hidden>
+        <div class="ei-cargando-escena" aria-hidden="true"><video muted playsinline preload="none"></video></div>
+        <p class="ei-cargando-texto" role="status" data-draw="carga-etapa" data-modelo="epi">Calculando la edad del paciente…</p>
+        <div class="ei-cargando-barra" aria-hidden="true"><i></i></div>
+      </div>
+      <div class="ei-resultados" data-resultados="epi">
+      <div class="ei-facts">
+        <div class="ei-card ei-tile"><span class="ei-label">Edad real</span><span class="ei-big"><span data-draw="pac-num" data-source="epi_pacientes_test" data-field="edad_real" data-fmt="f1">—</span> años</span></div>
+        <div class="ei-card ei-tile"><span class="ei-label">Edad predicha</span><span class="ei-big"><span data-draw="pac-num" data-source="epi_pacientes_test" data-field="edad_predicha" data-fmt="f1">—</span> años</span></div>
+        <div class="ei-card ei-tile"><span class="ei-label">Brecha (predicha − real)</span><span class="ei-big"><span data-draw="pac-num" data-source="epi_pacientes_test" data-field="brecha_edad" data-fmt="s1">—</span> años</span></div>
+        <div class="ei-card ei-tile"><span class="ei-label">Cohorte · sexo</span><span class="ei-big"><span data-draw="pac-txt" data-source="epi_pacientes_test" data-field="cohorte">—</span> · <span data-draw="pac-txt" data-source="epi_pacientes_test" data-field="sexo">—</span></span></div>
+      </div>
+      <div class="ei-card" id="card-epi-cascada">
+        <h2>De la base a la edad predicha, sonda por sonda</h2>
+        <p class="ei-note">Cascada exacta: parte de la base (la edad media del train) y suma el aporte de las 15 variables con más efecto en este paciente; la última barra junta a todas las demás. Donde termina la cascada está la edad predicha. La línea punteada es la edad real.</p>
+        <div class="ei-legend"><span><i class="ei-sw" data-sw="1"></i>Lo hace parecer mayor</span><span><i class="ei-sw" data-sw="0"></i>Lo hace parecer menor</span><span><i class="ei-sw" data-sw="muted"></i>Resto de variables</span></div>
+        <div class="ei-chart ei-tall dash-skeleton" data-draw="epi-cascada" data-source="epi_aportes epi_pacientes_test" id="chart-epi-cascada"></div>
+      </div>
+      <div class="ei-card" id="card-epi-simulador">
+        <h2>¿Qué pasaría si cambiara su metilación?</h2>
+        <p class="ei-note">Mueve la metilación de las <span data-draw="constante" data-nombre="SIM_SONDAS">—</span> sondas que más pesan en este paciente y mira cómo cambia su edad predicha. El cálculo es el del modelo, exacto; cada deslizador va del percentil 1 al 99 del train. Es una exploración del modelo, no una predicción biológica: en una persona real, las sondas correlacionadas cambian juntas.</p>
+        <div class="ei-facts">
+          <div class="ei-card ei-tile"><span class="ei-label">Edad predicha simulada</span><span class="ei-big"><span data-draw="sim-edad" data-source="epi_aportes epi_pacientes_test epi_coeficientes">—</span> años</span></div>
+          <div class="ei-card ei-tile"><span class="ei-label">Cambio frente a la edad predicha</span><span class="ei-big"><span data-draw="sim-cambio" data-source="epi_aportes epi_pacientes_test epi_coeficientes">—</span> años</span></div>
+        </div>
+        <div class="ei-controls">
+          <button type="button" class="ei-reset" data-sim-reset>Volver a los valores del paciente</button>
+        </div>
+        <div class="ei-legend"><span><i class="ei-sw" data-sw="muted"></i>Edad predicha</span><span><i class="ei-sw" data-sw="0"></i>Edad simulada</span><span><i class="ei-linea"></i>Edad real</span></div>
+        <div class="ei-sim dash-skeleton" data-draw="epi-simulador" data-source="epi_aportes epi_pacientes_test epi_coeficientes" id="sim-epi"></div>
+      </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(() => {
+  const EI = (window.EI = window.EI || {});
+  const UMBRAL = 5; // años: definición de "acierto"
+  const loc = d3.formatLocale({ decimal: ',', thousands: '.', grouping: [3], currency: ['$', ''] });
+  const FMT = { f1: loc.format('.1f'), f2: loc.format('.2f'), f3: loc.format('.3f'), s1: loc.format('+.1f'), s2: loc.format('+.2f'), d: loc.format(',d') };
+  const COLORS = () => dash.colors;
+  const MUTED = 'var(--cds-chart-muted)';
+  const NOMBRE = { 'Célula': 'Célula', 'Citoquina': 'Citoquina', 'Sexo': 'Sexo', Female: 'Mujer', Male: 'Hombre' };
+  // Modelo epigenético: colores de cohorte y de cada algoritmo comparado
+  const COHORTE_COLOR = (c) => (c === 'Hannum' ? COLORS()[2] : COLORS()[3]);
+  const ALGORITMOS = ['ElasticNet', 'SVR (RBF)', 'LightGBM', 'XGBoost', 'Random Forest'];
+  const ALG_COLOR = (m) => (ALGORITMOS.includes(m) ? COLORS()[ALGORITMOS.indexOf(m)] : MUTED);
+  // Modelo inmunológico: TabPFN (final) en el primer color y los clásicos después
+  const ALGORITMOS_INM = ['TabPFN v2', 'ElasticNet', 'SVR (RBF)', 'LightGBM', 'XGBoost', 'Random Forest'];
+  const ALG_COLOR_INM = (m) => (ALGORITMOS_INM.includes(m) ? COLORS()[ALGORITMOS_INM.indexOf(m)] : MUTED);
+  const K_INMUNO = 45; // biomarcadores del modelo final (línea de referencia en la curva de variables)
+  // Referencias fijas de los modelos: se escriben en el texto con dash.draw('constante')
+  const CONSTANTES = {
+    K_ELEGIDO: 500,         // número de sondas del modelo final (también la línea de referencia en la curva de sondas)
+    TOP_COEF: 20,           // sondas que muestra el gráfico de coeficientes
+    TOP_SHAP: 20,           // sondas del gráfico de importancia por cohorte
+    SIM_SONDAS: 6,          // sondas que se pueden mover en el simulador
+    SIM_BIOMARCADORES: 6,   // biomarcadores del simulador inmunológico (los fija exportar_simulador_inmune.py)
+    // SHAP del modelo inmunológico (explicabilidad/shap_inmunologico.py y web/modelos_api.py)
+    SHAP_COMBINACIONES: 1000,       // combinaciones de biomarcadores por paciente de test
+    SHAP_COMBINACIONES_SUBIDA: 500, // lo mismo para un paciente subido (N_SHAP en modelos_api.py)
+    TOP_SHAP_INM: 15,               // biomarcadores del gráfico de aporte medio y del enjambre
+    CASCADA_BIO: 12,                // biomarcadores de la cascada de cada paciente
+  };
+  const K_ELEGIDO = CONSTANTES.K_ELEGIDO;
+
+  // ---------- utilidades ----------
+  const parseWhere = (w) => Object.fromEntries((w || '').split('&').filter(Boolean).map((kv) => kv.split('=').map(decodeURIComponent)));
+  const matches = (row, cond) => Object.entries(cond).every(([k, v]) => String(row[k]) === v);
+  let canvas;
+  const textWidth = (s, px = 12) => {
+    canvas = canvas || document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.font = `${px}px ${getComputedStyle(document.body).fontFamily}`;
+    return ctx.measureText(s).width;
+  };
+  // Datos de una fuente más los pacientes que se subieron desde un archivo (si hay; ver "agregar un paciente")
+  EI.subidos = EI.subidos || {};
+  const datos = (id) => {
+    const d = dash.data(id), extra = EI.subidos[id];
+    return d.status === 'ok' && extra && extra.length ? { ...d, data: extra.concat(d.data) } : d;
+  };
+  // Prepara un dibujo: devuelve los datos si todos están listos, o deja el estado de carga / error.
+  const prep = (el, ids) => {
+    const ds = ids.map((id) => datos(id));
+    el.replaceChildren();
+    if (ds.every((d) => d.status === 'ok')) { el.classList.remove('dash-skeleton'); return ds.map((d) => d.data); }
+    if (ds.some((d) => d.status === 'error')) {
+      el.classList.remove('dash-skeleton');
+      const p = document.createElement('p'); p.className = 'ei-fail';
+      const dot = document.createElement('span'); dot.className = 'ei-dot';
+      p.append(dot, 'No se pudo cargar');
+      el.append(p);
+    } else el.classList.add('dash-skeleton');
+    return null;
+  };
+  const svgFor = (el, w, h) => d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('height', h);
+  const tooltip = (el) => {
+    const tip = document.createElement('div'); tip.className = 'ei-tip'; tip.hidden = true; el.append(tip);
+    return {
+      show(event, head, lines) {
+        tip.replaceChildren();
+        const h = document.createElement('div'); h.className = 'ei-tip-head'; h.textContent = head; tip.append(h);
+        lines.forEach(([color, text]) => {
+          const d = document.createElement('div');
+          if (color) { const s = document.createElement('i'); s.className = 'ei-sw'; s.style.background = color; s.style.marginRight = '6px'; d.append(s); }
+          d.append(text); tip.append(d);
+        });
+        tip.hidden = false;
+        const box = el.getBoundingClientRect();
+        let x = event.clientX - box.left + 12, y = event.clientY - box.top + 12;
+        if (x + tip.offsetWidth > box.width) x = Math.max(0, event.clientX - box.left - tip.offsetWidth - 12);
+        if (y + tip.offsetHeight > box.height) y = Math.max(0, event.clientY - box.top - tip.offsetHeight - 12);
+        tip.style.left = `${x}px`; tip.style.top = `${y}px`;
+      },
+      hide() { tip.hidden = true; },
+    };
+  };
+  // Marcas del eje según el ancho disponible (una cada ~70 px, máximo 5), para que los números no se pisen
+  const nTicks = (x) => Math.max(2, Math.min(5, Math.floor(Math.abs(x.range()[1] - x.range()[0]) / 70)));
+  const gridX = (g, x, h) => g.append('g').selectAll('line').data(x.ticks(nTicks(x))).join('line')
+    .attr('x1', (d) => x(d)).attr('x2', (d) => x(d)).attr('y1', 0).attr('y2', h).style('stroke', 'var(--cds-chart-grid)');
+  const axisBottom = (g, x, h, fmt) => {
+    const a = g.append('g').attr('transform', `translate(0,${h})`).call(d3.axisBottom(x).ticks(nTicks(x)).tickSize(0).tickPadding(8).tickFormat(fmt));
+    a.attr('font-size', null).attr('font-family', null); a.select('.domain').style('stroke', 'var(--cds-chart-axis)');
+    // Si un número no cabe junto al anterior (gráfico muy angosto), no se dibuja
+    let fin = -Infinity;
+    a.selectAll('.tick text').each(function (v) {
+      const w = this.getComputedTextLength(), ini = x(v) - w / 2;
+      if (ini < fin + 4) this.remove(); else fin = x(v) + w / 2;
+    });
+    return a;
+  };
+  const axisLeft = (g, y, w, fmt) => {
+    const a = g.append('g').call(d3.axisLeft(y).ticks(5).tickSize(-w).tickPadding(8).tickFormat(fmt));
+    a.attr('font-size', null).attr('font-family', null); a.select('.domain').remove();
+    a.selectAll('line').style('stroke', 'var(--cds-chart-grid)');
+    return a;
+  };
+  EI.FMT = FMT;
+
+  // ---------- modelo y pestañas ----------
+  // Las pestañas del modelo epigenético empiezan con "epi-"; el resto son del inmunológico.
+  const TABS = ['resumen', 'explicabilidad', 'paciente', 'epi-resumen', 'epi-explicabilidad', 'epi-paciente'];
+  const modeloDe = (tab) => (tab.startsWith('epi-') ? 'epi' : 'inmuno');
+  EI.tab = EI.tab || 'resumen';
+  EI.ultima = EI.ultima || { inmuno: 'resumen', epi: 'epi-resumen' };
+  const abrir = (tab) => { EI.tab = tab; dash.setLink(tab); aplicarTab(); };
+  const aplicarTab = () => {
+    const modelo = modeloDe(EI.tab);
+    EI.ultima[modelo] = EI.tab;
+    document.querySelectorAll('[data-modelo]').forEach((s) => { s.hidden = s.dataset.modelo !== modelo; });
+    document.querySelectorAll('[data-modelo-btn]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modeloBtn === modelo)));
+    document.querySelectorAll('[data-page]').forEach((s) => { s.hidden = s.dataset.page !== EI.tab; });
+    document.querySelectorAll('.ei-tabs [data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === EI.tab)));
+    // Animación: solo cuando la pestaña cambia de verdad (no en cada carga de datos)
+    if (EI.tabVista !== EI.tab) {
+      const antes = EI.tabVista; EI.tabVista = EI.tab;
+      if (antes !== undefined) EI.reanimar?.(EI.tab, modeloDe(antes) !== modelo);
+    }
+    EI.moverIndicador?.();
+  };
+  document.querySelectorAll('.ei-tabs [data-tab]').forEach((b) => b.addEventListener('click', () => abrir(b.dataset.tab)));
+  document.querySelectorAll('[data-modelo-btn]').forEach((b) => b.addEventListener('click', () => abrir(EI.ultima[b.dataset.modeloBtn])));
+  // En la página web cada reloj tiene su propia página (window.EI_PAGINA = 'inmuno' o 'epi'):
+  // se oculta la portada de aquí y solo se muestra ese modelo. En Claude van los dos juntos.
+  const PAGINA = ['inmuno', 'epi'].includes(window.EI_PAGINA) ? window.EI_PAGINA : null;
+  if (PAGINA) document.querySelector('.ei')?.classList.add('ei-pagina-sola');
+  const inicial = location.hash.slice(1);
+  if (TABS.includes(inicial) && (!PAGINA || modeloDe(inicial) === PAGINA)) EI.tab = inicial;
+  else if (PAGINA && modeloDe(EI.tab) !== PAGINA) EI.tab = PAGINA === 'epi' ? 'epi-resumen' : 'resumen';
+
+  // ---------- animaciones (solo cambian clases y estilos; nunca datos) ----------
+  const raiz = document.querySelector('.ei');
+  const quieto = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const REVELA = '.ei-card, .ei-model-head, .ei-page > .ei-lead, .ei-page > h2';
+  // Pestaña activa: la píldora violeta se desliza hasta ella
+  EI.moverIndicador = () => document.querySelectorAll('.ei-tabs').forEach((nav) => {
+    const ind = nav.querySelector('.ei-tab-ind'), b = nav.querySelector('[aria-selected="true"]');
+    if (!ind || !b || !b.offsetWidth) return;
+    ind.style.width = `${b.offsetWidth}px`; ind.style.transform = `translateX(${b.offsetLeft}px)`;
+    if (!nav.classList.contains('ei-ind-on')) setTimeout(() => nav.classList.add('ei-ind-on'), 60);
+  });
+  window.addEventListener('resize', () => EI.moverIndicador());
+  document.fonts?.ready.then(() => EI.moverIndicador());
+  if (raiz && !quieto && 'IntersectionObserver' in window) {
+    raiz.classList.add('ei-anim');
+    // Cada tarjeta aparece al llegar a la pantalla; las que llegan juntas, una tras otra
+    const visor = new IntersectionObserver((entradas) => {
+      entradas.filter((e) => e.isIntersecting).map((e) => e.target)
+        .sort((a, b) => { const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect(); return ra.top - rb.top || ra.left - rb.left; })
+        .forEach((t, i) => { t.style.setProperty('--d', `${Math.min(i, 8) * 80}ms`); t.classList.add('ei-visto'); visor.unobserve(t); });
+    }, { threshold: 0.06 });
+    raiz.querySelectorAll(REVELA).forEach((el) => visor.observe(el));
+    // Al cambiar de pestaña (o de modelo) la nueva página vuelve a entrar animada
+    EI.reanimar = (tab, cambioModelo) => {
+      const zonas = [...raiz.querySelectorAll(`[data-page="${tab}"]`)];
+      if (cambioModelo) zonas.push(...raiz.querySelectorAll(`[data-modelo="${modeloDe(tab)}"] > .ei-model-head`));
+      zonas.forEach((z) => [z, ...z.querySelectorAll(REVELA)].filter((el) => el.matches(REVELA)).forEach((el) => {
+        el.classList.remove('ei-visto'); visor.observe(el);
+      }));
+    };
+    // Los puntos de los gráficos aparecen de izquierda a derecha, al ritmo del barrido
+    const escalonar = (svg) => {
+      const W = svg.viewBox?.baseVal?.width || svg.clientWidth || 600;
+      const puntos = svg.querySelectorAll('circle');
+      if (puntos.length > 1500) { svg.classList.add('ei-muchos'); return; } // el enjambre solo usa el barrido, para no trabar la página
+      puntos.forEach((c) => {
+        const cx = Number(c.getAttribute('cx')) || 0;
+        c.style.setProperty('--dp', `${Math.round(Math.max(0, Math.min(1, cx / W)) * 800)}ms`);
+      });
+    };
+    new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((n) => {
+      if (n.nodeName === 'svg') escalonar(n); else if (n.querySelectorAll) n.querySelectorAll('svg').forEach(escalonar);
+    }))).observe(raiz, { childList: true, subtree: true });
+    // Portada: una luz sigue al mouse y el reloj se inclina hacia él
+    const hero = raiz.querySelector('.ei-hero');
+    hero?.addEventListener('pointermove', (e) => {
+      const r = hero.getBoundingClientRect();
+      hero.style.setProperty('--mx', `${e.clientX - r.left}px`); hero.style.setProperty('--my', `${e.clientY - r.top}px`);
+      hero.style.setProperty('--px', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+      hero.style.setProperty('--py', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+    });
+    hero?.addEventListener('pointerleave', () => { hero.style.setProperty('--px', '0'); hero.style.setProperty('--py', '0'); });
+  }
+
+  // ---------- filtros de la página (botones segmentados: parámetro -> valor por defecto) ----------
+  const SEG = { tipo: 'todas', epicohorte: 'Combinado', evalinm: 'test' };
+  Object.keys(SEG).forEach((k) => document.querySelectorAll(`[data-${k}]`)
+    .forEach((b) => b.addEventListener('click', () => dash.setParams({ [k]: b.dataset[k] }))));
+
+  dash.onData(() => {
+    aplicarTab();
+    const p = dash.params();
+    Object.entries(SEG).forEach(([k, def]) => document.querySelectorAll(`[data-${k}]`)
+      .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset[k] === (p[k] || def)))));
+    document.querySelectorAll('[data-grad]').forEach((s) => { s.style.background = `linear-gradient(to right, ${COLORS()[0]}, ${COLORS()[1]})`; });
+    document.querySelectorAll('[data-sw]').forEach((s) => {
+      const k = s.dataset.sw; s.style.background = k === 'muted' ? MUTED : COLORS()[Number(k)];
+    });
+  });
+
+  // ---------- cálculos ----------
+  // ---------- números y textos ----------
+  dash.draw('umbral', (el) => { el.textContent = String(UMBRAL); });
+  dash.draw('constante', (el) => { const v = CONSTANTES[el.dataset.nombre]; el.textContent = v == null ? '—' : FMT.d(v); });
+  dash.draw('num', (el) => {
+    const d = dash.data(el.dataset.source);
+    if (d.status !== 'ok') { el.textContent = '—'; return; }
+    const row = d.data.find((r) => matches(r, parseWhere(el.dataset.where)));
+    const v = row ? row[el.dataset.field] : null;
+    el.textContent = v == null ? '—' : FMT[el.dataset.fmt || 'f2'](v);
+  });
+  dash.draw('conteo', (el) => {
+    const d = dash.data(el.dataset.source);
+    el.textContent = d.status === 'ok' ? FMT.d(d.data.length) : '—';
+  });
+  dash.draw('tabla-metricas', (tb) => {
+    const d = prep(tb, [tb.dataset.source]); if (!d) return;
+    d[0].forEach((r) => {
+      const tr = tb.insertRow(); tr.dataset.key = r.prueba;
+      [[r.evaluacion, ''], [FMT.f2(r.MAE), 'ei-num'], [FMT.f2(r.RMSE), 'ei-num'], [FMT.f3(r.R2), 'ei-num'], [FMT.f3(r.r), 'ei-num'], [FMT.f1(r.acierto5), 'ei-num']]
+        .forEach(([t, c]) => { const td = tr.insertCell(); td.textContent = t; td.className = c; });
+    });
+  });
+
+  // ---------- evolución ----------
+  dash.draw('evolucion', (el) => {
+    const d = prep(el, ['evolucion']); if (!d) return;
+    const rows = d[0].slice().sort((a, b) => a.orden - b.orden);
+    const W = Math.max(300, el.clientWidth), bh = 13, gap = 18;
+    const narrow = W < 520;
+    const labelW = narrow ? 0 : Math.min(W * 0.45, d3.max(rows, (r) => textWidth(r.etapa)) + 12);
+    const rowH = (narrow ? 24 : 0) + 2 * bh + 4 + gap;
+    const H = rows.length * rowH + 28, m = { l: labelW, r: 44 };
+    const x = d3.scaleLinear([0, d3.max(rows, (r) => Math.max(r.MAE_test, r.MAE_no_vistos || 0)) * 1.05], [m.l, W - m.r]);
+    const svg = svgFor(el, W, H); const tip = tooltip(el);
+    const g = svg.append('g');
+    gridX(g, x, H - 24);
+    axisBottom(g, x, H - 24, (v) => loc.format('d')(v));
+    rows.forEach((r, i) => {
+      const y0 = i * rowH + (narrow ? 22 : 0);
+      const final = r.orden === d3.max(rows, (q) => q.orden);
+      g.append('text').attr('x', narrow ? m.l : m.l - 10).attr('y', narrow ? y0 - 11 : y0 + bh + 2).attr('text-anchor', narrow ? 'start' : 'end')
+        .attr('dominant-baseline', 'middle').attr('class', final ? 'ei-strong' : null).text(r.etapa);
+      [['MAE_test', 0, 'Test'], ['MAE_no_vistos', 1, 'Estudios no vistos']].forEach(([campo, k, nombre]) => {
+        if (r[campo] == null) return;
+        const y = y0 + k * (bh + 4);
+        g.append('rect').attr('x', x(0)).attr('y', y).attr('height', bh).attr('width', x(r[campo]) - x(0)).attr('rx', 4)
+          .style('fill', COLORS()[k])
+          .on('pointermove', (e) => tip.show(e, r.etapa, [[COLORS()[k], `${nombre}: ${FMT.f2(r[campo])} años`]])).on('pointerleave', tip.hide);
+        g.append('text').attr('class', 'ei-val').attr('x', x(r[campo]) + 6).attr('y', y + bh / 2).attr('dominant-baseline', 'middle').text(FMT.f2(r[campo]));
+      });
+    });
+  });
+
+  // ---------- los 7 modelos con la misma evaluación ----------
+  const PRUEBAS_INM = {
+    cv: { campo: 'MAE_CV', nombre: 'Validación cruzada 5×5 (473 pacientes)' },
+    test: { campo: 'MAE_test', nombre: 'Test (119 pacientes)' },
+    no_vistos: { campo: 'MAE_no_vistos', nombre: 'Estudios no vistos (promedio de 5)' },
+  };
+  dash.draw('inm-modelos', (el) => {
+    const d = prep(el, ['comparacion_modelos']); if (!d) return;
+    const prueba = PRUEBAS_INM[dash.params().evalinm] || PRUEBAS_INM.test, campo = prueba.campo;
+    const rows = d[0].slice().sort((a, b) => a[campo] - b[campo]);
+    const W = Math.max(300, el.clientWidth), bh = 22, gap = 14;
+    const narrow = W < 520;
+    const nombre = (r) => (r.final ? `${r.modelo} (final)` : r.modelo);
+    const labelW = narrow ? 0 : d3.max(rows, (r) => textWidth(nombre(r))) + 12;
+    const rowH = (narrow ? 20 : 0) + bh + gap;
+    const H = rows.length * rowH + 24, m = { l: labelW, r: 48 };
+    const x = d3.scaleLinear([0, d3.max(rows, (r) => r[campo]) * 1.05], [m.l, W - m.r]);
+    const svg = svgFor(el, W, H); const tip = tooltip(el); const g = svg.append('g');
+    gridX(g, x, H - 24); axisBottom(g, x, H - 24, (v) => loc.format('d')(v));
+    rows.forEach((r, i) => {
+      const y = i * rowH + 4 + (narrow ? 18 : 0), c = r.final ? COLORS()[0] : MUTED;
+      g.append('text').attr('x', narrow ? m.l : m.l - 10).attr('y', narrow ? y - 9 : y + bh / 2).attr('text-anchor', narrow ? 'start' : 'end')
+        .attr('dominant-baseline', 'middle').attr('class', r.final ? 'ei-strong' : null).text(nombre(r));
+      const lineas = [
+        [c, `Validación cruzada: ${FMT.f2(r.MAE_CV)} ± ${FMT.f2(r.MAE_CV_sd)} años`],
+        [c, `Test: ${FMT.f2(r.MAE_test)} años · R² ${FMT.f3(r.R2_test)} · ±5 años: ${FMT.f1(r.acierto5)} %`],
+        [c, `Estudios no vistos: ${FMT.f2(r.MAE_no_vistos)} años · r ${FMT.f2(r.r_no_vistos)}`],
+      ];
+      if (r.mejora_tabpfn != null) lineas.push([COLORS()[0], `TabPFN mejor en el test por ${FMT.f2(r.mejora_tabpfn)} años (IC95 ${FMT.f2(r.IC95_bajo)} a ${FMT.f2(r.IC95_alto)})`]);
+      g.append('rect').attr('x', x(0)).attr('y', y).attr('height', bh).attr('width', Math.max(1, x(r[campo]) - x(0))).attr('rx', 4).style('fill', c)
+        .on('pointermove', (e) => tip.show(e, `${r.modelo} · ${prueba.nombre}`, lineas)).on('pointerleave', tip.hide);
+      g.append('text').attr('class', 'ei-val').attr('x', x(r[campo]) + 6).attr('y', y + bh / 2).attr('dominant-baseline', 'middle').text(FMT.f2(r[campo]));
+    });
+  });
+
+  // ---------- estudios no vistos ----------
+  dash.draw('no-vistos', (el) => {
+    const d = prep(el, ['no_vistos']); if (!d) return;
+    const rows = d[0];
+    const modelos = ['Modelo anterior (dos ramas)', 'TabPFN dos ramas', 'TabPFN un modelo (final)'];
+    const color = { 'Modelo anterior (dos ramas)': MUTED, 'TabPFN dos ramas': COLORS()[2], 'TabPFN un modelo (final)': COLORS()[0] };
+    const estudios = [...new Set(rows.map((r) => r.estudio))];
+    const W = Math.max(300, el.clientWidth), H = 380, m = { t: 16, r: 8, b: 44, l: 40 };
+    const x = d3.scaleBand(estudios, [m.l, W - m.r]).paddingInner(0.25);
+    const xi = d3.scaleBand(modelos, [0, x.bandwidth()]).padding(0.12);
+    const y = d3.scaleLinear([0, d3.max(rows, (r) => r.MAE) * 1.12], [H - m.b, m.t]).nice();
+    const svg = svgFor(el, W, H); const tip = tooltip(el);
+    const g = svg.append('g').attr('transform', `translate(${m.l},0)`);
+    axisLeft(g, y, W - m.l - m.r, (v) => loc.format('d')(v));
+    const gb = svg.append('g');
+    rows.forEach((r) => {
+      const bx = x(r.estudio) + xi(r.modelo);
+      gb.append('rect').attr('x', bx).attr('width', Math.min(32, xi.bandwidth())).attr('y', y(r.MAE)).attr('height', y(0) - y(r.MAE)).attr('rx', 4)
+        .style('fill', color[r.modelo])
+        .on('pointermove', (e) => tip.show(e, `${r.estudio} · ${r.edades} años · n = ${r.n}`, [[color[r.modelo], `${r.modelo}: MAE ${FMT.f1(r.MAE)} · r ${FMT.f2(r.r)}`]]))
+        .on('pointerleave', tip.hide);
+    });
+    const paso = x.step();
+    const caben = (txt) => textWidth(txt) + 8 <= paso;
+    estudios.forEach((e) => {
+      const r = rows.find((q) => q.estudio === e);
+      const cx = x(e) + x.bandwidth() / 2;
+      gb.append('text').attr('x', cx).attr('y', H - m.b + 16).attr('text-anchor', 'middle').attr('class', 'ei-val').text(caben(e) ? e : e.replace('SDY', ''));
+      if (caben(r.edades)) gb.append('text').attr('x', cx).attr('y', H - m.b + 32).attr('text-anchor', 'middle').text(r.edades);
+    });
+  });
+
+  // ---------- bloques ----------
+  dash.draw('bloques', (el) => {
+    const d = prep(el, ['bloques']); if (!d) return;
+    const rows = d[0].slice().sort((a, b) => b.aumento_MAE - a.aumento_MAE);
+    const W = Math.max(300, el.clientWidth), bh = 26, gap = 22;
+    const labelW = d3.max(rows, (r) => textWidth(r.bloque)) + 12;
+    const H = rows.length * (bh + gap) + 24, m = { l: labelW, r: 56 };
+    const x = d3.scaleLinear([0, d3.max(rows, (r) => r.aumento_MAE + r.aumento_MAE_sd) * 1.05], [m.l, W - m.r]);
+    const svg = svgFor(el, W, H); const tip = tooltip(el); const g = svg.append('g');
+    gridX(g, x, H - 24); axisBottom(g, x, H - 24, (v) => FMT.f1(v));
+    const col = (b) => (b.startsWith('Cél') ? COLORS()[0] : b.startsWith('Cito') ? COLORS()[1] : MUTED);
+    rows.forEach((r, i) => {
+      const y = i * (bh + gap) + 6;
+      g.append('text').attr('x', m.l - 10).attr('y', y + bh / 2).attr('text-anchor', 'end').attr('dominant-baseline', 'middle').text(r.bloque);
+      g.append('rect').attr('x', x(0)).attr('y', y).attr('height', bh).attr('width', Math.max(1, x(r.aumento_MAE) - x(0))).attr('rx', 4).style('fill', col(r.bloque))
+        .on('pointermove', (e) => tip.show(e, r.bloque, [[col(r.bloque), `+${FMT.f2(r.aumento_MAE)} años de error (± ${FMT.f2(r.aumento_MAE_sd)})`]])).on('pointerleave', tip.hide);
+      g.append('text').attr('class', 'ei-val').attr('x', x(r.aumento_MAE) + 6).attr('y', y + bh / 2).attr('dominant-baseline', 'middle').text(`+${FMT.f2(r.aumento_MAE)}`);
+    });
+  });
+
+  // ---------- importancia ----------
+  dash.draw('importancia', (el) => {
+    const d = prep(el, ['importancia']); if (!d) return;
+    const tipo = dash.params().tipo || 'todas';
+    const rows = d[0].filter((r) => tipo === 'todas' || r.tipo === tipo).sort((a, b) => b.aumento_MAE - a.aumento_MAE).slice(0, 15);
+    const W = Math.max(300, el.clientWidth), bh = 16, gap = 10;
+    const labelW = d3.max(rows, (r) => textWidth(r.variable)) + 12;
+    const H = rows.length * (bh + gap) + 28, m = { l: labelW, r: 56 };
+    const lo = Math.min(0, d3.min(rows, (r) => r.aumento_MAE - r.aumento_MAE_sd));
+    const x = d3.scaleLinear([lo, d3.max(rows, (r) => r.aumento_MAE + r.aumento_MAE_sd) * 1.05], [m.l, W - m.r]);
+    const svg = svgFor(el, W, H); const tip = tooltip(el); const g = svg.append('g');
+    gridX(g, x, H - 24); axisBottom(g, x, H - 24, (v) => FMT.f1(v));
+    g.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 0).attr('y2', H - 24).style('stroke', 'var(--cds-chart-reference)');
+    const col = (t) => (t === 'Célula' ? COLORS()[0] : t === 'Citoquina' ? COLORS()[1] : MUTED);
+    rows.forEach((r, i) => {
+      const y = i * (bh + gap) + 4;
+      g.append('text').attr('x', m.l - 10).attr('y', y + bh / 2).attr('text-anchor', 'end').attr('dominant-baseline', 'middle').text(r.variable);
+      const x0 = x(Math.min(0, r.aumento_MAE)), x1 = x(Math.max(0, r.aumento_MAE));
+      g.append('rect').attr('x', x0).attr('y', y).attr('height', bh).attr('width', Math.max(1, x1 - x0)).attr('rx', 4).style('fill', col(r.tipo))
+        .on('pointermove', (e) => tip.show(e, `${r.variable} · puesto ${r.puesto}`, [[col(r.tipo), `${NOMBRE[r.tipo]}: +${FMT.f2(r.aumento_MAE)} años (± ${FMT.f2(r.aumento_MAE_sd)})`]]))
+        .on('pointerleave', tip.hide);
+      g.append('line').attr('x1', x(r.aumento_MAE - r.aumento_MAE_sd)).attr('x2', x(r.aumento_MAE + r.aumento_MAE_sd))
+        .attr('y1', y + bh / 2).attr('y2', y + bh / 2).style('stroke', 'var(--color-fg)').style('stroke-width', 1);
+      g.append('text').attr('class', 'ei-val').attr('x', x(r.aumento_MAE + r.aumento_MAE_sd) + 6).attr('y', y + bh / 2).attr('dominant-baseline', 'middle').text(FMT.f2(r.aumento_MAE));
+    });
+  });
+
+  // ---------- perfil (dependencia parcial) ----------
+  dash.draw('sel-variable', (sel) => {
+    const d = dash.data('perfiles');
+    const vars = d.status === 'ok' ? [...new Set(d.data.map((r) => r.variable))] : [];
+    sel.replaceChildren(...vars.map((v) => new Option(v, v)));
+    sel.value = dash.params().variable || vars[0] || '';
+    sel.onchange = () => dash.setParams({ variable: sel.value });
+  });
+  dash.draw('perfil', (el) => {
+    const d = prep(el, ['perfiles']); if (!d) return;
+    const vars = [...new Set(d[0].map((r) => r.variable))];
+    const v = dash.params().variable || vars[0];
+    const rows = d[0].filter((r) => r.variable === v).sort((a, b) => a.valor - b.valor);
+    const W = Math.max(300, el.clientWidth), H = 256, m = { t: 12, r: 16, b: 34, l: 44 };
+    const x = d3.scaleLinear(d3.extent(rows, (r) => r.valor), [m.l, W - m.r]);
+    const ext = d3.extent(rows, (r) => r.edad_predicha_media);
+    const pad = Math.max(1, (ext[1] - ext[0]) * 0.15);
+    const y = d3.scaleLinear([ext[0] - pad, ext[1] + pad], [H - m.b, m.t]).nice();
+    const svg = svgFor(el, W, H); const tip = tooltip(el);
+    const g = svg.append('g').attr('transform', `translate(${m.l},0)`);
+    axisLeft(g, y, W - m.l - m.r, (q) => loc.format('d')(q));
+    const gx = svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(5).tickSize(0).tickPadding(8).tickFormat(loc.format('~s')));
+    gx.attr('font-size', null).attr('font-family', null); gx.select('.domain').style('stroke', 'var(--cds-chart-axis)');
+    svg.append('path').datum(rows).attr('d', d3.line((r) => x(r.valor), (r) => y(r.edad_predicha_media)))
+      .style('fill', 'none').style('stroke', COLORS()[0]).style('stroke-width', 2).style('stroke-linecap', 'round').style('stroke-linejoin', 'round');
+    svg.append('g').selectAll('circle').data(rows).join('circle').attr('cx', (r) => x(r.valor)).attr('cy', (r) => y(r.edad_predicha_media)).attr('r', 4)
+      .style('fill', COLORS()[0]).style('stroke', 'var(--color-panel)').style('stroke-width', 2)
+      .on('pointermove', (e, r) => tip.show(e, `${v} = ${loc.format(',.3~f')(r.valor)}`, [[null, `Edad predicha media: ${FMT.f1(r.edad_predicha_media)} años`]]))
+      .on('pointerleave', tip.hide);
+  });
+
+  // ---------- paciente ----------
+  // Cada modelo guarda su paciente elegido en un parámetro propio.
+  const PARAM_PAC = { pacientes_test: 'paciente', epi_pacientes_test: 'epipaciente' };
+  const pacienteActual = (src = 'pacientes_test') => {
+    const d = datos(src);
+    if (d.status !== 'ok') return null;
+    const id = dash.params()[PARAM_PAC[src]];
+    // Sin elección, el paciente de test con la brecha más alta
+    return d.data.find((r) => r.id === id) || dash.data(src).data.slice().sort((a, b) => b.brecha_edad - a.brecha_edad)[0];
+  };
+  dash.draw('sel-paciente', (sel) => {
+    const src = sel.dataset.source;
+    const d = dash.data(src);
+    const test = d.status === 'ok' ? d.data.slice().sort((a, b) => b.brecha_edad - a.brecha_edad) : [];
+    const subidos = d.status === 'ok' ? EI.subidos[src] || [] : [];
+    // Los pacientes subidos pueden no traer edad real
+    const opcion = (r) => new Option(r.edad_real == null ? `${r.id} · edad predicha ${FMT.f1(r.edad_predicha)} años`
+      : `${r.id} · ${FMT.f1(r.edad_real)} años · brecha ${FMT.s1(r.brecha_edad)}`, r.id);
+    const grupo = (nombre, rows) => { const g = document.createElement('optgroup'); g.label = nombre; g.append(...rows.map(opcion)); return g; };
+    sel.replaceChildren(...(subidos.length ? [grupo('Tus pacientes', subidos), grupo('Pacientes de test', test)] : test.map(opcion)));
+    const p = pacienteActual(src);
+    sel.value = p ? p.id : '';
+    sel.onchange = () => { EI.cerrarSubida?.(src.startsWith('epi_') ? 'epi' : 'inmuno'); dash.setParams({ [PARAM_PAC[src]]: sel.value }); };
+  });
+  const pacDraw = (el, fmt) => {
+    const p = pacienteActual(el.dataset.source);
+    if (!p) { el.textContent = '—'; return; }
+    el.dataset.where = `id=${encodeURIComponent(p.id)}`;
+    const v = p[el.dataset.field];
+    if (v == null) { el.textContent = '—'; return; }
+    el.textContent = fmt ? FMT[el.dataset.fmt](v) : (NOMBRE[v] || String(v));
+  };
+  dash.draw('pac-num', (el) => pacDraw(el, true));
+  dash.draw('pac-txt', (el) => pacDraw(el, false));
+  // Cascada: de la base a la edad predicha, sumando el aporte de cada variable (la usan los dos modelos).
+  // filas: en el orden en que se dibujan (la de tipo "Resto" va gris); extra(r): más líneas para el recuadro de cada barra.
+  const cascada = (el, p, base, filas, extra) => {
+    let acc = base;
+    const pasos = filas.map((r) => { const ini = acc; acc += r.aporte_anos; return { r, ini, fin: acc }; });
+    const FINAL = 'Edad predicha';
+    const W = Math.max(300, el.clientWidth), rowH = 24, top = 24;
+    const labelW = d3.max([...filas.map((r) => r.variable), FINAL], (t) => textWidth(t)) + 14;
+    // Sitio a cada lado para los valores y el rótulo final, que pueden caer a la izquierda o a la derecha
+    const vw = Math.max(d3.max(filas, (r) => textWidth(FMT.s2(r.aporte_anos))), textWidth(`${FMT.f1(acc)} años`) + 4) + 10;
+    const H = top + (pasos.length + 1) * rowH + 28, m = { l: labelW + vw, r: vw };
+    const ext = d3.extent([base, p.edad_real, ...pasos.flatMap((s) => [s.ini, s.fin])]);
+    const x = d3.scaleLinear([ext[0] - 1, ext[1] + 1], [m.l, W - m.r]).nice();
+    const svg = svgFor(el, W, H); const tip = tooltip(el); const g = svg.append('g');
+    gridX(g, x, H - 24); axisBottom(g, x, H - 24, (v) => loc.format('d')(v));
+    const xEtiqueta = labelW - 10; // borde derecho de la columna de nombres
+    // Base y edad real como líneas de referencia, con su rótulo hacia fuera para que no se pisen
+    // (un paciente subido puede no traer edad real: entonces solo va la base)
+    const conReal = p.edad_real != null, izq = conReal && base <= p.edad_real;
+    [[base, `Base ${FMT.f1(base)}`, izq, '2 3'], [p.edad_real, `Real ${FMT.f1(p.edad_real)}`, !izq, '5 3']].slice(0, conReal ? 2 : 1).forEach(([v, t, aIzq, dash_]) => {
+      g.append('line').attr('x1', x(v)).attr('x2', x(v)).attr('y1', top - 6).attr('y2', H - 24)
+        .style('stroke', 'var(--color-fg-muted)').style('stroke-dasharray', dash_);
+      g.append('text').attr('x', x(v) + (aIzq ? -4 : 4)).attr('y', 12).attr('text-anchor', aIzq ? 'end' : 'start').text(t);
+    });
+    pasos.forEach((s, i) => {
+      const y = top + i * rowH, r = s.r, pos = r.aporte_anos >= 0;
+      const c = r.tipo === 'Resto' ? MUTED : pos ? COLORS()[1] : COLORS()[0];
+      g.append('text').attr('x', xEtiqueta).attr('y', y + rowH / 2).attr('text-anchor', 'end').attr('dominant-baseline', 'middle').text(r.variable);
+      g.append('rect').attr('x', x(Math.min(s.ini, s.fin))).attr('y', y + 3).attr('height', rowH - 6)
+        .attr('width', Math.max(1, Math.abs(x(s.fin) - x(s.ini)))).attr('rx', 3).style('fill', c)
+        .on('pointermove', (e) => tip.show(e, r.variable, [[c, `${FMT.s2(r.aporte_anos)} años`], [null, `Acumulado: ${FMT.f2(s.fin)} años`]].concat(extra(r))))
+        .on('pointerleave', tip.hide);
+      if (i < pasos.length - 1) g.append('line').attr('x1', x(s.fin)).attr('x2', x(s.fin)).attr('y1', y + rowH - 3).attr('y2', y + rowH + 3)
+        .style('stroke', 'var(--cds-chart-reference)');
+      g.append('text').attr('class', 'ei-val').attr('x', Math.max(s.ini, s.fin) === s.fin && pos ? x(s.fin) + 6 : x(Math.min(s.ini, s.fin)) - 6)
+        .attr('text-anchor', pos ? 'start' : 'end').attr('y', y + rowH / 2).attr('dominant-baseline', 'middle').text(FMT.s2(r.aporte_anos));
+    });
+    const yF = top + pasos.length * rowH + rowH / 2;
+    g.append('text').attr('x', xEtiqueta).attr('y', yF).attr('text-anchor', 'end').attr('dominant-baseline', 'middle').attr('class', 'ei-strong').text(FINAL);
+    g.append('line').attr('x1', x(base)).attr('x2', x(acc)).attr('y1', yF).attr('y2', yF).style('stroke', 'var(--color-fg)').style('stroke-width', 1.5);
+    g.append('circle').attr('cx', x(acc)).attr('cy', yF).attr('r', 5).style('fill', 'var(--color-fg)');
+    g.append('text').attr('class', 'ei-strong').attr('x', x(acc) + (acc >= base ? 9 : -9)).attr('text-anchor', acc >= base ? 'start' : 'end')
+      .attr('y', yF).attr('dominant-baseline', 'middle').text(`${FMT.f1(acc)} años`);
+  };
+  // Valor del paciente en un biomarcador, para los recuadros (z: desviaciones estándar frente al train)
+  const valorBiomarcador = (r) => (r.tipo === 'Sexo' ? `Sexo: ${r.valor === 1 ? 'hombre' : 'mujer'}`
+    : r.valor == null ? 'Sin dato: el modelo lo recibió vacío'
+      : `Valor del paciente: ${loc.format(',.3~f')(r.valor)} (${FMT.s1(r.z)} desviaciones estándar frente al train)`);
+  // Cascada SHAP del modelo inmunológico: los biomarcadores con más aporte y el resto sumado.
+  dash.draw('inm-cascada', (el) => {
+    const d = prep(el, ['shap_inmune', 'pacientes_test']); if (!d) return;
+    const p = pacienteActual(); if (!p) return;
+    const propias = d[0].filter((r) => r.id === p.id).sort((a, b) => Math.abs(b.aporte_anos) - Math.abs(a.aporte_anos));
+    if (!propias.length) { const aviso = document.createElement('p'); aviso.className = 'ei-note'; aviso.textContent = 'Este paciente no tiene valores SHAP calculados.'; el.append(aviso); return; }
+    const base = p.base ?? p.edad_predicha - d3.sum(propias, (r) => r.aporte_anos);
+    const filas = propias.slice(0, CONSTANTES.CASCADA_BIO);
+    const resto = propias.length - filas.length;
+    // El resto se calcula por diferencia, para que la cascada termine justo en la edad predicha
+    if (resto > 0) filas.push({ variable: `Otras ${resto} variables`, tipo: 'Resto', aporte_anos: p.edad_predicha - base - d3.sum(filas, (r) => r.aporte_anos) });
+    cascada(el, p, base, filas, (r) => (r.tipo === 'Resto' ? [] : [[null, valorBiomarcador(r)]]));
+  });
+
+  // =====================================================================
+  // MODELO EPIGENÉTICO (ElasticNet, 500 sondas CpG + sexo)
+  // =====================================================================
+  const cohorteActual = () => dash.params().epicohorte || 'Combinado';
+
+  dash.calc('epi_coef_resumen', {
+    inputs: ['epi_coeficientes'], title: 'Variables activas del ElasticNet',
+    description: 'Número total de variables del modelo y cuántas tienen coeficiente distinto de cero.',
+    fn: (epi_coeficientes) => [{ total: epi_coeficientes.length, activas: epi_coeficientes.filter((r) => r.coeficiente !== 0).length }],
+  });
+  // ---------- ayudas de dibujo ----------
+  // Barras horizontales a ambos lados de cero (coeficientes y aportes por paciente).
+  const barrasDivergentes = (el, rows, c) => {
+    const W = Math.max(300, el.clientWidth), bh = 18, gap = 10;
+    const labelW = d3.max(rows, (r) => textWidth(c.etiqueta(r))) + 12;
+    const H = rows.length * (bh + gap) + 28, m = { l: labelW, r: 52 };
+    const ext = d3.max(rows, (r) => Math.abs(c.valor(r))) || 1;
+    const vw = d3.max(rows, (r) => textWidth(FMT.s2(c.valor(r)))) + 8; // sitio para el valor a la izquierda de la barra más negativa
+    const x = d3.scaleLinear([-ext * 1.1, ext * 1.1], [m.l + 30 + vw, W - m.r]);
+    const svg = svgFor(el, W, H); const tip = tooltip(el); const g = svg.append('g');
+    gridX(g, x, H - 24); axisBottom(g, x, H - 24, (v) => loc.format('+~f')(v));
+    g.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 0).attr('y2', H - 24).style('stroke', 'var(--cds-chart-reference)');
+    rows.forEach((r, i) => {
+      const v = c.valor(r), y = i * (bh + gap) + 4, pos = v >= 0, col = c.color(r);
+      g.append('text').attr('x', m.l + 30).attr('y', y + bh / 2).attr('text-anchor', 'end').attr('dominant-baseline', 'middle').text(c.etiqueta(r));
+      g.append('rect').attr('x', x(Math.min(0, v))).attr('y', y).attr('height', bh)
+        .attr('width', Math.max(1, Math.abs(x(v) - x(0)))).attr('rx', 4).style('fill', col)
+        .on('pointermove', (e) => { const [head, lines] = c.tip(r, col); tip.show(e, head, lines); })
+        .on('pointerleave', tip.hide);
+      g.append('text').attr('class', 'ei-val').attr('x', pos ? x(v) + 6 : x(v) - 6).attr('text-anchor', pos ? 'start' : 'end')
+        .attr('y', y + bh / 2).attr('dominant-baseline', 'middle').text(FMT.s2(v));
+    });
+  };
+
+  // Una línea por algoritmo (curva de aprendizaje y curva de sondas). ElasticNet va más gruesa.
+  const dibujarLineas = (el, rows, c) => {
+    const W = Math.max(300, el.clientWidth), H = 280, m = { t: 22, r: 16, b: 40, l: 40 };
+    const modelos = [...new Set(rows.map((r) => r.modelo))];
+    const xs = d3.extent(rows, c.x);
+    const x = (c.log ? d3.scaleLog() : d3.scaleLinear()).domain(c.xDominio || xs).range([m.l, W - m.r]);
+    const ys = rows.flatMap((r) => [c.y(r), c.y2 && r.modelo === (c.final || 'ElasticNet') ? c.y2(r) : null]).filter((v) => v != null);
+    const ext = d3.extent(ys), pad = (ext[1] - ext[0]) * 0.08 || 0.5;
+    const y = d3.scaleLinear([ext[0] - pad, ext[1] + pad], [H - m.b, m.t]).nice();
+    const svg = svgFor(el, W, H); const tip = tooltip(el);
+    const g = svg.append('g').attr('transform', `translate(${m.l},0)`);
+    axisLeft(g, y, W - m.l - m.r, (q) => FMT.f1(q));
+    const eje = d3.axisBottom(x).tickSize(0).tickPadding(8);
+    if (c.log) eje.tickValues([10, 20, 50, 100, 200, 500, 1000].filter((t) => t >= xs[0] && t <= xs[1])).tickFormat(FMT.d);
+    else eje.ticks(6).tickFormat(FMT.d);
+    const gx = svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(eje);
+    gx.attr('font-size', null).attr('font-family', null); gx.select('.domain').style('stroke', 'var(--cds-chart-axis)');
+    svg.append('text').attr('x', W - m.r).attr('y', H - 4).attr('text-anchor', 'end').text(c.titX);
+    svg.append('text').attr('x', m.l).attr('y', 10).text('MAE (años)');
+    if (c.ref != null) {
+      svg.append('line').attr('x1', x(c.ref)).attr('x2', x(c.ref)).attr('y1', m.t).attr('y2', H - m.b)
+        .style('stroke', 'var(--cds-chart-reference)').style('stroke-dasharray', '4 3');
+      svg.append('text').attr('x', x(c.ref) - 4).attr('y', m.t + 10).attr('text-anchor', 'end').text(c.refLabel);
+    }
+    modelos.forEach((mo) => {
+      const pts = rows.filter((r) => r.modelo === mo).sort((a, b) => c.x(a) - c.x(b));
+      const final = mo === (c.final || 'ElasticNet'), col = (c.color || ALG_COLOR)(mo);
+      const linea = (f) => d3.line((r) => x(c.x(r)), (r) => y(f(r)));
+      const trazo = (sel) => sel.style('fill', 'none').style('stroke', col).style('stroke-linecap', 'round').style('stroke-linejoin', 'round');
+      if (final && c.y2) trazo(svg.append('path').datum(pts).attr('d', linea(c.y2))).style('stroke-width', 1.5).style('stroke-dasharray', '5 4');
+      trazo(svg.append('path').datum(pts).attr('d', linea(c.y))).style('stroke-width', final ? 2.5 : 1.5).style('opacity', final ? 1 : 0.85);
+      svg.append('g').selectAll('circle').data(pts).join('circle').attr('cx', (r) => x(c.x(r))).attr('cy', (r) => y(c.y(r))).attr('r', final ? 4 : 3)
+        .style('fill', col).style('stroke', 'var(--color-panel)').style('stroke-width', 1.5)
+        .on('pointermove', (e, r) => tip.show(e, `${mo} · ${c.fmtX(c.x(r))}`,
+          [[col, `${c.nomY}: ${FMT.f2(c.y(r))} años`]].concat(final && c.y2 ? [[null, `${c.nomY2}: ${FMT.f2(c.y2(r))} años`]] : [])))
+        .on('pointerleave', tip.hide);
+    });
+    if (c.extra) c.extra(svg, x, y, tip);
+  };
+
+  // ---------- resumen ----------
+  dash.draw('epi-modelos', (el) => {
+    const d = prep(el, ['epi_modelos']); if (!d) return;
+    const rows = d[0].filter((r) => r.cohorte === cohorteActual()).sort((a, b) => a.MAE - b.MAE);
+    const W = Math.max(300, el.clientWidth), bh = 22, gap = 14;
+    const labelW = d3.max(rows, (r) => textWidth(r.modelo)) + 12;
+    const H = rows.length * (bh + gap) + 24, m = { l: labelW, r: 48 };
+    const x = d3.scaleLinear([0, d3.max(d[0], (r) => r.MAE) * 1.05], [m.l, W - m.r]); // misma escala en las tres cohortes
+    const svg = svgFor(el, W, H); const tip = tooltip(el); const g = svg.append('g');
+    gridX(g, x, H - 24); axisBottom(g, x, H - 24, (v) => FMT.f1(v));
+    rows.forEach((r, i) => {
+      const y = i * (bh + gap) + 4, final = r.modelo === 'ElasticNet', c = final ? COLORS()[0] : MUTED;
+      g.append('text').attr('x', m.l - 10).attr('y', y + bh / 2).attr('text-anchor', 'end').attr('dominant-baseline', 'middle')
+        .attr('class', final ? 'ei-strong' : null).text(r.modelo);
+      g.append('rect').attr('x', x(0)).attr('y', y).attr('height', bh).attr('width', Math.max(1, x(r.MAE) - x(0))).attr('rx', 4).style('fill', c)
+        .on('pointermove', (e) => tip.show(e, `${r.modelo} · ${r.n} pacientes de test`, [[c, `MAE ${FMT.f2(r.MAE)} años · R² ${FMT.f3(r.R2)}`]]))
+        .on('pointerleave', tip.hide);
+      g.append('text').attr('class', 'ei-val').attr('x', x(r.MAE) + 6).attr('y', y + bh / 2).attr('dominant-baseline', 'middle').text(FMT.f2(r.MAE));
+    });
+  });
+
+  dash.draw('epi-leyenda-modelos', (el) => {
+    const d = dash.data(el.dataset.source);
+    el.replaceChildren();
+    if (d.status !== 'ok') return;
+    [...new Set(d.data.map((r) => r.modelo))].forEach((mo) => {
+      const s = document.createElement('span'); const i = document.createElement('i');
+      i.className = 'ei-sw'; i.style.background = ALG_COLOR(mo); s.append(i, mo); el.append(s);
+    });
+  });
+
+  dash.draw('epi-aprendizaje', (el) => {
+    const d = prep(el, ['epi_curva_aprendizaje']); if (!d) return;
+    dibujarLineas(el, d[0], { x: (r) => r.N_pacientes, y: (r) => r.MAE_Val, y2: (r) => r.MAE_Train,
+      titX: 'Pacientes de entrenamiento', fmtX: (v) => `${FMT.d(Math.round(v))} pacientes`, nomY: 'Validación', nomY2: 'Train' });
+  });
+
+  // ---------- qué mira el modelo ----------
+  dash.draw('epi-coeficientes', (el) => {
+    const d = prep(el, ['epi_coeficientes']); if (!d) return;
+    const rows = d[0].slice().sort((a, b) => a.puesto - b.puesto).slice(0, CONSTANTES.TOP_COEF);
+    const color = (r) => (r.tipo === 'Sexo' ? MUTED : r.coeficiente >= 0 ? COLORS()[1] : COLORS()[0]);
+    barrasDivergentes(el, rows, { valor: (r) => r.coeficiente, etiqueta: (r) => r.variable, color,
+      tip: (r, c) => [`${r.variable} · puesto ${r.puesto}`, [[c, `${FMT.s2(r.coeficiente)} años por desviación estándar`],
+        [null, `Correlación con la edad (train): ${loc.format('+.2f')(r.rho_con_edad)}`]]] });
+  });
+
+  dash.draw('sel-sonda', (sel) => {
+    const d = dash.data('epi_sondas_edad');
+    const vars = d.status === 'ok' ? [...new Set(d.data.map((r) => r.variable))] : [];
+    sel.replaceChildren(...vars.map((v) => new Option(v, v)));
+    const p = dash.params().episonda;
+    sel.value = vars.includes(p) ? p : vars[0] || '';
+    sel.onchange = () => dash.setParams({ episonda: sel.value });
+  });
+
+  dash.draw('epi-sonda-edad', (el) => {
+    const d = prep(el, ['epi_sondas_edad']); if (!d) return;
+    const vars = [...new Set(d[0].map((r) => r.variable))];
+    const v = vars.includes(dash.params().episonda) ? dash.params().episonda : vars[0];
+    const rows = d[0].filter((r) => r.variable === v);
+    const W = Math.max(300, el.clientWidth), H = 280, m = { t: 12, r: 12, b: 36, l: 44 };
+    const x = d3.scaleLinear(d3.extent(rows, (r) => r.edad_real), [m.l, W - m.r]).nice();
+    const ext = d3.extent(rows, (r) => r.beta), pad = (ext[1] - ext[0]) * 0.08 || 0.02;
+    const y = d3.scaleLinear([ext[0] - pad, ext[1] + pad], [H - m.b, m.t]).nice();
+    const svg = svgFor(el, W, H); const tip = tooltip(el);
+    const g = svg.append('g').attr('transform', `translate(${m.l},0)`);
+    axisLeft(g, y, W - m.l - m.r, (q) => loc.format('.2f')(q));
+    const gx = svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(6).tickSize(0).tickPadding(8));
+    gx.attr('font-size', null).attr('font-family', null); gx.select('.domain').remove();
+    svg.append('text').attr('x', W - m.r).attr('y', H - 4).attr('text-anchor', 'end').text('Edad real (años)');
+    svg.append('g').selectAll('circle').data(rows).join('circle').attr('cx', (r) => x(r.edad_real)).attr('cy', (r) => y(r.beta)).attr('r', 3.5)
+      .style('fill', (r) => COHORTE_COLOR(r.cohorte)).style('fill-opacity', 0.8).style('stroke', 'var(--color-panel)').style('stroke-width', 1)
+      .on('pointermove', (e, r) => tip.show(e, `${r.id} · ${r.cohorte}`, [[COHORTE_COLOR(r.cohorte), `Edad ${FMT.f1(r.edad_real)} · metilación ${FMT.f3(r.beta)}`]]))
+      .on('pointerleave', tip.hide);
+  });
+
+  dash.draw('epi-curva-sondas', (el) => {
+    const d = prep(el, ['epi_curva_sondas']); if (!d) return;
+    dibujarLineas(el, d[0], { x: (r) => r.k, y: (r) => r.MAE_CV, log: true, ref: K_ELEGIDO, refLabel: `${FMT.d(K_ELEGIDO)} (elegido)`,
+      titX: 'Número de sondas (escala logarítmica)', fmtX: (v) => `${FMT.d(v)} sondas`, nomY: 'Validación cruzada' });
+  });
+
+  // ---------- reloj inmunológico: error según el número de biomarcadores ----------
+  dash.draw('inm-leyenda-modelos', (el) => {
+    const d = dash.data(el.dataset.source);
+    el.replaceChildren();
+    if (d.status !== 'ok') return;
+    ALGORITMOS_INM.filter((mo) => d.data.some((r) => r.modelo === mo)).forEach((mo) => {
+      const s = document.createElement('span'); const i = document.createElement('i');
+      i.className = 'ei-sw'; i.style.background = ALG_COLOR_INM(mo); s.append(i, mo === 'TabPFN v2' ? `${mo} (final)` : mo); el.append(s);
+    });
+    const s = document.createElement('span'); const i = document.createElement('i');
+    i.className = 'ei-sw ei-sw-anillo'; s.append(i, `Los ${K_INMUNO} del modelo final`); el.append(s);
+  });
+
+  dash.draw('inm-curva-variables', (el) => {
+    const d = prep(el, ['curva_variables']); if (!d) return;
+    const finales = d[0].filter((r) => r.candidatas === 'actuales' && r.k === K_INMUNO);
+    // Anillo en k = 45: cada modelo con los 45 biomarcadores del modelo final (no son los 45 mejores de las 71)
+    const anillos = (svg, x, y, tip) => svg.append('g').selectAll('circle').data(finales).join('circle')
+      .attr('cx', x(K_INMUNO)).attr('cy', (r) => y(r.MAE_CV)).attr('r', 6)
+      .style('fill', 'none').style('stroke', (r) => ALG_COLOR_INM(r.modelo)).style('stroke-width', 2)
+      .on('pointermove', (e, r) => tip.show(e, `${r.modelo} · los ${K_INMUNO} del modelo final`, [[ALG_COLOR_INM(r.modelo), `Validación cruzada (train): ${FMT.f2(r.MAE_CV)} años`]]))
+      .on('pointerleave', tip.hide);
+    dibujarLineas(el, d[0].filter((r) => r.candidatas === 'candidatas'), { x: (r) => r.k, y: (r) => r.MAE_CV,
+      ref: K_INMUNO, refLabel: `${K_INMUNO} (elegido)`, final: 'TabPFN v2', color: ALG_COLOR_INM, extra: anillos,
+      titX: 'Número de biomarcadores (más el sexo)', fmtX: (v) => `${FMT.d(v)} biomarcadores`, nomY: 'Validación cruzada (train)' });
+  });
+
+  // ---------- paciente ----------
+  // Cascada exacta: la base más el aporte de cada variable, en orden de efecto (el dibujo es cascada(), más arriba).
+  dash.draw('epi-cascada', (el) => {
+    const d = prep(el, ['epi_aportes', 'epi_pacientes_test']); if (!d) return;
+    const p = pacienteActual('epi_pacientes_test'); if (!p) return;
+    const propias = d[0].filter((r) => r.id === p.id);
+    const filas = propias.filter((r) => r.tipo !== 'Resto').sort((a, b) => Math.abs(b.aporte_anos) - Math.abs(a.aporte_anos))
+      .concat(propias.filter((r) => r.tipo === 'Resto'));
+    cascada(el, p, p.base, filas, (r) => (r.beta != null ? [[null, `Metilación del paciente (beta): ${FMT.f3(r.beta)}`]] : []));
+  });
+
+  // ---------- simulador "qué pasaría si" (aporte = coeficiente × (valor − media) / escala) ----------
+  EI.sim = EI.sim || {}; // valores que movió el lector: { idPaciente: { sonda: beta } }
+  const SIM_IDS = ['epi_aportes', 'epi_pacientes_test', 'epi_coeficientes'];
+  const simEstado = () => {
+    const ds = SIM_IDS.map((id) => datos(id));
+    if (ds.some((x) => x.status !== 'ok')) return null;
+    const p = pacienteActual('epi_pacientes_test'); if (!p) return null;
+    const coef = new Map(ds[2].data.map((r) => [r.variable, r]));
+    const movidos = EI.sim[p.id] || {};
+    const filas = ds[0].data.filter((r) => r.id === p.id && r.tipo === 'Sonda' && coef.has(r.variable))
+      .sort((a, b) => Math.abs(b.aporte_anos) - Math.abs(a.aporte_anos)).slice(0, CONSTANTES.SIM_SONDAS)
+      .map((r) => {
+        const c = coef.get(r.variable), nuevo = movidos[r.variable] ?? r.beta;
+        const efecto = (v) => c.coeficiente * (v - r.beta) / c.escala; // cambio en años al pasar de su valor a v
+        return { r, c, nuevo, delta: efecto(nuevo), lo: Math.min(c.p01, r.beta), hi: Math.max(c.p99, r.beta), efecto };
+      });
+    filas.forEach((f) => { if (Math.abs(f.delta) < 0.005) f.delta = 0; }); // evita mostrar "−0,00"
+    const cambio = d3.sum(filas, (f) => f.delta);
+    return { p, filas, cambio, edad: p.edad_predicha + cambio };
+  };
+  dash.draw('sim-edad', (el) => { const s = simEstado(); el.textContent = s ? FMT.f1(s.edad) : '—'; });
+  dash.draw('sim-cambio', (el) => { const s = simEstado(); el.textContent = s ? FMT.s1(s.cambio) : '—'; });
+  dash.draw('epi-simulador', (el) => {
+    const d = prep(el, SIM_IDS); if (!d) return;
+    const s = simEstado(); if (!s) return;
+    // Regla de edades: la escala cubre todo lo que se puede alcanzar con los deslizadores
+    const W = Math.max(300, el.clientWidth), H = 58, m = { l: 14, r: 14 };
+    const alcance = [d3.sum(s.filas, (f) => Math.min(f.efecto(f.lo), f.efecto(f.hi))), d3.sum(s.filas, (f) => Math.max(f.efecto(f.lo), f.efecto(f.hi)))];
+    const x = d3.scaleLinear(d3.extent([s.p.edad_real, s.p.edad_predicha + alcance[0], s.p.edad_predicha + alcance[1]]), [m.l, W - m.r]).nice();
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H).style('overflow', 'visible');
+    const eje = svg.append('g').attr('transform', `translate(0,${H - 20})`).call(d3.axisBottom(x).ticks(6).tickSize(0).tickPadding(8).tickFormat(loc.format('d')));
+    eje.attr('font-size', null).attr('font-family', null).selectAll('text').style('fill', 'var(--color-fg-muted)').style('font-size', '12px');
+    eje.select('.domain').style('stroke', 'var(--cds-chart-axis)');
+    if (s.p.edad_real != null) svg.append('line').attr('x1', x(s.p.edad_real)).attr('x2', x(s.p.edad_real)).attr('y1', 6).attr('y2', H - 20)
+      .style('stroke', 'var(--color-fg-muted)').style('stroke-dasharray', '5 3');
+    svg.append('circle').attr('cx', x(s.p.edad_predicha)).attr('cy', 22).attr('r', 6).style('fill', MUTED);
+    const punto = svg.append('circle').attr('cx', x(s.edad)).attr('cy', 22).attr('r', 6).style('fill', COLORS()[0]).style('stroke', 'var(--color-panel)').style('stroke-width', 2);
+    const textos = [];
+    s.filas.forEach((f) => {
+      const fila = document.createElement('div'); fila.className = 'ei-sim-fila';
+      const nombre = document.createElement('span'); nombre.className = 'ei-sim-nombre'; nombre.textContent = f.r.variable;
+      const rango = document.createElement('input');
+      Object.assign(rango, { type: 'range', min: String(f.lo), max: String(f.hi), step: '0.001', value: String(f.nuevo) });
+      rango.setAttribute('aria-label', `Metilación de ${f.r.variable}`);
+      const valor = document.createElement('span'); valor.className = 'ei-sim-valor';
+      textos.push([f.r.variable, valor]);
+      rango.addEventListener('input', () => {
+        EI.sim[s.p.id] = { ...(EI.sim[s.p.id] || {}), [f.r.variable]: Number(rango.value) };
+        const nuevo = simEstado(); if (!nuevo) return;
+        punto.style('cx', `${x(nuevo.edad)}px`); // por estilo, para que el punto se deslice
+        pintar(nuevo);
+        dash.draw('sim-edad'); dash.draw('sim-cambio');
+        document.querySelectorAll('[data-draw="sim-edad"], [data-draw="sim-cambio"]').forEach((e) => {
+          e.classList.remove('ei-bump'); void e.offsetWidth; e.classList.add('ei-bump');
+        });
+      });
+      fila.append(nombre, rango, valor); el.append(fila);
+    });
+    const pintar = (st) => st.filas.forEach((f) => {
+      const span = textos.find(([v]) => v === f.r.variable)?.[1]; if (!span) return;
+      const b = document.createElement('b'); b.textContent = `${FMT.s2(f.delta)} años`;
+      span.replaceChildren(`beta ${FMT.f3(f.nuevo)} (era ${FMT.f3(f.r.beta)}) · `, b);
+    });
+    pintar(s);
+  });
+  document.querySelectorAll('[data-sim-reset]').forEach((b) => b.addEventListener('click', () => {
+    EI.sim = {};
+    ['epi-simulador', 'sim-edad', 'sim-cambio'].forEach((n) => dash.draw(n));
+  }));
+
+  // ---------- simulador "qué pasaría si" del modelo inmunológico (v2.4) ----------
+  // TabPFN tarda segundos por predicción, así que no calcula en vivo: las curvas se precalcularon con el
+  // modelo real (dashboard/exportar_simulador_inmune.py), moviendo un biomarcador a la vez, y aquí se
+  // interpola en cada curva. Solo se mueve un biomarcador a la vez: sumar los cambios de varios no sirve
+  // con TabPFN (se alejaba en promedio 8,2 años del cálculo exacto; ver simulador_aditividad.csv).
+  EI.simInm = EI.simInm || {}; // el biomarcador que movió el lector: { idPaciente: { biomarcador: valor } }
+  const INM_SIM_IDS = ['simulador_inmune', 'pacientes_test'];
+  const fmtValor = loc.format(',.3~f');
+  // Cambio en años para un valor: interpolación lineal entre los puntos calculados (ordenados por valor)
+  const interpolar = (pts, v) => {
+    if (v <= pts[0].valor) return pts[0].delta;
+    for (let i = 1; i < pts.length; i++) {
+      const a = pts[i - 1], b = pts[i];
+      if (v <= b.valor) return b.valor === a.valor ? b.delta : a.delta + (b.delta - a.delta) * (v - a.valor) / (b.valor - a.valor);
+    }
+    return pts[pts.length - 1].delta;
+  };
+  const simInmEstado = () => {
+    const ds = INM_SIM_IDS.map((id) => datos(id));
+    if (ds.some((x) => x.status !== 'ok')) return null;
+    const p = pacienteActual('pacientes_test'); if (!p) return null;
+    const movidos = EI.simInm[p.id] || {};
+    const filas = d3.groups(ds[0].data.filter((r) => r.id === p.id), (r) => r.variable).map(([variable, g]) => {
+      const pts = g.slice().sort((a, b) => a.valor - b.valor);
+      const original = g[0].valor_paciente, nuevo = movidos[variable] ?? original;
+      return { variable, tipo: g[0].tipo, orden: g[0].orden, pts, original, nuevo, lo: pts[0].valor, hi: pts[pts.length - 1].valor,
+        delta: interpolar(pts, nuevo), efecto: (v) => interpolar(pts, v) };
+    }).sort((a, b) => a.orden - b.orden);
+    filas.forEach((f) => { if (Math.abs(f.delta) < 0.005) f.delta = 0; }); // evita mostrar "−0,00"
+    const cambio = d3.sum(filas, (f) => f.delta);
+    return { p, filas, cambio, edad: p.edad_predicha + cambio };
+  };
+  dash.draw('inm-sim-edad', (el) => { const s = simInmEstado(); el.textContent = s && s.filas.length ? FMT.f1(s.edad) : '—'; });
+  dash.draw('inm-sim-cambio', (el) => { const s = simInmEstado(); el.textContent = s && s.filas.length ? FMT.s1(s.cambio) : '—'; });
+  dash.draw('inm-simulador', (el) => {
+    const d = prep(el, INM_SIM_IDS); if (!d) return;
+    const s = simInmEstado(); if (!s) return;
+    if (!s.filas.length) {
+      const p = document.createElement('p'); p.className = 'ei-fail';
+      p.append('Este paciente no tiene curvas del simulador.');
+      el.append(p); return;
+    }
+    // Regla de edades: cubre todo lo que se puede alcanzar con los deslizadores
+    const W = Math.max(300, el.clientWidth), H = 58, m = { l: 14, r: 14 };
+    // Un biomarcador a la vez: el alcance es el extremo más lejano de cualquiera de las curvas
+    const extremos = s.filas.map((f) => d3.extent(f.pts, (q) => q.delta));
+    const alcance = [Math.min(0, d3.min(extremos, (e) => e[0])), Math.max(0, d3.max(extremos, (e) => e[1]))];
+    const x = d3.scaleLinear(d3.extent([s.p.edad_real, s.p.edad_predicha + alcance[0], s.p.edad_predicha + alcance[1]]), [m.l, W - m.r]).nice();
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H).style('overflow', 'visible');
+    const eje = svg.append('g').attr('transform', `translate(0,${H - 20})`).call(d3.axisBottom(x).ticks(6).tickSize(0).tickPadding(8).tickFormat(loc.format('d')));
+    eje.attr('font-size', null).attr('font-family', null).selectAll('text').style('fill', 'var(--color-fg-muted)').style('font-size', '12px');
+    eje.select('.domain').style('stroke', 'var(--cds-chart-axis)');
+    if (s.p.edad_real != null) svg.append('line').attr('x1', x(s.p.edad_real)).attr('x2', x(s.p.edad_real)).attr('y1', 6).attr('y2', H - 20)
+      .style('stroke', 'var(--color-fg-muted)').style('stroke-dasharray', '5 3');
+    svg.append('circle').attr('cx', x(s.p.edad_predicha)).attr('cy', 22).attr('r', 6).style('fill', MUTED);
+    const punto = svg.append('circle').attr('cx', x(s.edad)).attr('cy', 22).attr('r', 6).style('fill', COLORS()[0]).style('stroke', 'var(--color-panel)').style('stroke-width', 2);
+    const textos = [], rangos = [];
+    s.filas.forEach((f) => {
+      const fila = document.createElement('div'); fila.className = 'ei-sim-fila';
+      // Si el nombre no cabe, que se corte después de un guion bajo y no en medio de una palabra
+      const nombre = document.createElement('span'); nombre.className = 'ei-sim-nombre ei-sim-nombre-largo'; nombre.textContent = f.variable.replaceAll('_', '_​');
+      const rango = document.createElement('input');
+      Object.assign(rango, { type: 'range', min: String(f.lo), max: String(f.hi), step: String((f.hi - f.lo) / 400 || 0.001), value: String(f.nuevo) });
+      rango.setAttribute('aria-label', `Valor de ${f.variable}`);
+      const valor = document.createElement('span'); valor.className = 'ei-sim-valor';
+      textos.push([f.variable, valor]); rangos.push([f, rango]);
+      rango.addEventListener('input', () => {
+        // Un biomarcador a la vez: los demás deslizadores vuelven al valor del paciente
+        EI.simInm[s.p.id] = { [f.variable]: Number(rango.value) };
+        rangos.forEach(([otra, r]) => { if (r !== rango) r.value = String(otra.original); });
+        const nuevo = simInmEstado(); if (!nuevo) return;
+        punto.style('cx', `${x(nuevo.edad)}px`); // por estilo, para que el punto se deslice
+        pintar(nuevo);
+        dash.draw('inm-sim-edad'); dash.draw('inm-sim-cambio');
+        document.querySelectorAll('[data-draw="inm-sim-edad"], [data-draw="inm-sim-cambio"]').forEach((e) => {
+          e.classList.remove('ei-bump'); void e.offsetWidth; e.classList.add('ei-bump');
+        });
+      });
+      fila.append(nombre, rango, valor); el.append(fila);
+    });
+    const pintar = (st) => st.filas.forEach((f) => {
+      const span = textos.find(([v]) => v === f.variable)?.[1]; if (!span) return;
+      const b = document.createElement('b'); b.textContent = `${FMT.s2(f.delta)} años`;
+      span.replaceChildren(`valor ${fmtValor(f.nuevo)} (era ${fmtValor(f.original)}) · `, b);
+    });
+    pintar(s);
+  });
+  document.querySelectorAll('[data-inm-sim-reset]').forEach((b) => b.addEventListener('click', () => {
+    EI.simInm = {};
+    ['inm-simulador', 'inm-sim-edad', 'inm-sim-cambio'].forEach((n) => dash.draw(n));
+  }));
+
+  // ---------- agregar un paciente (v1.4) ----------
+  // Solo fuera de Claude: la página web define window.EI_API (el servidor Python que calcula la edad).
+  // El servidor devuelve al paciente con el mismo formato que los de test; se agrega a esas fuentes
+  // (EI.subidos) y lo dibujan los mismos gráficos. Este bloque solo cambia hidden, clases, estilos y valores.
+  const API = window.EI_API;
+  const CORTE_VIDEO = 9; // segundos del video que se usan (al final tiene un error)
+  const SUBIR = {
+    inmuno: { ruta: 'inmunologico', pacientes: 'pacientes_test', aportes: 'shap_inmune', simulacion: 'simulador_inmune', param: 'paciente' },
+    epi: { ruta: 'epigenetico', pacientes: 'epi_pacientes_test', aportes: 'epi_aportes', param: 'epipaciente' },
+  };
+  EI.subida = EI.subida || { inmuno: { fase: 'normal' }, epi: { fase: 'normal' } };
+  const parte = (attr, m) => document.querySelector(`[${attr}="${m}"]`);
+  // Fases: normal (gráficos), subir (zona para el archivo), calculando (animación donde estaban los gráficos)
+  const aplicarSubida = (m) => {
+    const f = EI.subida[m].fase;
+    parte('data-subir', m).hidden = f !== 'subir';
+    parte('data-cargando', m).hidden = f !== 'calculando';
+    parte('data-resultados', m).hidden = f !== 'normal';
+    const b = parte('data-subir-abrir', m);
+    b.setAttribute('aria-expanded', String(f === 'subir'));
+    b.disabled = f === 'calculando';
+  };
+  const ponerFase = (m, fase, extra = {}) => {
+    EI.subida[m] = { ...EI.subida[m], fase, ...extra };
+    aplicarSubida(m);
+    dash.draw('subir-estado');
+  };
+  EI.cerrarSubida = (m) => { if (EI.subida[m]?.fase === 'subir') ponerFase(m, 'normal', { error: null }); };
+  dash.draw('subir-estado', (el) => {
+    const s = EI.subida[el.dataset.modelo] || {};
+    el.replaceChildren();
+    el.classList.toggle('ei-subir-error', Boolean(s.error) && s.fase !== 'calculando');
+    if (s.fase === 'calculando') return;
+    if (s.error) {
+      const dot = document.createElement('span'); dot.className = 'ei-dot';
+      el.append(dot, s.error);
+      return;
+    }
+    if (!s.agregados?.length) return;
+    const linea = document.createElement('span'); const b = document.createElement('b');
+    b.textContent = s.agregados.length === 1 ? 'Se agregó tu paciente' : `Se agregaron ${s.agregados.length} pacientes`;
+    linea.append(b, ` (calculado en ${FMT.f1(s.segundos || 0)} s). Aparece${s.agregados.length === 1 ? '' : 'n'} primero en la lista, en «Tus pacientes».`);
+    el.append(linea);
+    (s.avisos || []).forEach((a) => { const av = document.createElement('span'); av.textContent = `Aviso: ${a}`; el.append(av); });
+  });
+
+  // La animación de carga: el video de la silueta que envejece mientras camina, en bucle (solo sus
+  // primeros 9 s) hasta que termina el cálculo. La barra muestra el avance que informa el servidor.
+  const MINIMO_CARGA = 1200; // ms: aunque el cálculo sea instantáneo, la animación no parpadea
+  const pausa = (ms) => new Promise((r) => setTimeout(r, ms));
+  dash.draw('carga-etapa', (el) => {
+    const s = EI.subida[el.dataset.modelo] || {};
+    el.textContent = s.fase === 'calculando' && s.etapa
+      ? `${s.etapa} · ${Math.round(100 * Math.min(1, s.progreso || 0))} %` : 'Calculando la edad del paciente…';
+  });
+  const iniciarCarga = (m) => {
+    const caja = parte('data-cargando', m), video = caja.querySelector('video'), barra = caja.querySelector('.ei-cargando-barra i');
+    // Tema: silueta blanca sobre fondo oscuro, negra sobre fondo claro
+    const fondo = getComputedStyle(caja).backgroundColor;
+    let rgb = (fondo.match(/[\d.]+/g) || [255, 255, 255]).slice(0, 3).map(Number);
+    if (fondo.startsWith('color(')) rgb = rgb.map((v) => v * 255);
+    caja.classList.toggle('ei-oscuro', 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2] < 128);
+    caja.classList.remove('ei-sin-video');
+    barra.style.transform = 'scaleX(0)';
+    let vivo = true;
+    const minimo = pausa(MINIMO_CARGA);
+    const progreso = (f) => { barra.style.transform = `scaleX(${Math.max(0, Math.min(1, f))})`; };
+    const cerrar = () => {
+      vivo = false; video.pause();
+      video.ontimeupdate = null; video.onended = null; video.onerror = null;
+    };
+    const sinVideo = () => { if (vivo) caja.classList.add('ei-sin-video'); };
+    if (!window.EI_VIDEO) { sinVideo(); return { minimo, progreso, cerrar }; }
+    video.onerror = sinVideo;
+    if (video.getAttribute('src') !== window.EI_VIDEO) video.src = window.EI_VIDEO; else video.currentTime = 0;
+    if (quieto) { // movimiento reducido: un cuadro fijo
+      const fijar = () => { video.currentTime = 4.5; };
+      if (video.readyState >= 1) fijar(); else video.addEventListener('loadedmetadata', fijar, { once: true });
+      return { minimo, progreso, cerrar };
+    }
+    // A los 9 s vuelve al inicio (al final el video tiene un error).
+    // requestVideoFrameCallback es preciso; timeupdate queda de respaldo (el primero no corre con la pestaña oculta)
+    const revisar = () => {
+      if (vivo && video.currentTime >= CORTE_VIDEO && !video.seeking) { video.currentTime = 0; video.play().catch(() => {}); }
+    };
+    const porCuadro = () => { if (!vivo) return; revisar(); video.requestVideoFrameCallback(porCuadro); };
+    if (video.requestVideoFrameCallback) video.requestVideoFrameCallback(porCuadro);
+    video.ontimeupdate = revisar;
+    video.onended = () => { if (vivo) { video.currentTime = 0; video.play().catch(() => {}); } };
+    const reproducir = (intento) => video.play().catch((e) => {
+      if (!vivo) return;
+      if (e.name === 'AbortError' && intento === 1) video.addEventListener('loadeddata', () => vivo && reproducir(2), { once: true });
+      else sinVideo();
+    });
+    reproducir(1);
+    return { minimo, progreso, cerrar };
+  };
+
+  // Pide el cálculo al servidor con ?progreso=1: responde una línea JSON por evento
+  // ({progreso, etapa} varias veces por segundo y al final {resultado} o {error}).
+  const calcularConProgreso = async (m, url, texto, signal, anim) => {
+    const r = await fetch(`${url}?progreso=1`, { method: 'POST', headers: { 'Content-Type': 'text/csv; charset=utf-8' }, body: texto, signal });
+    if (!r.ok || !r.body) {
+      let res = {};
+      try { res = await r.json(); } catch (e) { /* respuesta sin JSON */ }
+      throw new Error(res.error || `El servidor respondió con un error (${r.status}).`);
+    }
+    const lector = r.body.pipeThrough(new TextDecoderStream()).getReader();
+    let resto = '', resultado = null;
+    for (;;) {
+      const { value, done } = await lector.read();
+      if (done) break;
+      resto += value;
+      let corte;
+      while ((corte = resto.indexOf('\n')) >= 0) {
+        const linea = resto.slice(0, corte).trim();
+        resto = resto.slice(corte + 1);
+        if (!linea) continue;
+        const ev = JSON.parse(linea);
+        if (ev.error) throw new Error(ev.error);
+        if (ev.resultado) resultado = ev.resultado;
+        if (ev.progreso != null) {
+          anim.progreso(ev.progreso);
+          EI.subida[m] = { ...EI.subida[m], etapa: ev.etapa, progreso: ev.progreso };
+          dash.draw('carga-etapa');
+        }
+      }
+    }
+    if (!resultado?.pacientes?.length) throw new Error('El servidor no devolvió resultados.');
+    return resultado;
+  };
+
+  const enviar = async (m, archivo) => {
+    const cfg = SUBIR[m];
+    if (!/\.(csv|txt)$/i.test(archivo.name) && archivo.type !== 'text/csv') { ponerFase(m, 'subir', { error: 'El archivo debe ser un CSV (.csv).' }); return; }
+    if (archivo.size > 5 * 1024 * 1024) { ponerFase(m, 'subir', { error: 'El archivo es demasiado grande (máximo 5 MB).' }); return; }
+    const texto = await archivo.text();
+    ponerFase(m, 'calculando', { error: null, agregados: null, avisos: [], etapa: null, progreso: 0 });
+    dash.draw('carga-etapa');
+    const anim = iniciarCarga(m);
+    const ctrl = new AbortController(), reloj = setTimeout(() => ctrl.abort(), 240000);
+    try {
+      const res = await calcularConProgreso(m, `${API}/${cfg.ruta}`, texto, ctrl.signal, anim);
+      // La barra llega al 100 % y se ve un instante antes de mostrar los resultados
+      await Promise.all([anim.minimo, pausa(400)]);
+      anim.cerrar();
+      // Si se vuelve a subir un paciente con el mismo id, reemplaza al anterior
+      const ids = new Set(res.pacientes.map((p) => p.id));
+      EI.subidos[cfg.pacientes] = res.pacientes.concat((EI.subidos[cfg.pacientes] || []).filter((p) => !ids.has(p.id)));
+      EI.subidos[cfg.aportes] = res.aportes.concat((EI.subidos[cfg.aportes] || []).filter((a) => !ids.has(a.id)));
+      if (cfg.simulacion) EI.subidos[cfg.simulacion] = (res.simulacion || []).concat((EI.subidos[cfg.simulacion] || []).filter((a) => !ids.has(a.id)));
+      ids.forEach((id) => { delete EI.sim[id]; delete EI.simInm[id]; });
+      ponerFase(m, 'normal', { agregados: res.pacientes.map((p) => p.id), avisos: res.avisos || [], segundos: res.segundos });
+      dash.setParams({ [cfg.param]: res.pacientes[0].id });
+      EI.reanimar?.(EI.tab);
+    } catch (e) {
+      anim.cerrar();
+      const msg = e.name === 'AbortError' ? 'El cálculo tardó demasiado. Intenta de nuevo.'
+        : e instanceof TypeError ? 'No se pudo conectar con el servidor que calcula la edad.' : e.message;
+      ponerFase(m, 'subir', { error: msg });
+    } finally {
+      clearTimeout(reloj);
+    }
+  };
+
+  if (API) {
+    document.querySelectorAll('[data-subir-acciones]').forEach((e) => { e.hidden = false; });
+    // Soltar un archivo fuera de la zona no debe abrirlo en el navegador
+    ['dragover', 'drop'].forEach((t) => window.addEventListener(t, (e) => e.preventDefault()));
+    Object.keys(SUBIR).forEach((m) => {
+      aplicarSubida(m);
+      parte('data-subir-abrir', m).addEventListener('click', () => ponerFase(m, EI.subida[m].fase === 'subir' ? 'normal' : 'subir', { error: null }));
+      parte('data-subir-cerrar', m).addEventListener('click', () => ponerFase(m, 'normal', { error: null }));
+      const zonaArchivo = parte('data-subir-zona', m), input = parte('data-subir-input', m);
+      zonaArchivo.addEventListener('click', () => input.click());
+      zonaArchivo.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
+      input.addEventListener('change', () => { const f = input.files[0]; input.value = ''; if (f) enviar(m, f); });
+      ['dragenter', 'dragover'].forEach((t) => zonaArchivo.addEventListener(t, () => zonaArchivo.classList.add('ei-arrastrando')));
+      zonaArchivo.addEventListener('dragleave', (e) => { if (!zonaArchivo.contains(e.relatedTarget)) zonaArchivo.classList.remove('ei-arrastrando'); });
+      zonaArchivo.addEventListener('drop', (e) => {
+        zonaArchivo.classList.remove('ei-arrastrando');
+        const f = e.dataTransfer?.files?.[0];
+        if (f) enviar(m, f);
+      });
+    });
+  }
+
+  // ---------- SHAP global (aporte = coeficiente × valor estandarizado, exacto en un modelo lineal) ----------
+  dash.calc('epi_shap_resumen', {
+    inputs: ['epi_importancia'], title: 'Concentración del aporte',
+    description: 'Parte del aporte total que explican las 20 primeras variables, y cuántas hacen falta para el 50 % y el 80 %.',
+    fn: (epi_importancia) => {
+      const v = epi_importancia.map((r) => r.media_abs).sort((a, b) => b - a);
+      const total = d3.sum(v);
+      let acc = 0;
+      const cum = v.map((x) => (acc += x) / total);
+      return [{ top: 20, parte_top: 100 * cum[19], n50: cum.findIndex((c) => c >= 0.5) + 1, n80: cum.findIndex((c) => c >= 0.8) + 1 }];
+    },
+  });
+  dash.calc('epi_por_edad', {
+    inputs: ['epi_shap', 'epi_pacientes_test'], title: 'Aporte medio por grupo de edad',
+    description: 'Aporte medio (años) de cada sonda principal en los pacientes de test de cada grupo de edad real.',
+    fn: (epi_shap, epi_pacientes_test) => {
+      const cortes = [30, 45, 60, 75];
+      const nombres = ['Menos de 30', '30 a 44', '45 a 59', '60 a 74', '75 o más'];
+      const grupo = new Map(epi_pacientes_test.map((p) => [p.id, d3.bisectRight(cortes, p.edad_real)]));
+      return d3.rollups(epi_shap, (g) => ({ media: d3.mean(g, (r) => r.aporte_anos), n: g.length }), (r) => r.variable, (r) => grupo.get(r.id))
+        .flatMap(([variable, gs]) => gs.map(([k, s]) => ({ clave: `${variable}|${k}`, variable, orden: k, grupo: nombres[k], media: s.media, n: s.n })));
+    },
+  });
+
+  // Color real de un token (dash.colors puede venir como var(--…)), para mezclar dos colores con d3.
+  const colorReal = (el, c) => {
+    const s = document.createElement('span'); s.style.color = c; el.append(s);
+    const v = getComputedStyle(s).color; s.remove(); return v;
+  };
+
+  dash.draw('epi-acumulado', (el) => {
+    const d = prep(el, ['epi_importancia']); if (!d) return;
+    const v = d[0].map((r) => r.media_abs).sort((a, b) => b - a);
+    const total = d3.sum(v);
+    let acc = 0;
+    const pts = v.map((x, i) => ({ n: i + 1, p: 100 * (acc += x) / total }));
+    const W = Math.max(300, el.clientWidth), H = 260, m = { t: 14, r: 16, b: 40, l: 40 };
+    const x = d3.scaleLinear([1, pts.length], [m.l, W - m.r]);
+    const y = d3.scaleLinear([0, 100], [H - m.b, m.t]);
+    const svg = svgFor(el, W, H); const tip = tooltip(el);
+    const g = svg.append('g').attr('transform', `translate(${m.l},0)`);
+    axisLeft(g, y, W - m.l - m.r, (q) => `${q} %`);
+    const gx = svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(6).tickSize(0).tickPadding(8).tickFormat(FMT.d));
+    gx.attr('font-size', null).attr('font-family', null); gx.select('.domain').style('stroke', 'var(--cds-chart-axis)');
+    svg.append('text').attr('x', W - m.r).attr('y', H - 4).attr('text-anchor', 'end').text('Variables, de mayor a menor aporte');
+    svg.append('path').datum(pts).attr('d', d3.line((p) => x(p.n), (p) => y(p.p)))
+      .style('fill', 'none').style('stroke', COLORS()[0]).style('stroke-width', 2).style('stroke-linejoin', 'round');
+    [50, 80].forEach((meta) => {
+      const p = pts.find((q) => q.p >= meta); if (!p) return;
+      svg.append('line').attr('x1', x(p.n)).attr('x2', x(p.n)).attr('y1', y(p.p)).attr('y2', H - m.b)
+        .style('stroke', 'var(--cds-chart-reference)').style('stroke-dasharray', '4 3');
+      svg.append('circle').attr('cx', x(p.n)).attr('cy', y(p.p)).attr('r', 4).style('fill', COLORS()[0]).style('stroke', 'var(--color-panel)').style('stroke-width', 2);
+      svg.append('text').attr('x', x(p.n) + 6).attr('y', y(p.p) + 14).text(`${meta} %: ${FMT.d(p.n)} variables`);
+    });
+    const foco = svg.append('circle').attr('r', 4).style('fill', COLORS()[0]).style('pointer-events', 'none').attr('visibility', 'hidden');
+    svg.append('rect').attr('x', m.l).attr('y', m.t).attr('width', W - m.l - m.r).attr('height', H - m.t - m.b).style('fill', 'transparent')
+      .on('pointermove', (e) => {
+        const [mx] = d3.pointer(e);
+        const p = pts[Math.max(0, Math.min(pts.length - 1, Math.round(x.invert(mx)) - 1))];
+        foco.attr('cx', x(p.n)).attr('cy', y(p.p)).attr('visibility', 'visible');
+        tip.show(e, `Las ${FMT.d(p.n)} primeras variables`, [[COLORS()[0], `${FMT.f1(p.p)} % del aporte total`]]);
+      })
+      .on('pointerleave', () => { foco.attr('visibility', 'hidden'); tip.hide(); });
+  });
+
+  dash.draw('epi-imp-cohorte', (el) => {
+    const d = prep(el, ['epi_importancia']); if (!d) return;
+    const rows = d[0].slice().sort((a, b) => a.puesto - b.puesto).slice(0, CONSTANTES.TOP_SHAP);
+    const W = Math.max(300, el.clientWidth), rowH = 22;
+    const labelW = d3.max(rows, (r) => textWidth(r.variable)) + 12;
+    const H = rows.length * rowH + 28, m = { l: labelW, r: 20 };
+    const x = d3.scaleLinear([0, d3.max(rows, (r) => Math.max(r.media_abs_hannum, r.media_abs_gse)) * 1.08], [m.l, W - m.r]);
+    const svg = svgFor(el, W, H); const tip = tooltip(el); const g = svg.append('g');
+    gridX(g, x, H - 24); axisBottom(g, x, H - 24, (v) => FMT.f1(v));
+    rows.forEach((r, i) => {
+      const y = i * rowH + rowH / 2;
+      g.append('text').attr('x', m.l - 10).attr('y', y).attr('text-anchor', 'end').attr('dominant-baseline', 'middle').text(r.variable);
+      g.append('line').attr('x1', x(r.media_abs_hannum)).attr('x2', x(r.media_abs_gse)).attr('y1', y).attr('y2', y)
+        .style('stroke', 'var(--cds-chart-muted)').style('stroke-width', 2);
+      [['Hannum', r.media_abs_hannum], ['GSE87571', r.media_abs_gse]].forEach(([c, v]) => {
+        g.append('circle').attr('cx', x(v)).attr('cy', y).attr('r', 5).style('fill', COHORTE_COLOR(c)).style('stroke', 'var(--color-panel)').style('stroke-width', 1.5)
+          .on('pointermove', (e) => tip.show(e, `${r.variable} · puesto ${r.puesto}`, [
+            [COHORTE_COLOR('Hannum'), `Hannum: ${FMT.f2(r.media_abs_hannum)} años`],
+            [COHORTE_COLOR('GSE87571'), `GSE87571: ${FMT.f2(r.media_abs_gse)} años`]]))
+          .on('pointerleave', tip.hide);
+      });
+    });
+  });
+
+  // Enjambre SHAP: una fila por variable y un punto por paciente (lo usan los dos modelos).
+  // color(r): color del punto; detalle(r): segunda línea del recuadro; alClic(r): qué hacer al elegir un punto.
+  const enjambre = (el, filas, vars, { color, detalle, alClic }) => {
+    const W = Math.max(300, el.clientWidth), rowH = 30, rad = 2.4;
+    const labelW = d3.max(vars, (v) => textWidth(v)) + 12;
+    const H = vars.length * rowH + 28, m = { l: labelW, r: 12 };
+    const ext = d3.max(filas, (r) => Math.abs(r.aporte_anos)) * 1.05 || 1;
+    const x = d3.scaleLinear([-ext, ext], [m.l, W - m.r]);
+    const svg = svgFor(el, W, H); const tip = tooltip(el); const g = svg.append('g');
+    gridX(g, x, H - 24); axisBottom(g, x, H - 24, (v) => loc.format('+~f')(v));
+    g.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 0).attr('y2', H - 24).style('stroke', 'var(--cds-chart-reference)');
+    const limite = rowH / 2 - rad;
+    const porVariable = d3.group(filas, (r) => r.variable);
+    vars.forEach((v, i) => {
+      const y0 = i * rowH + rowH / 2;
+      g.append('text').attr('x', m.l - 10).attr('y', y0).attr('text-anchor', 'end').attr('dominant-baseline', 'middle').text(v);
+      // Apila los puntos que se tocan hacia arriba y abajo (enjambre)
+      const pts = (porVariable.get(v) || []).map((r) => ({ r, px: x(r.aporte_anos), dy: 0 })).sort((a, b) => a.px - b.px);
+      const puestos = [];
+      let desde = 0;
+      pts.forEach((p, k) => {
+        while (desde < puestos.length && p.px - puestos[desde].px > 2 * rad) desde += 1;
+        const cerca = puestos.slice(desde);
+        for (let j = 0; ; j += 1) {
+          const dy = (j % 2 ? 1 : -1) * Math.ceil(j / 2) * (2 * rad + 0.3);
+          if (Math.abs(dy) > limite) { p.dy = ((k * 7) % 11 / 10 - 0.5) * 2 * limite; break; }
+          if (cerca.every((q) => Math.hypot(p.px - q.px, dy - q.dy) >= 2 * rad)) { p.dy = dy; break; }
+        }
+        puestos.push(p);
+      });
+      g.append('g').selectAll('circle').data(pts).join('circle').attr('class', 'ei-click')
+        .attr('cx', (p) => p.px).attr('cy', (p) => y0 + p.dy).attr('r', rad).style('fill', (p) => color(p.r))
+        .on('pointermove', (e, p) => tip.show(e, `${p.r.id} · ${v}`, [[color(p.r), `${FMT.s2(p.r.aporte_anos)} años en la edad predicha`], [null, detalle(p.r)]]))
+        .on('pointerleave', tip.hide)
+        .on('click', (e, p) => alClic(p.r));
+    });
+  };
+  // Color de un valor en desviaciones estándar: de −2 (primer color) a +2 (segundo color)
+  const colorZ = (el) => {
+    const mezcla = d3.interpolateRgb(colorReal(el, COLORS()[0]), colorReal(el, COLORS()[1]));
+    return (z) => mezcla((Math.max(-2, Math.min(2, z)) + 2) / 4);
+  };
+
+  dash.draw('epi-enjambre', (el) => {
+    const d = prep(el, ['epi_shap']); if (!d) return;
+    const tono = colorZ(el);
+    enjambre(el, d[0], [...new Set(d[0].map((r) => r.variable))], {
+      color: (r) => tono(r.z),
+      detalle: (r) => (r.beta == null ? 'Variable sexo' : `Metilación (beta) ${FMT.f3(r.beta)}`),
+      alClic: (r) => { dash.setParams({ epipaciente: r.id }); abrir('epi-paciente'); },
+    });
+  });
+
+  // ---------- SHAP del modelo inmunológico (KernelExplainer de la librería shap; ver explicabilidad/shap_inmunologico.py) ----------
+  const TIPO_COLOR = (t) => (t === 'Célula' ? COLORS()[0] : t === 'Citoquina' ? COLORS()[1] : MUTED);
+  dash.draw('inm-shap-imp', (el) => {
+    const d = prep(el, ['shap_inmune_importancia']); if (!d) return;
+    const rows = d[0].slice().sort((a, b) => a.puesto - b.puesto).slice(0, CONSTANTES.TOP_SHAP_INM);
+    const W = Math.max(300, el.clientWidth), bh = 16, gap = 10;
+    const labelW = d3.max(rows, (r) => textWidth(r.variable)) + 12;
+    const H = rows.length * (bh + gap) + 28, m = { l: labelW, r: 56 };
+    const x = d3.scaleLinear([0, d3.max(rows, (r) => r.media_abs) * 1.05], [m.l, W - m.r]);
+    const svg = svgFor(el, W, H); const tip = tooltip(el); const g = svg.append('g');
+    gridX(g, x, H - 24); axisBottom(g, x, H - 24, (v) => FMT.f1(v));
+    rows.forEach((r, i) => {
+      const y = i * (bh + gap) + 4, c = TIPO_COLOR(r.tipo);
+      g.append('text').attr('x', m.l - 10).attr('y', y + bh / 2).attr('text-anchor', 'end').attr('dominant-baseline', 'middle').text(r.variable);
+      g.append('rect').attr('x', x(0)).attr('y', y).attr('height', bh).attr('width', Math.max(1, x(r.media_abs) - x(0))).attr('rx', 4).style('fill', c)
+        .on('pointermove', (e) => tip.show(e, `${r.variable} · puesto ${r.puesto}`, [[c, `${NOMBRE[r.tipo]}: ${FMT.f2(r.media_abs)} años de aporte medio`],
+          [null, `Aporte medio con signo: ${FMT.s2(r.media)} años`], [null, `Puesto ${r.puesto_permutacion} en la importancia por permutación`]]))
+        .on('pointerleave', tip.hide);
+      g.append('text').attr('class', 'ei-val').attr('x', x(r.media_abs) + 6).attr('y', y + bh / 2).attr('dominant-baseline', 'middle').text(FMT.f2(r.media_abs));
+    });
+  });
+  dash.draw('inm-enjambre', (el) => {
+    const d = prep(el, ['shap_inmune', 'shap_inmune_importancia', 'pacientes_test']); if (!d) return;
+    const vars = d[1].slice().sort((a, b) => a.puesto - b.puesto).slice(0, CONSTANTES.TOP_SHAP_INM).map((r) => r.variable);
+    // Solo los pacientes de test: los que se suben desde un archivo no entran al enjambre
+    const test = new Set(dash.data('pacientes_test').data.map((p) => p.id)), elegidas = new Set(vars);
+    const tono = colorZ(el);
+    enjambre(el, d[0].filter((r) => elegidas.has(r.variable) && test.has(r.id)), vars, {
+      color: (r) => (r.tipo === 'Sexo' ? tono(r.valor === 1 ? 2 : -2) : r.z == null ? MUTED : tono(r.z)),
+      detalle: valorBiomarcador,
+      alClic: (r) => { EI.cerrarSubida?.('inmuno'); dash.setParams({ paciente: r.id }); abrir('paciente'); },
+    });
+  });
+
+  dash.draw('epi-calor', (el) => {
+    const d = prep(el, ['epi_por_edad']); if (!d) return;
+    const vars = [...new Set(d[0].map((r) => r.variable))];
+    const grupos = d3.sort([...new Map(d[0].map((r) => [r.orden, r])).values()], (r) => r.orden);
+    const W = Math.max(300, el.clientWidth), cellH = 22, headH = 36;
+    const labelW = d3.max(vars, (v) => textWidth(v)) + 12;
+    const cellW = (W - labelW - 4) / grupos.length;
+    const H = headH + vars.length * cellH + 4;
+    const max = d3.max(d[0], (r) => Math.abs(r.media)) || 1;
+    const svg = svgFor(el, W, H); const tip = tooltip(el);
+    // Encabezados cortos ("<30", "30–44", "75+") cuando las columnas son angostas
+    const corto = (t) => t.replace('Menos de ', '<').replace(' o más', '+').replace(' a ', '–');
+    const angosto = d3.max(grupos, (gr) => textWidth(gr.grupo)) + 6 > cellW;
+    grupos.forEach((gr, k) => {
+      const cx = labelW + k * cellW + cellW / 2;
+      svg.append('text').attr('x', cx).attr('y', 14).attr('text-anchor', 'middle').attr('class', 'ei-val').text(angosto ? corto(gr.grupo) : gr.grupo);
+      svg.append('text').attr('x', cx).attr('y', 29).attr('text-anchor', 'middle').text(angosto ? `n=${gr.n}` : `n = ${gr.n}`);
+    });
+    vars.forEach((v, i) => {
+      const y = headH + i * cellH;
+      svg.append('text').attr('x', labelW - 10).attr('y', y + cellH / 2).attr('text-anchor', 'end').attr('dominant-baseline', 'middle').text(v);
+      d[0].filter((r) => r.variable === v).forEach((r) => {
+        const c = r.media >= 0 ? COLORS()[1] : COLORS()[0];
+        const cx = labelW + r.orden * cellW;
+        svg.append('rect').attr('x', cx + 1).attr('y', y + 1).attr('width', cellW - 2).attr('height', cellH - 2).attr('rx', 3)
+          .style('fill', c).style('fill-opacity', 0.1 + 0.6 * Math.abs(r.media) / max)
+          .on('pointermove', (e) => tip.show(e, `${v} · ${r.grupo}`, [[c, `${FMT.s2(r.media)} años de aporte medio`], [null, `${r.n} pacientes`]]))
+          .on('pointerleave', tip.hide);
+        if (cellW >= 40) svg.append('text').attr('x', cx + cellW / 2).attr('y', y + cellH / 2).attr('text-anchor', 'middle')
+          .attr('dominant-baseline', 'middle').attr('class', 'ei-val').style('pointer-events', 'none').text(FMT.s1(r.media));
+      });
+    });
+  });
+})();
+</script>

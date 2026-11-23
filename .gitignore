@@ -1,0 +1,64 @@
+# ==============================================================================
+# Immuno-XAI: qué NO se sube al repositorio
+# ==============================================================================
+
+# --- Python y sistema ---------------------------------------------------------
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+.claude/
+
+# --- Datasets: no se redistribuyen (ver DATOS.md para descargarlos) ------------
+Modelo 1/Datasets/
+Modelo 2/Datasets/
+
+# --- Informes, respaldos y versiones antiguas de la página --------------------
+Modelo 1/informe/
+Modelo 2/resultados/informe/
+**/_respaldo_original/
+XAI/dashboard/versiones/
+XAI/dashboard/prueba_carga/
+XAI/dashboard/Media/animaciones/
+XAI/INSTRUCCIONES.txt
+
+# --- Modelos entrenados -------------------------------------------------------
+# TabPFN guarda dentro del archivo a los pacientes de entrenamiento (datos de
+# ImmPort), así que ningún .joblib del modelo inmunológico se publica.
+# Solo se suben los ElasticNet epigenéticos (coeficientes, datos públicos de GEO).
+*.joblib
+!Modelo 1/modelos/elasticnet_reloj_epigenetico.joblib
+!XAI/modelos/epigenetico_elasticnet/modelo_elasticnet.joblib
+
+# --- Datos por paciente de ImmPort (Stanford 10K) ------------------------------
+# Archivos con IDs de sujetos (SUB...), sus edades o sus biomarcadores.
+*.npz
+**/predicciones_test.csv
+!Modelo 1/**/predicciones_test.csv
+!XAI/resultados/modelo_epigenetico/predicciones_test.csv
+**/brecha_edad_473.csv
+**/explicacion_individual_test.csv
+**/shap_inmunologico_test.csv
+**/lime_inmunologico_test.csv
+**/comparacion_metodos_por_paciente.csv
+**/simulador_aditividad.csv
+Modelo 2/resultados/explicabilidad/dashboard/
+Modelo 2/resultados/explicabilidad/datos_dashboard.json
+XAI/dashboard/datos/aportes_paciente.json
+XAI/dashboard/datos/brecha.json
+XAI/dashboard/datos/pacientes_test.json
+XAI/dashboard/datos/shap_inmune.json
+XAI/dashboard/datos/simulador_inmune.json
+XAI/web/publico/ejemplos/ejemplo_inmunologico.csv
+
+# --- Métricas binarias (no se usan en la tesis) --------------------------------
+**/metricas_matriz_confusion.csv
+**/17_matriz_confusion.png
+**/matriz_confusion_60_anos.png
+XAI/dashboard/datos/epi_confusion.json
+**/predicciones_test_banco.csv
+**/predicciones_test_df_train_*.csv
+Modelo 2/experimentos/01_modelo_inicial/resultados/logs/

@@ -1,0 +1,9 @@
+GEOparse
+pandas
+numpy
+scipy
+matplotlib
+seaborn
+scikit-learn
+xgboost
+lightgbm

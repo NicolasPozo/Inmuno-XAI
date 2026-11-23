@@ -1,0 +1,5 @@
+modelo,LOSO_r_medio,LOSO_MAE_medio,MAE_SDY420,MAE_SDY515,MAE_SDY519,MAE_SDY113,MAE_SDY311,MAE_CV_473,R2_CV_473
+"Fusión citoquinas crudas, sin fuentes",0.473,18.477,18.787,18.224,11.391,20.157,23.828,8.545,0.771
+Fusión citoquinas crudas + todas las fuentes,0.552,15.078,14.762,14.777,11.84,16.031,17.978,8.543,0.778
+"Fusión citoquinas CLR + selección consistente, sin fuentes",0.557,14.973,14.969,14.355,11.518,12.142,21.881,9.884,0.706
+Fusión citoquinas CLR + selección consistente + todas las fuentes,0.563,13.206,13.546,11.758,10.039,12.187,18.502,9.918,0.707

@@ -1,0 +1,6 @@
+Modelo,Tiempo (s),MAE Test (Años),RMSE Test,R² (Varianza Explicada),Exactitud (±5 Años)
+ElasticNet,5.01,11.71,15.0,55.5%,26.9%
+SVR (RBF),2.61,15.17,18.25,34.2%,16.8%
+Random Forest,29.02,9.83,12.6,68.6%,31.1%
+LightGBM,81.39,9.15,11.41,74.3%,31.9%
+XGBoost,93.43,9.69,12.02,71.5%,29.4%

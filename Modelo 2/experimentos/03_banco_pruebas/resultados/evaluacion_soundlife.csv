@@ -1,0 +1,9 @@
+receta,datos,MAE_CV_473,MAE_CV_473_sd,MAE_test_119,dif_vs_sin_extra,IC95_bajo,IC95_alto,P_mejora
+R0 LightGBM | 45,sin extra,9.334,0.231,8.793,,,,
+R0 LightGBM | 45,+ Sound Life (1 visita/persona),9.425,0.052,8.997,0.092,-0.098,0.28,16.44
+R0 LightGBM | 45,+ Sound Life (todas las visitas basales),9.611,0.12,9.306,0.278,-0.0,0.556,2.54
+R6 Ensamble + corrección de sesgo | 45,sin extra,8.521,0.184,8.127,,,,
+R6 Ensamble + corrección de sesgo | 45,+ Sound Life (1 visita/persona),8.592,0.139,8.383,0.071,-0.061,0.205,14.76
+R8 Ensamble + corrección de sesgo | top-35 de 71+razones,sin extra,8.339,0.074,8.341,,,,
+R8 Ensamble + corrección de sesgo | top-35 de 71+razones,+ Sound Life (1 visita/persona),8.348,0.136,8.382,0.009,-0.168,0.189,46.24
+R8 Ensamble + corrección de sesgo | top-35 de 71+razones,+ Sound Life (todas las visitas basales),8.732,0.145,8.721,0.393,0.138,0.648,0.16

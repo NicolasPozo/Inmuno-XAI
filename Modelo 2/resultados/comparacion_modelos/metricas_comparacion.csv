@@ -1,0 +1,22 @@
+modelo,evaluacion,MAE,MAE_sd,RMSE,RMSE_sd,R2,R2_sd,r,r_sd,acierto_5a_%,acierto_5a_%_sd
+ElasticNet,CV 5x5 (473 pacientes),10.063,0.127,12.607,0.163,0.707,0.008,0.841,0.005,30.571,0.74
+ElasticNet,Test (119 pacientes),9.749,,11.967,,0.717,,0.85,,28.571,
+ElasticNet,Estudios no vistos (promedio de 5),14.112,,17.27,,-5.341,,0.586,,22.228,
+SVR (RBF),CV 5x5 (473 pacientes),9.669,0.146,12.323,0.163,0.72,0.007,0.849,0.004,33.488,0.727
+SVR (RBF),Test (119 pacientes),9.141,,11.545,,0.737,,0.863,,33.613,
+SVR (RBF),Estudios no vistos (promedio de 5),16.627,,19.509,,-7.373,,0.553,,15.137,
+Random Forest,CV 5x5 (473 pacientes),10.219,0.102,13.269,0.161,0.675,0.008,0.828,0.005,32.727,0.687
+Random Forest,Test (119 pacientes),9.696,,12.732,,0.68,,0.836,,35.294,
+Random Forest,Estudios no vistos (promedio de 5),18.101,,20.698,,-9.819,,0.535,,12.529,
+LightGBM,CV 5x5 (473 pacientes),9.236,0.205,12.361,0.279,0.718,0.013,0.849,0.008,38.858,2.141
+LightGBM,Test (119 pacientes),8.749,,11.639,,0.732,,0.863,,41.176,
+LightGBM,Estudios no vistos (promedio de 5),17.751,,20.369,,-9.231,,0.507,,11.978,
+XGBoost,CV 5x5 (473 pacientes),9.256,0.153,12.103,0.207,0.73,0.009,0.855,0.006,37.674,0.93
+XGBoost,Test (119 pacientes),8.553,,11.186,,0.753,,0.876,,39.496,
+XGBoost,Estudios no vistos (promedio de 5),17.464,,20.141,,-7.789,,0.546,,12.205,
+Dos ramas + fusión,CV 5x5 (473 pacientes),8.159,0.111,10.56,0.209,0.794,0.008,0.891,0.005,39.366,0.589
+Dos ramas + fusión,Test (119 pacientes),8.688,,10.89,,0.766,,0.883,,36.134,
+Dos ramas + fusión,Estudios no vistos (promedio de 5),17.235,,19.812,,-7.847,,0.519,,15.979,
+TabPFN v2,CV 5x5 (473 pacientes),6.343,0.111,9.058,0.219,0.848,0.007,0.922,0.004,55.687,1.17
+TabPFN v2,Test (119 pacientes),6.516,,9.34,,0.828,,0.915,,57.143,
+TabPFN v2,Estudios no vistos (promedio de 5),13.504,,16.574,,-4.501,,0.588,,24.084,

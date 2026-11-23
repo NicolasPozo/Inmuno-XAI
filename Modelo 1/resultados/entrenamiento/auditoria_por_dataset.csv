@@ -1,0 +1,11 @@
+Dataset,Modelo,N_test,MAE (Años),R²,Sesgo (Años)
+Hannum,ElasticNet,164,3.91,0.882,-0.52
+Hannum,SVR (RBF),164,4.13,0.866,-0.7
+Hannum,Random Forest,164,4.7,0.85,0.28
+Hannum,LightGBM,164,4.44,0.864,-0.18
+Hannum,XGBoost,164,4.23,0.872,-0.11
+GSE87571,ElasticNet,183,2.44,0.974,-0.54
+GSE87571,SVR (RBF),183,2.54,0.974,-0.4
+GSE87571,Random Forest,183,3.34,0.955,-0.31
+GSE87571,LightGBM,183,3.16,0.961,-0.07
+GSE87571,XGBoost,183,2.98,0.964,-0.01

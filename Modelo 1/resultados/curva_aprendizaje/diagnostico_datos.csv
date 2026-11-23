@@ -1,0 +1,5 @@
+Modelo,N_pacientes_max,MAE_Val_actual,MAE_Train_actual,Brecha_Val_Train,Ganancia_por_100_pacientes,Ganancia_estimada_x2_datos,MAE_minimo_estimado
+ElasticNet,830,2.97,2.01,0.96,0.04,0.18,2.14
+SVR (RBF),830,3.06,0.38,2.68,0.04,0.15,2.71
+LightGBM,830,3.23,0.76,2.46,0.07,0.13,2.94
+XGBoost,830,3.25,0.54,2.71,0.08,0.13,2.98

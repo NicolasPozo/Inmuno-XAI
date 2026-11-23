@@ -1,0 +1,13 @@
+pandas==2.3.3
+numpy==2.4.1
+scipy==1.18.1
+scikit-learn==1.9.0
+lightgbm==4.7.0
+xgboost==3.4.1
+matplotlib==3.11.1
+joblib==1.5.3
+# Modelo final (TabPFN v2, en CPU)
+tabpfn==9.2.0
+torch==2.14.1
+# Solo para experimentos/06_tabpfn/modelos_pesados.py (TabM y RealMLP)
+pytabkit==1.7.3

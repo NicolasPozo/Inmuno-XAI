@@ -1,0 +1,26 @@
+﻿>>> [FASE 1] Cargando datasets filtrados Train y Test (k=45)...
+  -> Train: 1014 muestras aumentadas | Test Puro: 119 pacientes reales
+  -> Biomarcadores utilizados: 45 (+ género = 46 variables)
+  -> Validación cruzada: KFold (5 folds por fila)
+
+>>> [FASE 2] Optimizando en Train (5-Fold CV) y evaluando a ciegas en Test...
+   -> ElasticNet      | Tiempo:  5.02s | MAE CV: 10.37a | R²:  60.7% | MAE: 11.65a | Acierto ±5a:  19.3%
+   -> SVR (RBF)       | Tiempo:  1.90s | MAE CV: 2.30a | R²:  52.5% | MAE: 12.18a | Acierto ±5a:  28.6%
+   -> Random Forest   | Tiempo: 24.70s | MAE CV: 5.31a | R²:  67.1% | MAE: 9.98a | Acierto ±5a:  31.1%
+   -> LightGBM        | Tiempo: 84.34s | MAE CV: 3.57a | R²:  73.9% | MAE: 8.94a | Acierto ±5a:  33.6%
+   -> XGBoost         | Tiempo: 93.61s | MAE CV: 3.47a | R²:  72.4% | MAE: 9.28a | Acierto ±5a:  31.1%
+
+================================================================================
+TABLA COMPARATIVA FINAL (EVALUADA SOBRE EL TEST PURO - 119 PACIENTES REALES)
+================================================================================
+       Modelo  Tiempo (s)  MAE CV Train (Años)  MAE Test (Años)  RMSE Test R² (Varianza Explicada) Exactitud (±5 Años)
+   ElasticNet        5.02                10.37            11.65      14.10                   60.7%               19.3%
+    SVR (RBF)        1.90                 2.30            12.18      15.51                   52.5%               28.6%
+Random Forest       24.70                 5.31             9.98      12.90                   67.1%               31.1%
+     LightGBM       84.34                 3.57             8.94      11.49                   73.9%               33.6%
+      XGBoost       93.61                 3.47             9.28      11.82                   72.4%               31.1%
+
+================================================================================
+>>> BENCHMARK COMPLETADO EXITOSAMENTE (SIN ENSAMBLE)
+  * Artefactos guardados en: 'D:\Claude Code\Titulo\Modelo 2\graficos_entrenamiento_multimodal/'
+================================================================================

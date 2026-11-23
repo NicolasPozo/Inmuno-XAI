@@ -1,0 +1,28 @@
+medida,valor,detalle
+"Correlación de Spearman por paciente, SHAP y LIME (mediana)",0.619,"entre los 46 valores de cada paciente; mínimo 0.30, máximo 0.86"
+"Biomarcadores en común en el top 5, SHAP y LIME (media)",3.311,"de 5, por paciente"
+"Mismo signo en los 10 principales de SHAP, SHAP y LIME (media)",0.91,"fracción, por paciente"
+"Correlación de Spearman por paciente, SHAP y oclusión (mediana)",0.899,"entre los 46 valores de cada paciente; mínimo 0.25, máximo 0.99"
+"Biomarcadores en común en el top 5, SHAP y oclusión (media)",4.101,"de 5, por paciente"
+"Mismo signo en los 10 principales de SHAP, SHAP y oclusión (media)",0.982,"fracción, por paciente"
+"Correlación de Spearman por paciente, LIME y oclusión (mediana)",0.576,"entre los 46 valores de cada paciente; mínimo 0.25, máximo 0.81"
+"Biomarcadores en común en el top 5, LIME y oclusión (media)",2.95,"de 5, por paciente"
+"Mismo signo en los 10 principales de SHAP, LIME y oclusión (media)",0.91,"fracción, por paciente"
+"Correlación de Spearman del ranking global, SHAP y LIME",0.846,46 variables
+"Biomarcadores en común en el top 10 global, SHAP y LIME",8.0,de 10
+"Correlación de Spearman del ranking global, SHAP y oclusión",0.965,46 variables
+"Biomarcadores en común en el top 10 global, SHAP y oclusión",10.0,de 10
+"Correlación de Spearman del ranking global, SHAP y permutación",0.683,46 variables
+"Biomarcadores en común en el top 10 global, SHAP y permutación",7.0,de 10
+"Correlación de Spearman del ranking global, LIME y permutación",0.567,46 variables
+"Biomarcadores en común en el top 10 global, LIME y permutación",7.0,de 10
+LIME: R² del modelo local (mediana),0.378,qué tan bien la recta de LIME imita a TabPFN cerca del paciente; mínimo 0.11
+LIME: error del modelo local en el paciente (media),7.494,"años, |predicción local − edad predicha|"
+Estabilidad de LIME: diferencia media entre dos corridas,1.188,"años por variable, 10 pacientes"
+Estabilidad de LIME: diferencia máxima entre dos corridas,5.572,años
+Estabilidad de LIME: correlación de Spearman entre dos corridas (mediana),0.555,por paciente
+Estabilidad de LIME: biomarcadores en común en el top 5 (media),3.9,de 5
+Estabilidad de SHAP: diferencia media entre dos corridas,0.166,"años por variable, 10 pacientes"
+Estabilidad de SHAP: diferencia máxima entre dos corridas,0.809,años
+Estabilidad de SHAP: correlación de Spearman entre dos corridas (mediana),0.955,por paciente
+Estabilidad de SHAP: biomarcadores en común en el top 5 (media),4.7,de 5

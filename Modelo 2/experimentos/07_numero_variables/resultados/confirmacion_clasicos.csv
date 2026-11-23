@@ -1,0 +1,6 @@
+modelo,mejor_config,MAE_CV_train_45,MAE_CV_train_mejor,MAE_CV473_45,MAE_CV473_mejor,MAE_test_45,MAE_test_mejor,dif_test,IC95_bajo,IC95_alto,MAE_loso_45,MAE_loso_mejor,MAE_CV473_paso05,MAE_test_paso05
+ElasticNet,"Candidatas (71), k = 71",10.059,9.882,10.06,9.911,9.746,9.736,-0.004,-0.623,0.618,14.115,15.44,10.063,9.749
+SVR (RBF),"Las 45 actuales, k = 45",10.074,10.074,,,,,,,,,,,
+Random Forest,"Las 45 actuales, k = 45",10.404,10.404,,,,,,,,,,,
+LightGBM,"Candidatas (71), k = 71",9.432,9.415,9.254,9.305,9.052,8.894,-0.16,-0.721,0.406,17.745,18.781,9.236,8.749
+XGBoost,"Las 45 actuales, k = 45",9.307,9.307,,,,,,,,,,,

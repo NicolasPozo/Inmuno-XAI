@@ -1,0 +1,58 @@
+{
+  "dashboard_url": "https://claude.ai/artifact/794jg3fRxv7WYTd2cLtEKS",
+  "dashboard_anterior": "borrado (solo tenía el modelo inmunológico)",
+  "tipo": "Artifact de tipo Dashboard de Claude (los datos y la página viven en la base de datos del artifact)",
+  "documentos": {
+    "dash/meta": "título del dashboard",
+    "dash/params": "filtros por defecto: tipo, brecha (inmunológico); epicohorte, epibrecha (epigenético). variable, paciente, episonda y epipaciente se fijan al elegirlos",
+    "files/index.html": "la página (campo text); copia local en dashboard/index.html",
+    "datasets/<id>": "una fuente de datos por archivo JSON subido como asset"
+  },
+  "datasets": {
+    "metricas": {"archivo": "datos/metricas.json", "asset": "/_blob/c52d1c31ed80fa7e1a749b6871dba6cb"},
+    "evolucion": {"archivo": "datos/evolucion.json", "asset": "/_blob/e197ebc5845dac0fb9517da10f0e98b3"},
+    "no_vistos": {"archivo": "datos/no_vistos.json", "asset": "/_blob/5d41713056cec91aad9f23ebf3014925"},
+    "importancia": {"archivo": "datos/importancia.json", "asset": "/_blob/bd78b90c31e981aa98343eefd6ed64f7"},
+    "bloques": {"archivo": "datos/bloques.json", "asset": "/_blob/d30d33f0181b8c3771fae868f773d858"},
+    "perfiles": {"archivo": "datos/perfiles.json", "asset": "/_blob/58aed91025e245eb9fc9611045eb42bd"},
+    "pacientes_test": {"archivo": "datos/pacientes_test.json", "asset": "/_blob/b0483f5c4781f3d0df4f52264dcdf09e"},
+    "aportes_paciente": {"archivo": "datos/aportes_paciente.json", "asset": "/_blob/41a5a386df281b8cb367507f789a45a1"},
+    "brecha": {"archivo": "datos/brecha.json", "asset": "/_blob/c50ad80ff7a94db4d1e5491a31e9635f"},
+    "brecha_biomarcadores": {"archivo": "datos/brecha_biomarcadores.json", "asset": "/_blob/5a465d7429692c8135663d022f8779fc"}
+  },
+  "datasets_epigenetico": {
+    "_nota": "Generados con dashboard/exportar_epigenetico.py.",
+    "epi_metricas": {"archivo": "datos/epi_metricas.json", "asset": "/_blob/b5b0775162d6ee9bc5fe4eaa5f9e896c"},
+    "epi_modelos": {"archivo": "datos/epi_modelos.json", "asset": "/_blob/60b8591ccb4645f4aaf606ee055eb606"},
+    "epi_confusion": {"archivo": "datos/epi_confusion.json", "asset": "/_blob/847eef0924c82bae31000e4878c2a423"},
+    "epi_curva_aprendizaje": {"archivo": "datos/epi_curva_aprendizaje.json", "asset": "/_blob/d6450a4e6ebf1c3c440a2d2e901454e3"},
+    "epi_curva_sondas": {"archivo": "datos/epi_curva_sondas.json", "asset": "/_blob/b5290d0ab2af042428f4ec221531bae5"},
+    "epi_coeficientes": {"archivo": "datos/epi_coeficientes.json", "asset": "/_blob/072b54e7769c14afe703def34de9fc09"},
+    "epi_sondas_edad": {"archivo": "datos/epi_sondas_edad.json", "asset": "/_blob/2282530106cd0cc5c8f7efe1954c81a9"},
+    "epi_pacientes_test": {"archivo": "datos/epi_pacientes_test.json", "asset": "/_blob/fae97afc6e0e48791f0cd6077804ac8f"},
+    "epi_aportes": {"archivo": "datos/epi_aportes.json", "asset": "/_blob/b52f76b2e5fa8b20cb52e6f10d7dcebe"},
+    "epi_brecha": {"archivo": "datos/epi_brecha.json", "asset": "/_blob/c7c27c62890aa1c88bbc3b267c872ba9"},
+    "epi_brecha_sondas": {"archivo": "datos/epi_brecha_sondas.json", "asset": "/_blob/0d1441f1294d7ec0e73e8edce33879cf"},
+    "epi_importancia": {"archivo": "datos/epi_importancia.json", "asset": "/_blob/c0b83486a79cbf38995c3269011b699f"},
+    "epi_shap": {"archivo": "datos/epi_shap.json", "asset": "/_blob/e5d04dfb792371e318be59b07c134d55"}
+  },
+  "datasets_solo_web": {
+    "_nota": "Fuentes de la página web (v2.4 en adelante) que no están subidas al dashboard de Claude. La página web las lee de dashboard/datos/. Para publicar esas versiones en Claude habría que subirlas como assets.",
+    "simulador_inmune": {"archivo": "datos/simulador_inmune.json", "genera": "dashboard/exportar_simulador_inmune.py"},
+    "shap_inmune": {"archivo": "datos/shap_inmune.json", "genera": "explicabilidad/shap_inmunologico.py"},
+    "shap_inmune_importancia": {"archivo": "datos/shap_inmune_importancia.json", "genera": "explicabilidad/shap_inmunologico.py"},
+    "comparacion_modelos": {"archivo": "datos/comparacion_modelos.json", "genera": "Modelo 2/src/09_exportar_dashboard.py (desde resultados/comparacion_modelos/resumen_comparacion.csv)"},
+    "curva_variables": {"archivo": "datos/curva_variables.json", "genera": "Modelo 2/src/09_exportar_dashboard.py (desde experimentos/07_numero_variables/resultados/curva_numero_variables*.csv)"},
+    "pacientes_test": {"archivo": "datos/pacientes_test.json", "nota": "la copia local tiene además el campo base (lo agrega explicabilidad/shap_inmunologico.py); la subida a Claude no"}
+  },
+  "calculos_en_la_pagina": {
+    "brecha_resumen": "desviación estándar de la brecha corregida y media por sexo (desde brecha)",
+    "brecha_por_estudio": "brecha corregida media y n por estudio (desde brecha)",
+    "epi_brecha_resumen": "lo mismo para el modelo epigenético (desde epi_brecha)",
+    "epi_brecha_por_cohorte": "brecha corregida media y n por cohorte (desde epi_brecha)",
+    "epi_coef_resumen": "total de variables y cuántas tienen coeficiente distinto de 0 (desde epi_coeficientes)",
+    "epi_sondas_asociadas": "sondas asociadas a la brecha en ambas cohortes (desde epi_brecha_sondas)",
+    "epi_shap_resumen": "parte del aporte total de las 20 primeras variables y cuántas hacen falta para el 50 % y el 80 % (desde epi_importancia)",
+    "epi_por_edad": "aporte medio de cada sonda principal por grupo de edad real (desde epi_shap y epi_pacientes_test)"
+  }
+}

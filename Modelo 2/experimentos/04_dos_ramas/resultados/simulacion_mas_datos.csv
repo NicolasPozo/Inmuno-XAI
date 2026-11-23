@@ -1,0 +1,13 @@
+escenario,frac_celulas,frac_citoquinas,personas_celulas,personas_citoquinas,MAE_fusion,MAE_rama_celulas,MAE_rama_citoquinas,R2_fusion
+Crecen ambas,0.25,0.25,93.6,93.6,11.1,13.196,13.995,0.626
+Crecen ambas,0.5,0.5,186.6,186.6,9.804,12.056,12.17,0.705
+Crecen ambas,0.75,0.75,280.0,280.0,8.965,11.281,11.023,0.746
+Crecen ambas,1.0,1.0,373.6,373.6,8.476,10.8,10.303,0.773
+Solo crecen las citoquinas,1.0,0.25,373.6,93.6,9.887,10.8,13.995,0.706
+Solo crecen las citoquinas,1.0,0.5,373.6,186.6,9.323,10.8,12.17,0.736
+Solo crecen las citoquinas,1.0,0.75,373.6,280.0,8.836,10.8,11.023,0.757
+Solo crecen las citoquinas,1.0,1.0,373.6,373.6,8.476,10.8,10.303,0.773
+Solo crecen las células,0.25,1.0,93.6,373.6,8.909,13.196,10.303,0.744
+Solo crecen las células,0.5,1.0,186.6,373.6,8.716,12.056,10.303,0.756
+Solo crecen las células,0.75,1.0,280.0,373.6,8.581,11.281,10.303,0.765
+Solo crecen las células,1.0,1.0,373.6,373.6,8.476,10.8,10.303,0.773

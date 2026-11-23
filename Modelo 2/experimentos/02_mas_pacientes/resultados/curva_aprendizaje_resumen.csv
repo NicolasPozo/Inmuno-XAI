@@ -1,0 +1,9 @@
+variante,fraccion,pacientes_reales,MAE_media,MAE_sd,R2_media,acierto_5a_media
+Con aumento,0.25,88.0,11.381,0.657,0.59,30.76
+Con aumento,0.5,175.0,10.043,0.396,0.684,32.26
+Con aumento,0.75,261.0,9.411,0.327,0.714,31.44
+Con aumento,1.0,349.0,8.863,0.198,0.743,35.14
+Sin aumento,0.25,88.0,11.444,0.784,0.578,29.08
+Sin aumento,0.5,175.0,10.16,0.649,0.677,31.44
+Sin aumento,0.75,261.0,9.062,0.473,0.731,34.98
+Sin aumento,1.0,349.0,8.133,0.0,0.775,37.8

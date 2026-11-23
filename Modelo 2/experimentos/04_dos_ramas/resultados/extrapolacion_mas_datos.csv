@@ -1,0 +1,6 @@
+escenario,medida,personas_actuales,MAE_actual,MAE_x2,MAE_x4,piso_estimado
+Solo crecen las células,MAE_fusion,373.6,8.49,8.28,8.09,2.49
+Solo crecen las citoquinas,MAE_fusion,373.6,8.55,7.92,7.35,0.0
+Crecen ambas,MAE_fusion,373.6,8.5,7.42,6.49,0.0
+Solo crecen las células,MAE_rama_celulas,373.6,10.83,9.8,8.87,0.0
+Solo crecen las citoquinas,MAE_rama_citoquinas,373.6,10.36,8.89,7.63,0.0

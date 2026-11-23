@@ -1,0 +1,10 @@
+# Paquetes para correr la página web (servidor.py). Versiones con las que se probó.
+# torch: en un servidor sin GPU conviene la versión CPU, que es mucho más liviana:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+tabpfn==9.2.0
+torch==2.14.1
+scikit-learn==1.9.0
+pandas==2.3.3
+numpy==2.4.1
+joblib==1.5.3
+shap==0.54.1        # valores SHAP de los pacientes que se suben al modelo inmunológico

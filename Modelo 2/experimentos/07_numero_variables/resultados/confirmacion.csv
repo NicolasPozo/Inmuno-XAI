@@ -1,0 +1,3 @@
+configuracion,variables,MAE_CV_473,dif_CV_vs_actual,MAE_test,R2_test,MAE_estudios_no_vistos,r_estudios_no_vistos,MAE_SDY420,MAE_SDY515,MAE_SDY519,MAE_SDY113,MAE_SDY311,dif_test_vs_actual,IC95_bajo,IC95_alto
+Actual: las 45,46,6.343,0.0,6.516,0.828,13.504,0.588,11.931,14.394,10.832,13.817,16.545,,,
+Top 71 de candidatas (71),72,6.385,0.042,6.288,0.85,14.286,0.592,13.151,13.222,10.733,16.383,17.939,-0.227,-0.675,0.191

@@ -1,0 +1,4 @@
+evaluacion,MAE,MAE_sd,RMSE,RMSE_sd,R2,R2_sd,r,r_sd,acierto_5a_%,acierto_5a_%_sd
+CV 5x5 (473 pacientes),6.343,0.111,9.058,0.219,0.848,0.007,0.922,0.004,55.687,1.17
+Test (119 pacientes),6.516,,9.34,,0.828,,0.915,,57.143,
+Estudios no vistos (promedio de 5),13.504,,16.574,,-4.501,,0.588,,24.084,

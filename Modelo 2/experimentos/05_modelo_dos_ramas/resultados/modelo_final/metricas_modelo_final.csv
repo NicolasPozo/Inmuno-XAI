@@ -1,0 +1,10 @@
+evaluacion,modelo,MAE,MAE_sd,RMSE,RMSE_sd,R2,R2_sd,r,r_sd,acierto_5a_%,acierto_5a_%_sd
+CV 5x5 (473 pacientes),Rama células,10.247,0.086,12.961,0.143,0.69,0.007,0.831,0.004,30.233,0.813
+CV 5x5 (473 pacientes),Rama citoquinas,10.303,0.199,13.518,0.289,0.663,0.014,0.819,0.01,34.207,1.214
+CV 5x5 (473 pacientes),Fusión,8.159,0.111,10.56,0.209,0.794,0.008,0.891,0.005,39.366,0.589
+Test (119 pacientes),Rama células,10.913,,13.559,,0.637,,0.804,,22.689,
+Test (119 pacientes),Rama citoquinas,9.846,,12.347,,0.699,,0.854,,34.454,
+Test (119 pacientes),Fusión,8.688,,10.89,,0.766,,0.883,,36.134,
+Estudios no vistos (promedio de 5),Rama células,13.532,,16.361,,-4.478,,0.585,,18.366,
+Estudios no vistos (promedio de 5),Rama citoquinas,26.217,,29.757,,-22.339,,0.137,,10.365,
+Estudios no vistos (promedio de 5),Fusión,17.235,,19.812,,-7.847,,0.519,,15.979,

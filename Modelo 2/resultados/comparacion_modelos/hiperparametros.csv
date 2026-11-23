@@ -1,0 +1,30 @@
+modelo,parametro,valor
+ElasticNet,l1_ratio,0.7
+ElasticNet,alpha,0.1
+SVR (RBF),gamma,0.01
+SVR (RBF),epsilon,2
+SVR (RBF),C,200
+Random Forest,n_estimators,500
+Random Forest,min_samples_leaf,2
+Random Forest,max_features,0.8
+Random Forest,max_depth,
+LightGBM,subsample_freq,1
+LightGBM,subsample,0.7
+LightGBM,reg_lambda,0.0
+LightGBM,reg_alpha,1.0
+LightGBM,num_leaves,31
+LightGBM,n_estimators,600
+LightGBM,min_child_samples,5
+LightGBM,max_depth,-1
+LightGBM,learning_rate,0.04
+LightGBM,colsample_bytree,0.9
+XGBoost,subsample,0.7
+XGBoost,reg_lambda,0.5
+XGBoost,reg_alpha,1
+XGBoost,n_estimators,800
+XGBoost,min_child_weight,5
+XGBoost,max_depth,2
+XGBoost,learning_rate,0.02
+XGBoost,colsample_bytree,0.7
+Dos ramas + fusión,(ver script),afinados en experimentos/05_modelo_dos_ramas/modelo_final_dos_ramas.py
+TabPFN v2,(todos),valores por defecto (ModelVersion.V2)

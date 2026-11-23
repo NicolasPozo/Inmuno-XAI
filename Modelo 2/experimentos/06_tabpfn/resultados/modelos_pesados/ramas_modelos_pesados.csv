@@ -1,0 +1,13 @@
+rama,modelo,MAE_CV,R2_CV,MAE_test,R2_test,acierto5_test
+células,Actual,10.221,0.69,10.913,0.637,22.689
+células,TabPFN v2,9.48,0.727,9.49,0.705,34.454
+células,TabM,10.407,0.676,10.832,0.631,29.412
+células,RealMLP,10.731,0.639,10.498,0.635,28.571
+células,Actual + TabPFN v2,9.694,0.72,10.096,0.684,24.37
+células,Actual + TabPFN v2 + TabM + RealMLP,9.767,0.711,9.874,0.69,32.773
+citoquinas,Actual,10.312,0.663,9.617,0.703,35.294
+citoquinas,TabPFN v2,7.802,0.767,7.308,0.8,48.739
+citoquinas,TabM,13.266,0.469,12.412,0.528,25.21
+citoquinas,RealMLP,12.286,0.493,11.69,0.526,30.252
+citoquinas,Actual + TabPFN v2,8.81,0.737,8.31,0.773,42.857
+citoquinas,Actual + TabPFN v2 + TabM + RealMLP,10.319,0.663,9.685,0.703,33.613

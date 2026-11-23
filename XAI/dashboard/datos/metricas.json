@@ -1,0 +1,1 @@
+[{"prueba":"cv","evaluacion":"CV 5x5 (473 pacientes)","MAE":6.343,"RMSE":9.058,"R2":0.848,"r":0.922,"acierto5":55.687},{"prueba":"test","evaluacion":"Test (119 pacientes)","MAE":6.516,"RMSE":9.34,"R2":0.828,"r":0.915,"acierto5":57.143},{"prueba":"no_vistos","evaluacion":"Estudios no vistos (promedio de 5)","MAE":13.504,"RMSE":16.574,"R2":-4.501,"r":0.588,"acierto5":24.084}]

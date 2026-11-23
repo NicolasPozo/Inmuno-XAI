@@ -1,0 +1,9 @@
+prueba,valor,unidad,detalle
+LinearExplainer: diferencia máxima con el dashboard,2.1416855788825018e-10,años,173847 aportes: 347 pacientes x 501 variables
+LinearExplainer: diferencia media con el dashboard,5.890766235235459e-13,años,valor absoluto
+LinearExplainer: diferencia de la base,2.951097144432424e-10,años,base de shap 54.7582; intercepto del modelo 54.7582
+LinearExplainer: base + suma de aportes − edad predicha (máx.),1.4210854715202004e-14,años,propiedad de eficiencia de SHAP
+LinearExplainer: sondas del top 20 en el mismo puesto,20.0,de 20,ranking por media de |SHAP| en el test
+LinearExplainer: diferencia máxima con epi_aportes.json,4.998808336076355e-05,años,5205 aportes que dibuja la cascada; el archivo guarda 4 decimales
+KernelExplainer: diferencia máxima con el dashboard,2.1426083823827824e-10,años,"5010 aportes: 10 pacientes x 501 variables, 2004 combinaciones por paciente"
+KernelExplainer: diferencia de la base,2.951097144432424e-10,años,predicción del paciente medio frente al intercepto

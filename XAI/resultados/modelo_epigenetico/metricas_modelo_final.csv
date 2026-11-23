@@ -1,0 +1,5 @@
+evaluacion,N,MAE,RMSE,R2,r,acierto_5a_%
+CV 5 folds fuera de pliegue (1038 pacientes de train),1038,2.889,3.925,0.962,0.981,84.8
+Test combinado (347 pacientes),347,3.135,4.349,0.953,0.977,80.4
+Test Hannum GSE40279 (164 pacientes),164,3.914,5.31,0.882,0.941,72.0
+Test GSE87571 (183 pacientes),183,2.437,3.254,0.974,0.988,88.0

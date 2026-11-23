@@ -1,0 +1,6 @@
+Modelo,MAE actual,MAE ampliado,Diferencia MAE,IC95% bajo,IC95% alto,Prob. de que mejore,R² actual,R² ampliado,±5a actual,±5a ampliado,Significativo
+ElasticNet,11.65,11.71,0.06,-1.01,1.2,46%,60.7%,55.5%,19.3%,26.9%,No
+SVR (RBF),12.18,15.17,3.0,1.95,4.01,0%,52.5%,34.2%,28.6%,16.8%,Sí
+Random Forest,9.98,9.83,-0.15,-0.83,0.52,68%,67.1%,68.6%,31.1%,31.1%,No
+LightGBM,8.94,9.15,0.21,-0.5,0.94,29%,73.9%,74.3%,33.6%,31.9%,No
+XGBoost,9.28,9.69,0.41,-0.27,1.08,12%,72.4%,71.5%,31.1%,29.4%,No

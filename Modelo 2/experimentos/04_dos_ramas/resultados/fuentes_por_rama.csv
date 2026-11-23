@@ -1,0 +1,12 @@
+rama,variante,filas_extra,MAE_CV,R2_CV,MAE_test,R2_test,dif_vs_sin_extra,IC95_bajo,IC95_alto,P_mejora
+Células,sin fuentes extra,0,10.778,0.66,10.683,0.652,,,,
+Células,+ 10k_cytof,111,10.661,0.666,10.996,0.633,-0.117,-0.413,0.175,77.36
+Células,+ 10k_flujo,347,11.056,0.64,10.958,0.633,0.278,-0.024,0.574,3.36
+Células,+ fluprint_cytof,52,10.857,0.653,10.964,0.632,0.079,-0.158,0.307,25.28
+Células,+ soundlife_scrna,96,10.841,0.66,11.017,0.632,0.063,-0.137,0.268,28.08
+Células,+ todas,606,10.827,0.657,10.95,0.643,0.049,-0.362,0.443,40.56
+Citoquinas,sin fuentes extra,0,10.303,0.663,9.846,0.699,,,,
+Citoquinas,+ 10k_elisa,492,10.944,0.641,10.705,0.618,0.641,0.126,1.168,0.78
+Citoquinas,+ fluprint_luminex,125,10.35,0.661,10.425,0.646,0.047,-0.221,0.32,36.4
+Citoquinas,+ soundlife_olink,96,10.752,0.64,10.361,0.663,0.449,0.211,0.688,0.0
+Citoquinas,+ todas,713,10.86,0.652,10.819,0.631,0.557,0.07,1.031,1.1

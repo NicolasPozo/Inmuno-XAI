@@ -1,0 +1,32 @@
+fase,candidato,n_variables,MAE_CV,MAE_CV_sd,MAE_test,acierto5_test,miembros
+1-variables,LGBM | 45 originales (base),46,9.55,0.113,8.256,41.2,
+1-variables,LGBM | 45 + razones,57,9.162,0.15,8.864,41.2,
+1-variables,LGBM | 71 completas,72,9.498,0.111,8.082,41.2,
+1-variables,LGBM | 71 completas + razones,83,9.185,0.106,8.858,37.0,
+1-variables,LGBM re-afinado | 45 + razones,57,9.002,0.021,8.574,43.7,
+2-selección,LGBM | top-15 elegidas dentro de cada fold,83,9.986,0.209,10.671,34.5,
+2-selección,LGBM | top-25 elegidas dentro de cada fold,83,8.997,0.157,9.51,33.6,
+2-selección,LGBM | top-35 elegidas dentro de cada fold,83,8.994,0.209,9.151,37.0,
+2-selección,LGBM | top-50 elegidas dentro de cada fold,83,9.06,0.207,9.332,38.7,
+2-selección,LGBM re-afinado | top-35 de 71+razones,35,8.592,0.145,9.068,38.7,
+3-objetivo,LGBM pérdida L1 | top-35 de 71+razones,35,9.018,0.161,9.257,37.8,
+3-objetivo,LGBM pérdida Huber | top-35 de 71+razones,35,8.645,0.042,8.922,37.8,
+3-objetivo,LGBM predice log(edad) | top-35 de 71+razones,35,8.832,0.201,9.319,39.5,
+3-objetivo,LGBM predice raíz(edad) | top-35 de 71+razones,35,8.582,0.01,9.272,37.8,
+4-modelos,XGBoost | top-35 de 71+razones,35,8.622,0.057,9.118,34.5,
+4-modelos,ExtraTrees | top-35 de 71+razones,35,9.832,0.169,10.413,29.4,
+4-modelos,Random Forest | top-35 de 71+razones,35,9.587,0.236,10.653,32.8,
+4-modelos,HistGB (pérdida L1) | top-35 de 71+razones,35,9.389,0.17,8.826,40.3,
+4-modelos,SVR (log + escalado) | top-35 de 71+razones,35,9.435,0.133,9.614,26.9,
+4-modelos,ElasticNet (log + escalado) | top-35 de 71+razones,35,10.193,0.097,10.594,21.8,
+4-modelos,KNN (log + escalado) | top-35 de 71+razones,35,9.269,0.262,8.923,35.3,
+4-modelos,Red neuronal MLP (log + escalado) | top-35 de 71+razones,35,11.606,0.701,13.938,23.5,
+4-modelos,SVR (log + escalado) | 45 originales,46,9.803,0.098,9.478,31.1,
+4-modelos,ElasticNet (log + escalado) | 45 originales,46,10.02,0.105,9.874,28.6,
+5-ensamble,Promedio: LGBM predice raíz(edad) + XGBoost + KNN (log + escalado) + SVR (log + escalado),35,8.316,0.024,8.392,40.3,LGBM predice raíz(edad) | top-35 de 71+razones || XGBoost | top-35 de 71+razones || KNN (log + escalado) | top-35 de 71+razones || SVR (log + escalado) | top-35 de 71+razones
+5-ensamble,Promedio: LGBM predice raíz(edad) + XGBoost + KNN (log + escalado),35,8.342,0.04,8.331,41.2,LGBM predice raíz(edad) | top-35 de 71+razones || XGBoost | top-35 de 71+razones || KNN (log + escalado) | top-35 de 71+razones
+5-ensamble,Promedio: LGBM predice raíz(edad) + KNN (log + escalado) + SVR (log + escalado),35,8.356,0.038,8.316,37.8,LGBM predice raíz(edad) | top-35 de 71+razones || KNN (log + escalado) | top-35 de 71+razones || SVR (log + escalado) | top-35 de 71+razones
+5-ensamble,Promedio: LGBM predice raíz(edad) + KNN (log + escalado),35,8.41,0.103,8.238,41.2,LGBM predice raíz(edad) | top-35 de 71+razones || KNN (log + escalado) | top-35 de 71+razones
+5-ensamble,Promedio: LGBM predice raíz(edad) + XGBoost + KNN (log + escalado) + HistGB (pérdida L1) + SVR (log + escalado),35,8.413,0.051,8.376,40.3,LGBM predice raíz(edad) | top-35 de 71+razones || XGBoost | top-35 de 71+razones || KNN (log + escalado) | top-35 de 71+razones || HistGB (pérdida L1) | top-35 de 71+razones || SVR (log + escalado) | top-35 de 71+razones
+6-sesgo,LGBM + corrección de sesgo,35,8.433,0.113,9.048,37.8,
+6-sesgo,Promedio: LGBM predice raíz(edad) + XGBoost + KNN (log + escalado) + SVR (log + escalado) + corrección de sesgo,35,7.905,0.01,8.165,37.0,LGBM predice raíz(edad) | top-35 de 71+razones || XGBoost | top-35 de 71+razones || KNN (log + escalado) | top-35 de 71+razones || SVR (log + escalado) | top-35 de 71+razones

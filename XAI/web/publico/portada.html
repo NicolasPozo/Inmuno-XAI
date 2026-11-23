@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Immuno-XAI</title>
+<meta name="description" content="Dos relojes de edad biológica, inmunológico y epigenético, explicados paciente por paciente.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%233a17e6'/%3E%3Cpath d='M16 8v8l5 3' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600&display=swap">
+<style>
+  /* Portada: siempre oscura, a pantalla completa. Lo único que se mueve es el reloj (y el pulso del pipeline). */
+  :root {
+    color-scheme: dark;
+    --ink: #0d0d11;
+    --ink-2: #15151b;
+    --fg: #f2f2f5;
+    --muted: rgba(242, 242, 245, 0.66);
+    --soft: rgba(242, 242, 245, 0.45);
+    --line: rgba(255, 255, 255, 0.12);
+    --accent: #3a17e6;
+    --accent-2: #a99bff;
+    --display: 'Work Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--ink); color: var(--fg); font-family: var(--display); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  p { margin: 0; }
+  h1, h2, h3 { margin: 0; font-weight: 300; letter-spacing: -0.04em; text-wrap: balance; }
+  .acc { color: var(--accent-2); }
+  .ceja { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--soft); font-weight: 500; }
+
+  /* ---------- Primera pantalla ---------- */
+  .portada { position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; display: grid; grid-template-rows: auto 1fr auto;
+    padding: clamp(16px, 3vw, 32px) clamp(16px, 5vw, 72px);
+    background:
+      radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1.2px) 0 0 / 24px 24px,
+      radial-gradient(60% 70% at 85% 30%, rgba(58, 23, 230, 0.42), transparent 70%),
+      radial-gradient(45% 55% at 0% 100%, rgba(120, 80, 255, 0.18), transparent 70%),
+      var(--ink); }
+  .barra { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .marca { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 500; letter-spacing: -0.01em; }
+  .marca svg { width: 26px; height: 26px; }
+  .barra nav { display: flex; gap: 6px; flex-wrap: wrap; }
+  .barra nav a { text-decoration: none; font-size: 14px; color: var(--muted); padding: 8px 14px; border-radius: 999px; border: 1px solid transparent; transition: color .2s, border-color .2s, background .2s; }
+  .barra nav a:hover { color: var(--fg); border-color: var(--line); background: rgba(255, 255, 255, 0.04); }
+  a:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
+
+  .centro { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); align-items: center; gap: clamp(16px, 4vw, 56px);
+    padding: clamp(24px, 6vh, 64px) 0 clamp(16px, 4vh, 40px); }
+  .texto { display: grid; gap: clamp(18px, 3vh, 28px); max-width: 44rem; }
+  .texto h1 { font-size: clamp(2.6rem, 6.2vw, 5.4rem); line-height: 0.98; letter-spacing: -0.05em; }
+  .bajada { font-size: clamp(1.02rem, 1.35vw, 1.22rem); line-height: 1.6; color: var(--muted); max-width: 40rem; }
+  .bajada b { color: var(--fg); font-weight: 500; }
+
+  /* Las dos entradas: cada una lleva a la página de su reloj */
+  .relojes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 4px; }
+  .reloj-link { display: grid; gap: 10px; align-content: start; text-decoration: none; padding: 20px 22px; border-radius: 24px; border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.03); transition: background .25s, border-color .25s, transform .25s; }
+  .reloj-link:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+  .reloj-link .fila { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .reloj-link .nombre { font-size: 1.2rem; font-weight: 400; letter-spacing: -0.02em; }
+  .reloj-link .flecha { font-size: 1.2rem; transition: transform .25s; }
+  .reloj-link:hover .flecha { transform: translateX(4px); }
+  .reloj-link .datos { font-size: 13px; line-height: 1.5; color: var(--muted); }
+  .reloj-link:hover .datos, .reloj-link:hover .cifra small { color: rgba(255, 255, 255, 0.82); }
+  .reloj-link .cifra { display: flex; align-items: baseline; gap: 8px; font-weight: 300; font-size: 2rem; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+  .reloj-link .cifra small { font-size: 12px; letter-spacing: 0; color: var(--soft); font-weight: 400; }
+
+  .bajar { position: relative; z-index: 1; justify-self: start; display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: var(--soft); text-decoration: none; padding: 6px 0; }
+  .bajar:hover { color: var(--fg); }
+  .bajar span { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); }
+
+  /* ---------- El reloj: lo único animado ---------- */
+  .reloj-caja { position: relative; display: grid; place-items: center; }
+  .reloj { width: min(100%, 560px); aspect-ratio: 1; overflow: visible;
+    transform: perspective(900px) rotateY(calc(var(--px, 0) * 16deg)) rotateX(calc(var(--py, 0) * -16deg)); transition: transform .4s ease-out; }
+  .reloj * { transform-box: view-box; transform-origin: 160px 160px; fill: none; }
+  .reloj .r-tic { stroke: rgba(255, 255, 255, 0.28); stroke-width: 6; stroke-dasharray: 1.5 14.208; }
+  .reloj .r-tic-may { stroke: rgba(255, 255, 255, 0.6); stroke-width: 12; stroke-dasharray: 3 75.54; }
+  .reloj .r-guion { stroke: rgba(255, 255, 255, 0.22); stroke-width: 1.5; stroke-dasharray: 2 9; }
+  .reloj .r-arco { stroke: #7c5cff; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 150 50 36 60 12 320; }
+  .reloj .r-sat { fill: var(--accent-2); }
+  .reloj line { stroke: #fff; stroke-linecap: round; }
+  .reloj .r-aguja-h line { stroke-width: 5; }
+  .reloj .r-aguja-m line { stroke-width: 2.5; stroke: var(--accent-2); }
+  .reloj .r-centro { fill: #fff; }
+  .reloj .r-onda { stroke: var(--accent-2); stroke-width: 1.5; animation: onda 3s ease-out infinite; }
+  .reloj .r-gira-lento { animation: gira 60s linear infinite; }
+  .reloj .r-gira-inverso { animation: gira 24s linear infinite reverse; }
+  .reloj .r-orbita { animation: gira 9s cubic-bezier(.45, .05, .55, .95) infinite; }
+  .reloj .r-aguja-h { animation: gira 48s linear infinite; }
+  .reloj .r-aguja-m { animation: gira 6s steps(60) infinite; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+  @keyframes onda { from { r: 6; opacity: 0.9; } to { r: 70; opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .reloj, .reloj * { animation: none !important; transition: none !important; } }
+
+  /* ---------- Contexto del proyecto ---------- */
+  .seccion { padding: clamp(56px, 10vh, 112px) clamp(16px, 5vw, 72px); border-top: 1px solid var(--line); }
+  .seccion > .ancho { max-width: 1180px; margin: 0 auto; display: grid; gap: clamp(28px, 5vh, 48px); }
+  .seccion h2 { font-size: clamp(1.9rem, 3.6vw, 3rem); line-height: 1.05; max-width: 22ch; }
+  .tres { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .bloque { display: grid; gap: 12px; align-content: start; padding: 24px; border-radius: 24px; background: var(--ink-2); border: 1px solid var(--line); }
+  .bloque .num { font-size: 12px; color: var(--accent-2); font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
+  .bloque h3 { font-size: 1.35rem; letter-spacing: -0.03em; font-weight: 400; }
+  .bloque p { color: var(--muted); line-height: 1.6; font-size: 15px; }
+  .bloque p b { color: var(--fg); font-weight: 500; }
+
+  .comparar { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
+  .comparar th, .comparar td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .comparar thead th { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--soft); font-weight: 500; }
+  .comparar tbody th { color: var(--muted); font-weight: 400; width: 26%; }
+  .comparar td { color: var(--fg); line-height: 1.5; }
+  .tabla-caja { overflow-x: auto; border: 1px solid var(--line); border-radius: 24px; background: var(--ink-2); }
+  .tabla-caja .comparar tr:last-child > * { border-bottom: 0; }
+
+  /* Pipeline: el recorrido por la interfaz, de izquierda a derecha (vertical en pantallas angostas) */
+  .pipeline { --nodo: 56px; position: relative; list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+  .pipeline::before, .pipeline::after { content: ""; position: absolute; z-index: 0; pointer-events: none;
+    top: calc(var(--nodo) / 2 - 1px); left: 10%; right: 10%; height: 2px; }
+  .pipeline::before { background: linear-gradient(90deg, var(--line), rgba(169, 155, 255, 0.55) 70%, var(--accent)); }
+  .pipeline::after { background: linear-gradient(90deg, transparent, var(--accent-2), transparent) no-repeat;
+    background-size: 18% 100%; animation: flujo 5s linear infinite; }
+  @keyframes flujo { from { background-position: -20% 0; } to { background-position: 120% 0; } }
+  .etapa { position: relative; z-index: 1; display: grid; grid-template-rows: auto 1fr; justify-items: start; gap: 10px; }
+  .nodo { justify-self: center; display: grid; place-items: center; width: var(--nodo); height: var(--nodo); border-radius: 50%;
+    background: var(--ink); border: 1px solid rgba(169, 155, 255, 0.45); box-shadow: 0 0 0 6px var(--ink); }
+  .nodo svg { width: 24px; height: 24px; fill: none; stroke: var(--accent-2); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .etapa.salida .nodo { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 6px var(--ink), 0 0 32px 2px rgba(58, 23, 230, 0.7); }
+  .etapa.salida .nodo svg { stroke: #fff; }
+  .tarjeta { display: grid; gap: 8px; align-content: start; align-self: stretch; width: 100%; margin-top: 8px; padding: 18px; border-radius: 20px;
+    background: var(--ink-2); border: 1px solid var(--line); transition: border-color .25s, transform .25s; }
+  .etapa:hover .tarjeta { border-color: rgba(169, 155, 255, 0.4); transform: translateY(-2px); }
+  .etapa.salida .tarjeta { border-color: rgba(169, 155, 255, 0.35); background: linear-gradient(180deg, rgba(58, 23, 230, 0.16), var(--ink-2) 70%); }
+  .tarjeta .num { font-size: 12px; color: var(--accent-2); font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
+  .tarjeta .donde { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--soft); font-weight: 500; }
+  .tarjeta h3 { font-size: 1.12rem; font-weight: 400; letter-spacing: -0.02em; }
+  .tarjeta p { color: var(--muted); font-size: 14px; line-height: 1.55; }
+  .chips { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips li { font-size: 12px; line-height: 1; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); background: rgba(255, 255, 255, 0.03); }
+  .bifurca { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 6px; margin-top: 4px; }
+  .bifurca span { font-size: 12px; line-height: 1.3; text-align: center; padding: 8px 6px; border-radius: 12px; border: 1px solid var(--line); color: var(--fg); background: rgba(255, 255, 255, 0.03); }
+  .bifurca i { font-style: normal; font-size: 12px; color: var(--soft); }
+  @media (prefers-reduced-motion: reduce) { .pipeline::after { animation: none; display: none; } .etapa .tarjeta { transition: none; } }
+
+  .aviso { display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: 18px; background: rgba(169, 155, 255, 0.08); border: 1px solid rgba(169, 155, 255, 0.22);
+    color: var(--muted); font-size: 14px; line-height: 1.6; }
+  .aviso b { color: var(--fg); font-weight: 500; }
+  .aviso svg { flex: none; width: 20px; height: 20px; margin-top: 2px; stroke: var(--accent-2); fill: none; stroke-width: 2; stroke-linecap: round; }
+
+  .final { display: flex; flex-wrap: wrap; gap: 12px; }
+  .boton { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; padding: 14px 22px; border-radius: 999px; font-size: 15px;
+    background: var(--accent); color: #fff; border: 1px solid var(--accent); transition: transform .2s, box-shadow .2s; }
+  .boton:hover { transform: translateY(-1px); box-shadow: 0 16px 34px -16px rgba(58, 23, 230, 1); }
+  .boton.secundario { background: transparent; border-color: var(--line); }
+  .boton.secundario:hover { border-color: var(--accent-2); box-shadow: none; }
+  footer { padding: 28px clamp(16px, 5vw, 72px); border-top: 1px solid var(--line); color: var(--soft); font-size: 13px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+  /* ---------- Pantallas angostas ---------- */
+  @media (max-width: 1100px) {
+    /* Pipeline vertical: la línea baja por la izquierda uniendo los nodos */
+    .pipeline { --hueco: 16px; grid-template-columns: minmax(0, 1fr); gap: var(--hueco); }
+    .pipeline::before, .pipeline::after { display: none; }
+    .etapa { grid-template-columns: var(--nodo) minmax(0, 1fr); grid-template-rows: auto; column-gap: 16px; align-items: start; }
+    /* Cada paso dibuja el tramo de línea hasta el nodo siguiente, así la línea termina justo en el último */
+    .etapa:not(:last-child)::before { content: ""; position: absolute; z-index: -1; left: calc(var(--nodo) / 2 - 1px); width: 2px;
+      top: calc(var(--nodo) / 2); bottom: calc(-1 * (var(--hueco) + var(--nodo) / 2));
+      background: linear-gradient(180deg, rgba(169, 155, 255, 0.35), rgba(169, 155, 255, 0.6)); }
+    .etapa:nth-last-child(2)::before { background: linear-gradient(180deg, rgba(169, 155, 255, 0.6), var(--accent)); }
+    .nodo { justify-self: start; }
+    .tarjeta { margin-top: 0; }
+  }
+  @media (max-width: 980px) {
+    .centro { grid-template-columns: minmax(0, 1fr); }
+    .reloj-caja { position: absolute; z-index: -1; right: -22vw; top: 2vh; width: 78vw; opacity: 0.32; pointer-events: none; }
+    .tres { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 620px) {
+    .relojes { grid-template-columns: minmax(0, 1fr); }
+    .pipeline { --nodo: 44px; }
+    .etapa { column-gap: 12px; }
+    .nodo svg { width: 20px; height: 20px; }
+    .barra nav a { padding: 6px 10px; font-size: 13px; }
+    .reloj-caja { right: -40vw; width: 110vw; top: 6vh; opacity: 0.22; }
+    .comparar { font-size: 14px; }
+    .comparar th, .comparar td { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="portada" id="portada">
+  <div class="barra">
+    <a class="marca" href="./" aria-label="Immuno-XAI, portada">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="#3a17e6"/><path d="M16 8v8l5 3" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+      Immuno-XAI
+    </a>
+    <nav aria-label="Relojes">
+      <a href="inmunologico">Reloj inmunológico</a>
+      <a href="epigenetico">Reloj epigenético</a>
+    </nav>
+  </div>
+
+  <div class="centro">
+    <div class="texto">
+      <span class="ceja">Proyecto de título · Edad biológica explicable</span>
+      <h1>La edad del cuerpo, contada por <span class="acc">dos relojes</span>.</h1>
+      <p class="bajada">Dos personas de la misma edad no envejecen igual. Este proyecto entrena <b>dos modelos que estiman la edad a partir de la sangre</b>: uno lee el sistema inmune y el otro la metilación del ADN. Además, cada uno <b>explica su respuesta</b>: qué variables pesan y qué hace que un paciente parezca mayor o menor de lo que es.</p>
+      <div class="relojes">
+        <a class="reloj-link" href="inmunologico">
+          <span class="fila"><span class="nombre">Reloj inmunológico</span><span class="flecha" aria-hidden="true">→</span></span>
+          <span class="datos">16 tipos de células inmunes y 29 citoquinas · TabPFN v2 · Stanford 10K Immunomes</span>
+          <span class="cifra">6,5 años <small>de error medio en el test</small></span>
+        </a>
+        <a class="reloj-link" href="epigenetico">
+          <span class="fila"><span class="nombre">Reloj epigenético</span><span class="flecha" aria-hidden="true">→</span></span>
+          <span class="datos">500 sondas de metilación del ADN · ElasticNet · Hannum + GSE87571</span>
+          <span class="cifra">3,1 años <small>de error medio en el test</small></span>
+        </a>
+      </div>
+    </div>
+    <div class="reloj-caja" aria-hidden="true">
+      <svg class="reloj" viewBox="0 0 320 320" focusable="false">
+        <circle class="r-tic" cx="160" cy="160" r="150"/>
+        <circle class="r-tic-may" cx="160" cy="160" r="150"/>
+        <g class="r-gira-lento"><circle class="r-guion" cx="160" cy="160" r="122"/></g>
+        <g class="r-gira-inverso"><circle class="r-arco" cx="160" cy="160" r="100"/></g>
+        <g class="r-orbita"><circle class="r-sat" cx="160" cy="38" r="5"/></g>
+        <g class="r-aguja-h"><line x1="160" y1="168" x2="160" y2="104"/></g>
+        <g class="r-aguja-m"><line x1="160" y1="172" x2="160" y2="68"/></g>
+        <circle class="r-onda" cx="160" cy="160" r="6"/>
+        <circle class="r-centro" cx="160" cy="160" r="6"/>
+      </svg>
+    </div>
+  </div>
+
+  <a class="bajar" href="#proyecto"><span aria-hidden="true">↓</span>Más sobre el proyecto</a>
+</header>
+
+<main>
+  <section class="seccion" id="proyecto">
+    <div class="ancho">
+      <span class="ceja">El proyecto</span>
+      <h2>Una edad que no sale del carné, sino de la sangre.</h2>
+      <div class="tres">
+        <article class="bloque">
+          <span class="num">01</span>
+          <h3>¿Qué es la edad biológica?</h3>
+          <p>Cada modelo aprende a estimar la edad de una persona a partir de marcadores de su sangre. La diferencia entre la edad que predice y la edad real es la <b>brecha de edad</b>: si es positiva, el cuerpo «parece» mayor de lo que es; si es negativa, parece más joven.</p>
+        </article>
+        <article class="bloque">
+          <span class="num">02</span>
+          <h3>Dos relojes, por separado</h3>
+          <p>El <b>inmunológico</b> usa las proporciones de células inmunes y los niveles de citoquinas de 473 personas. El <b>epigenético</b> usa la metilación del ADN en sangre de 1.385 personas de Estados Unidos y Suecia. Se entrenaron con personas distintas, así que no se mezclan: cada uno tiene su propia página.</p>
+        </article>
+        <article class="bloque">
+          <span class="num">03</span>
+          <h3>Explicable (XAI)</h3>
+          <p>Un número solo no basta. Cada reloj muestra qué variables pesan más, cómo cambia la edad estimada cuando cambia un marcador y, para cada paciente, qué lo hace parecer mayor o menor. Los dos se explican con <b>SHAP</b>: en el epigenético el cálculo es exacto, porque el modelo es lineal; en el inmunológico se estima probando combinaciones de biomarcadores.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="ancho">
+      <span class="ceja">Los dos relojes</span>
+      <h2>Mismo objetivo, datos y métodos distintos.</h2>
+      <div class="tabla-caja">
+        <table class="comparar">
+          <thead><tr><th scope="col"></th><th scope="col">Reloj inmunológico</th><th scope="col">Reloj epigenético</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Qué mide</th><td>Proporciones de 16 tipos de células inmunes (CyTOF) y niveles de 29 citoquinas en suero, más el sexo</td><td>Metilación del ADN en sangre completa: 500 sondas CpG del array Illumina 450K, más el sexo</td></tr>
+            <tr><th scope="row">Datos</th><td>Stanford 10K Immunomes: 473 personas (354 de entrenamiento y 119 de test)</td><td>Hannum GSE40279 (EE. UU.) y GSE87571 (Suecia): 1.385 personas (1.038 de entrenamiento y 347 de test)</td></tr>
+            <tr><th scope="row">Modelo</th><td>TabPFN v2, un transformer pre-entrenado para tablas</td><td>ElasticNet, un modelo lineal, el mismo tipo del reloj original de Hannum</td></tr>
+            <tr><th scope="row">Error medio en el test</th><td>6,5 años (R² 0,83)</td><td>3,1 años (R² 0,95)</td></tr>
+            <tr><th scope="row">Cómo se explica</th><td>Importancia por permutación, perfiles de dependencia parcial y SHAP estimado (KernelSHAP): enjambre, cascada por paciente y simulador «qué pasaría si»</td><td>SHAP exacto: enjambre, cascada por paciente y simulador «qué pasaría si»</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="ancho">
+      <span class="ceja">Cómo se usa</span>
+      <h2>Un recorrido en cinco pasos, de lo general al paciente.</h2>
+      <ol class="pipeline">
+        <li class="etapa">
+          <span class="nodo" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
+          <div class="tarjeta">
+            <span class="num">01 · Entrada</span>
+            <span class="donde">Portada</span>
+            <h3>Elige un reloj</h3>
+            <p>Desde esta portada entras a uno de los dos modelos. Cada uno tiene su propia página.</p>
+            <ul class="chips"><li>Inmunológico</li><li>Epigenético</li></ul>
+          </div>
+        </li>
+        <li class="etapa">
+          <span class="nodo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M7 16v-5M12 16V6M17 16v-8"/></svg></span>
+          <div class="tarjeta">
+            <span class="num">02</span>
+            <span class="donde">Pestaña Resumen</span>
+            <h3>Revisa qué tan bien estima</h3>
+            <p>El error del modelo, la comparación con otros algoritmos y su desempeño en pacientes que nunca vio.</p>
+            <ul class="chips"><li>Error medio</li><li>R²</li><li>Otros modelos</li></ul>
+          </div>
+        </li>
+        <li class="etapa">
+          <span class="nodo" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/><path d="M8 12.5v-2M10.5 12.5V8.5M13 12.5v-3"/></svg></span>
+          <div class="tarjeta">
+            <span class="num">03</span>
+            <span class="donde">Pestaña Qué mira el modelo</span>
+            <h3>Entiende qué variables pesan</h3>
+            <p>Los marcadores que más influyen en la edad estimada y cómo cambia la predicción cuando cambia cada uno.</p>
+            <ul class="chips"><li>SHAP global</li><li>Enjambre</li><li>Dependencia</li></ul>
+          </div>
+        </li>
+        <li class="etapa">
+          <span class="nodo" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M18 9v8M15 12l3-3 3 3"/></svg></span>
+          <div class="tarjeta">
+            <span class="num">04</span>
+            <span class="donde">Pestaña Explorar un paciente</span>
+            <h3>Elige un paciente</h3>
+            <p>Toma uno de los pacientes de test o sube el tuyo: el servidor calcula su edad con el modelo real.</p>
+            <div class="bifurca"><span>Paciente de test</span><i>o</i><span>Tu archivo CSV</span></div>
+          </div>
+        </li>
+        <li class="etapa salida">
+          <span class="nodo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18h3l2-6 3 9 3-13 2 10h3"/></svg></span>
+          <div class="tarjeta">
+            <span class="num">05 · Resultado</span>
+            <span class="donde">Explorar un paciente</span>
+            <h3>Interpreta su edad</h3>
+            <p>Su edad estimada y su brecha, qué lo hace parecer mayor o menor, y qué pasaría si cambiaran sus valores.</p>
+            <ul class="chips"><li>Brecha de edad</li><li>Cascada SHAP</li><li>Simulador</li></ul>
+          </div>
+        </li>
+      </ol>
+      <p class="aviso"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>
+        <span><b>Es un proyecto académico.</b> Las edades son estimaciones de modelos entrenados con datos públicos de investigación; no son un diagnóstico médico ni reemplazan una evaluación clínica.</span></p>
+      <div class="final">
+        <a class="boton" href="inmunologico">Ir al reloj inmunológico <span aria-hidden="true">→</span></a>
+        <a class="boton secundario" href="epigenetico">Ir al reloj epigenético <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Immuno-XAI · Proyecto de título · 2026</span>
+  <span>Datos: Stanford 10K Immunomes · GEO GSE40279 y GSE87571</span>
+</footer>
+
+<script>
+  // El reloj se inclina hacia el mouse (no se mueve si el sistema pide reducir movimiento)
+  (() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const portada = document.getElementById('portada'), reloj = portada.querySelector('.reloj');
+    portada.addEventListener('pointermove', (e) => {
+      const r = portada.getBoundingClientRect();
+      reloj.style.setProperty('--px', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+      reloj.style.setProperty('--py', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+    });
+    portada.addEventListener('pointerleave', () => { reloj.style.setProperty('--px', '0'); reloj.style.setProperty('--py', '0'); });
+  })();
+</script>
+</body>
+</html>

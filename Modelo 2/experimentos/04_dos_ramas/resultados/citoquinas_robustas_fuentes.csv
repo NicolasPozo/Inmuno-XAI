@@ -1,0 +1,9 @@
+transformacion,fuente,LOSO_r_medio,LOSO_MAE_medio,MAE_CV_473,R2_CV_473,dif_CV_vs_sin_fuentes,dif_LOSO_MAE_vs_sin_fuentes
+crudo,sin fuentes,0.103,26.057,10.427,0.661,0.0,0.0
+crudo,+ 10k_elisa,0.302,20.863,10.714,0.662,0.287,-5.194
+crudo,+ fluprint_luminex,0.226,24.932,10.66,0.645,0.233,-1.125
+crudo,+ soundlife_olink,0.166,24.942,10.702,0.647,0.274,-1.114
+CLR + selección consistente,sin fuentes,0.199,22.845,14.718,0.364,0.0,0.0
+CLR + selección consistente,+ 10k_elisa,0.211,19.978,15.388,0.33,0.67,-2.868
+CLR + selección consistente,+ fluprint_luminex,0.149,21.766,15.139,0.334,0.421,-1.079
+CLR + selección consistente,+ soundlife_olink,0.16,21.965,14.978,0.352,0.26,-0.881

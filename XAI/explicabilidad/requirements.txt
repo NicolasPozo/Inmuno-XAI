@@ -1,0 +1,6 @@
+# Paquetes para los scripts de explicabilidad, además de los de web/requirements.txt.
+# Versiones con las que se probó.
+shap==0.54.1
+lime==0.2.0.1
+scipy==1.18.1
+matplotlib==3.11.1
