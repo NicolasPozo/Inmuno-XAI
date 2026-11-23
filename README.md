@@ -2,6 +2,16 @@
 
 **Dos relojes de edad biológica explicables, a partir de la sangre.** Proyecto de título.
 
+*Sistema de Inteligencia Artificial Explicable para la Caracterización Computacional de Patrones de Inmunosenescencia en Dataset Públicos*
+
+## Autores
+
+- **Constanza Olivos Fernández** ([@Coniiii](https://github.com/Coniiii))
+- **Nicolás Pozo Villagrán** ([@NicolasPozo](https://github.com/NicolasPozo))
+
+Ingeniería Civil en Computación, mención Informática. Escuela de Informática y Computación, Facultad de Ingeniería, Universidad Tecnológica Metropolitana (UTEM).
+Profesor guía: Dr. Oscar Magna Veloso.
+
 Un reloj estima la edad desde el **sistema inmune** y el otro desde la **metilación del ADN**. Los dos se entrenan y se validan por separado y **nunca se fusionan**: no existe un dataset público con ambos tipos de datos para las mismas personas. Cada predicción se explica con **SHAP**: cuántos años suma o resta cada variable.
 
 | Reloj | Datos | Modelo | Error en el test (MAE) | R² test |

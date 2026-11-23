@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "Si usas este trabajo, cítalo con estos datos."
+title: "Immuno-XAI: Sistema de Inteligencia Artificial Explicable para la Caracterización Computacional de Patrones de Inmunosenescencia en Dataset Públicos"
+type: software
+authors:
+  - given-names: Constanza
+    family-names: Olivos Fernández
+    affiliation: Universidad Tecnológica Metropolitana (UTEM)
+  - given-names: Nicolás
+    family-names: Pozo Villagrán
+    affiliation: Universidad Tecnológica Metropolitana (UTEM)
+repository-code: "https://github.com/NicolasPozo/Inmuno-XAI"
+date-released: 2026-11-23
+keywords:
+  - explainable AI
+  - SHAP
+  - biological age
+  - immunosenescence
+  - epigenetic clock
+  - TabPFN
